@@ -4,13 +4,14 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.egg-info/
-dist/
-build/
 .eggs/
 
 # Environment
 .env
 .env.local
+.env.development.local
+.env.test.local
+.env.production.local
 .env.*.local
 venv/
 .venv/
@@ -30,7 +31,9 @@ desktop.ini
 # Build
 .next/
 out/
+build/
 *.tsbuildinfo
+tsconfig.tsbuildinfo
 
 # Logs
 logs/
