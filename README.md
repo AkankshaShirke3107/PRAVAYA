@@ -147,39 +147,23 @@ PRAVAYA's core innovation is an **evidence-grounded, barrier-centric reasoning l
 
 ### The Risk Chain Model
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    SAFETY NARRATIVE                         │
-│  "During routine maintenance on a pressurized pipeline,    │
-│   the worker began bolt removal before confirming that     │
-│   the line had been depressurized and isolated..."         │
-└────────────────────────┬────────────────────────────────────┘
-                         │
-                         ▼
-               ┌─────────────────┐
-               │    ACTIVITY     │ ──── Pipeline Maintenance
-               └────────┬────────┘
-                         │
-                         ▼
-               ┌─────────────────┐
-               │     HAZARD      │ ──── Pressurized Hydrocarbon
-               └────────┬────────┘
-                         │
-                         ▼
-               ┌─────────────────┐
-               │    EXPOSURE     │ ──── Worker in blast/release zone
-               └────────┬────────┘
-                         │
-                         ▼
-           ┌─────────────────────────┐
-           │   FAILED / MISSING      │
-           │      BARRIER            │ ──── Energy Isolation & Verification
-           └────────────┬────────────┘
-                         │
-                         ▼
-           ┌─────────────────────────┐
-           │ POTENTIAL CONSEQUENCE   │ ──── Serious Injury / Fatality
-           └─────────────────────────┘
+```mermaid
+flowchart TD
+    A["SAFETY NARRATIVE<br/>'During routine maintenance on a pressurized pipeline,<br/>the worker began bolt removal before confirming that<br/>the line had been depressurized and isolated...'"]
+    B["ACTIVITY<br/>Pipeline Maintenance"]
+    C["HAZARD<br/>Pressurized Hydrocarbon"]
+    D["EXPOSURE<br/>Worker in blast/release zone"]
+    E["FAILED / MISSING BARRIER<br/>Energy Isolation & Verification"]
+    F["POTENTIAL CONSEQUENCE<br/>Serious Injury / Fatality"]
+
+    A --> B --> C --> D --> E --> F
+
+    style A fill:#1a1a2e,stroke:#FF6B35,color:#fff
+    style B fill:#1a1a2e,stroke:#2196F3,color:#fff
+    style C fill:#1a1a2e,stroke:#00D4AA,color:#fff
+    style D fill:#1a1a2e,stroke:#FF9800,color:#fff
+    style E fill:#1a1a2e,stroke:#FF4444,color:#fff
+    style F fill:#1a1a2e,stroke:#9C27B0,color:#fff
 ```
 
 ### The Analysis Pipeline
@@ -616,38 +600,48 @@ SIF detection using NLP/ML has existing research. **PRAVAYA's differentiation is
 
 <br>
 
-<div align="center">
+```mermaid
+flowchart TB
+    subgraph OTHERS ["WHAT OTHERS DO"]
+        direction LR
+        O1["Safety Report"] --> O2["Risk Classification"] --> O3["'High Risk' Label"]
+    end
 
+    subgraph PRAVAYA ["WHAT PRAVAYA DOES"]
+        direction LR
+        P1["Safety Report"]
+        
+        P1 --> P2["Activity / Hazard / Exposure Extraction"]
+        P1 --> P3["SIF Potential Scoring with Confidence"]
+        P1 --> P4["Specific Precursor Identification"]
+        P1 --> P5["Failed Barrier Identification"]
+        P1 --> P6["Risk Chain Reconstruction"]
+        P1 --> P7["Evidence-Grounded Explanation"]
+        P1 --> P8["Life-Saving Rule Mapping"]
+        P1 --> P9["Similar Report Retrieval"]
+        P1 --> P10["Recurring Pattern Detection"]
+        P1 --> P11["HSE Expert Validation Loop"]
+    end
+
+    style OTHERS fill:none,stroke:#FF4444,stroke-width:2px,stroke-dasharray: 5 5,color:#fff
+    style PRAVAYA fill:none,stroke:#00D4AA,stroke-width:2px,color:#fff
+    
+    style O1 fill:#1a1a2e,stroke:#666,color:#fff
+    style O2 fill:#1a1a2e,stroke:#666,color:#fff
+    style O3 fill:#1a1a2e,stroke:#FF4444,color:#fff
+    
+    style P1 fill:#1a1a2e,stroke:#666,color:#fff
+    style P2 fill:#1a1a2e,stroke:#2196F3,color:#fff
+    style P3 fill:#1a1a2e,stroke:#2196F3,color:#fff
+    style P4 fill:#1a1a2e,stroke:#2196F3,color:#fff
+    style P5 fill:#1a1a2e,stroke:#2196F3,color:#fff
+    style P6 fill:#1a1a2e,stroke:#2196F3,color:#fff
+    style P7 fill:#1a1a2e,stroke:#2196F3,color:#fff
+    style P8 fill:#1a1a2e,stroke:#2196F3,color:#fff
+    style P9 fill:#1a1a2e,stroke:#2196F3,color:#fff
+    style P10 fill:#1a1a2e,stroke:#2196F3,color:#fff
+    style P11 fill:#1a1a2e,stroke:#2196F3,color:#fff
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│                     WHAT OTHERS DO                                   │
-│                                                                      │
-│    Safety Report  ──►  Risk Classification  ──►  "High Risk" Label  │
-│                                                                      │
-└──────────────────────────────────────────────────────────────────────┘
-
-                              vs.
-
-┌──────────────────────────────────────────────────────────────────────┐
-│                     WHAT PRAVAYA DOES                                 │
-│                                                                      │
-│    Safety Report                                                     │
-│         │                                                            │
-│         ├──► Activity / Hazard / Exposure Extraction                 │
-│         ├──► SIF Potential Scoring with Confidence                   │
-│         ├──► Specific Precursor Identification                      │
-│         ├──► Failed Barrier Identification                          │
-│         ├──► Risk Chain Reconstruction                              │
-│         ├──► Evidence-Grounded Explanation                          │
-│         ├──► Life-Saving Rule Mapping                               │
-│         ├──► Similar Report Retrieval                               │
-│         ├──► Recurring Pattern Detection                            │
-│         └──► HSE Expert Validation Loop                             │
-│                                                                      │
-└──────────────────────────────────────────────────────────────────────┘
-```
-
-</div>
 
 <br>
 
