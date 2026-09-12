@@ -28,24 +28,24 @@
 
 <br>
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [Overview](#-overview)
-- [Problem Statement](#-problem-statement)
-- [Our Approach](#-our-approach)
-- [What is a SIF Precursor?](#-what-is-a-sif-precursor)
-- [Key Features](#-key-features)
-- [System Architecture](#-system-architecture)
-- [Proposed Tech Stack](#-proposed-tech-stack)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-- [Dataset Strategy](#-dataset-strategy)
-- [Core Differentiation](#-core-differentiation)
-- [Screenshots](#-screenshots)
-- [Roadmap](#-roadmap)
-- [Data & Limitations Disclaimer](#-data--limitations-disclaimer)
-- [Team Neural Forge](#-team-neural-forge)
-- [License](#-license)
+- [Overview](#overview)
+- [Problem Statement](#problem-statement)
+- [Our Approach](#our-approach)
+- [What is a SIF Precursor?](#what-is-a-sif-precursor)
+- [Key Features](#key-features)
+- [System Architecture](#system-architecture)
+- [Proposed Tech Stack](#proposed-tech-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Dataset Strategy](#dataset-strategy)
+- [Core Differentiation](#core-differentiation)
+- [Screenshots](#screenshots)
+- [Roadmap](#roadmap)
+- [Data & Limitations Disclaimer](#data--limitations-disclaimer)
+- [Team Neural Forge](#team-neural-forge)
+- [License](#license)
 
 <br>
 
@@ -53,7 +53,7 @@
 
 <br>
 
-## 🔍 Overview
+## Overview
 
 **PRAVAYA** is an AI-powered **Serious Injury & Fatality (SIF) Precursor Intelligence System** designed for **Oil India Limited (OIL)**. It analyzes unstructured safety narratives — Unsafe Act (UA), Unsafe Condition (UC), and Near-Miss reports — to identify hidden warning signals that could escalate into serious injuries or fatalities.
 
@@ -69,7 +69,7 @@ PRAVAYA is **not** an accident prediction system. It is an **evidence-grounded, 
 
 <br>
 
-## 🎯 Problem Statement
+## Problem Statement
 
 <table>
 <tr>
@@ -109,12 +109,12 @@ Oil & Gas organizations generate large volumes of safety observations and report
 
 These reports are predominantly **unstructured free-text narratives**. A single report may describe:
 
-- ⚡ A worker exposed to **hazardous energy** without verified isolation
-- 🚧 A **safety barrier** that was missing, bypassed, or degraded
-- 🔥 A **line-of-fire exposure** during an active operation
-- 🏗️ **Work at height** performed without adequate fall protection
-- 🫁 **Confined space** entry without proper atmospheric monitoring
-- 🏋️ **Mechanical lifting** operations with insufficient rigging controls
+- A worker exposed to **hazardous energy** without verified isolation
+- A **safety barrier** that was missing, bypassed, or degraded
+- A **line-of-fire exposure** during an active operation
+- **Work at height** performed without adequate fall protection
+- **Confined space** entry without proper atmospheric monitoring
+- **Mechanical lifting** operations with insufficient rigging controls
 
 Even though **no injury occurred** in these scenarios, they represent **SIF Precursors** — situations where the potential for a serious injury or fatality was present.
 
@@ -141,7 +141,7 @@ PRAVAYA automates this reasoning at scale.
 
 <br>
 
-## 🧠 Our Approach
+## Our Approach
 
 PRAVAYA's core innovation is an **evidence-grounded, barrier-centric reasoning layer** built around SIF detection. Rather than simply classifying reports as "high risk" or "low risk," PRAVAYA reconstructs the full **risk chain** from each safety narrative.
 
@@ -186,14 +186,14 @@ PRAVAYA's core innovation is an **evidence-grounded, barrier-centric reasoning l
 
 ```mermaid
 flowchart LR
-    A["📄 Safety Report"] --> B["🔍 Context Understanding"]
-    B --> C["⚠️ SIF Potential Detection"]
-    C --> D["🎯 Precursor Identification"]
-    D --> E["🛡️ Barrier Analysis"]
-    E --> F["📊 Risk Chain Reconstruction"]
-    F --> G["📐 Life-Saving Rule Mapping"]
-    G --> H["📝 Evidence-Grounded Explanation"]
-    H --> I["🔗 Pattern Detection"]
+    A["Safety Report"] --> B["Context Understanding"]
+    B --> C["SIF Potential Detection"]
+    C --> D["Precursor Identification"]
+    D --> E["Barrier Analysis"]
+    E --> F["Risk Chain Reconstruction"]
+    F --> G["Life-Saving Rule Mapping"]
+    G --> H["Evidence-Grounded Explanation"]
+    H --> I["Pattern Detection"]
 
     style A fill:#1a1a2e,stroke:#FF6B35,color:#fff
     style C fill:#1a1a2e,stroke:#FF4444,color:#fff
@@ -217,7 +217,7 @@ PRAVAYA doesn't just flag risk — it **explains** why a seemingly routine repor
 
 <br>
 
-## 🔬 What is a SIF Precursor?
+## What is a SIF Precursor?
 
 A **SIF Precursor** is a condition, behavior, or event that had the **realistic potential** to result in a serious injury or fatality — even if no injury actually occurred.
 
@@ -249,39 +249,39 @@ A **SIF Precursor** is a condition, behavior, or event that had the **realistic 
 
 <br>
 
-## ✨ Key Features
+## Key Features
 
-### 🎯 SIF Potential Detection
+### SIF Potential Detection
 Analyzes unstructured safety narratives to determine whether a reported observation carries potential for a Serious Injury or Fatality, providing a confidence-scored assessment.
 
-### 🔍 Safety Narrative Understanding
+### Safety Narrative Understanding
 Contextual understanding of safety report narratives using NLP — extracting activities, hazards, exposures, and safety-critical entities from free-text descriptions.
 
-### 🧩 Precursor Identification
+### Precursor Identification
 Identifies the specific **SIF precursor** present in a report — such as *Line-of-Fire Exposure*, *Energy Isolation Failure*, *Fall Hazard*, *Confined Space Atmospheric Hazard*, or *Lifting Control Deficiency*.
 
-### 🛡️ Failed Barrier Analysis
+### Failed Barrier Analysis
 Determines which **safety barrier** was missing, bypassed, degraded, or inadequate — the critical link in the risk chain that, if it had held, would have prevented the exposure.
 
-### 🔗 Risk Chain Reconstruction
+### Risk Chain Reconstruction
 Reconstructs the complete causal risk chain: **Activity → Hazard → Exposure → Failed Barrier → Potential Consequence**. This provides HSE teams with a structured understanding of the escalation pathway.
 
-### 📐 Life-Saving Rule Mapping
+### Life-Saving Rule Mapping
 Maps each SIF-potential finding to the corresponding **IOGP Life-Saving Rule** (e.g., *Work at Height*, *Confined Space*, *Energy Isolation*, *Safe Mechanical Lifting*), aligning findings with internationally recognized safety standards.
 
-### 📝 Evidence-Grounded Explanation
+### Evidence-Grounded Explanation
 Every finding is supported by **extracted evidence spans** from the original report text. The system shows *why* it reached its conclusion, not just *what* the conclusion is.
 
-### 🔗 Similar Report Retrieval
+### Similar Report Retrieval
 Identifies **semantically similar reports** from the report database, helping HSE teams understand whether the current finding is an isolated event or part of a broader pattern.
 
-### 📊 Recurring Risk Patterns
+### Recurring Risk Patterns
 Detects **recurring precursor and barrier failure patterns** across reports — for example, repeated LOTO failures at a specific site, or a trend of fall protection gaps in a particular operational area.
 
-### 👤 HSE Expert Validation Loop
+### HSE Expert Validation Loop
 High-confidence AI findings are presented for **expert review and validation**. HSE professionals can confirm, modify, or override AI assessments — creating a feedback loop that improves domain-specific accuracy over time.
 
-### 📈 Safety Intelligence Dashboard
+### Safety Intelligence Dashboard
 A centralized HSE dashboard providing:
 - Total reports processed and SIF-potential breakdown
 - SIF trend over time
@@ -290,14 +290,14 @@ A centralized HSE dashboard providing:
 - Recent high SIF-potential reports requiring review
 - Rule distribution across findings
 
-### 📋 Report Registry
+### Report Registry
 A structured, searchable registry of all safety reports with:
 - Report ID, type, date, location, and activity
 - SIF potential assessment and precursor classification
 - Confidence score and review status
 - Drill-down to full analysis and evidence
 
-### ✅ Compliance Monitoring
+### Compliance Monitoring
 Monitors alignment with statutory and industry safety standards:
 - **OISD** (Oil Industry Safety Directorate) standards
 - **OSHA** compliance requirements
@@ -310,17 +310,17 @@ Monitors alignment with statutory and industry safety standards:
 
 <br>
 
-## 🏗️ System Architecture
+## System Architecture
 
 ### Proposed High-Level Architecture
 
 ```mermaid
 flowchart TD
-    subgraph USER["👤 HSE Officer / Safety Analyst"]
+    subgraph USER["HSE Officer / Safety Analyst"]
         A["Web Browser"]
     end
 
-    subgraph FRONTEND["🖥️ Web Frontend"]
+    subgraph FRONTEND["Web Frontend"]
         B["Dashboard"]
         C["Report Analyzer"]
         D["SIF Reports Registry"]
@@ -328,13 +328,13 @@ flowchart TD
         F["Compliance Monitor"]
     end
 
-    subgraph BACKEND["⚙️ Backend API"]
+    subgraph BACKEND["Backend API"]
         G["Report Ingestion API"]
         H["Text Preprocessing"]
         I["Authentication & RBAC"]
     end
 
-    subgraph AI_ENGINE["🧠 AI / NLP Engine"]
+    subgraph AI_ENGINE["AI / NLP Engine"]
         J["Safety Context Extraction"]
         K["SIF Potential Classifier"]
         L["Precursor & Barrier Analyzer"]
@@ -342,14 +342,14 @@ flowchart TD
         N["Life-Saving Rule Mapper"]
     end
 
-    subgraph INTELLIGENCE["📊 Safety Intelligence"]
+    subgraph INTELLIGENCE["Safety Intelligence"]
         O["Embedding Generator"]
         P["Vector Similarity Search"]
         Q["Pattern & Cluster Analysis"]
         R["Trend Aggregation"]
     end
 
-    subgraph DATA["🗄️ Data Layer"]
+    subgraph DATA["Data Layer"]
         S[("Report Database")]
         T[("Vector Store")]
         U["Domain Knowledge Base"]
@@ -428,7 +428,7 @@ flowchart LR
 
 <br>
 
-## 🛠️ Proposed Tech Stack
+## Proposed Tech Stack
 
 > [!NOTE]
 > The following represents the **planned/proposed technology stack** for PRAVAYA. The specific implementation choices will be finalized as the codebase is built out. Refer to `package.json`, `requirements.txt`, and configuration files for the current implementation status.
@@ -452,7 +452,7 @@ flowchart LR
 
 <br>
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 PRAVAYA/
@@ -494,7 +494,7 @@ PRAVAYA/
 
 <br>
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -543,7 +543,7 @@ python main.py
 
 <br>
 
-## 📊 Dataset Strategy
+## Dataset Strategy
 
 PRAVAYA follows a **phased data strategy** to build a robust, domain-specific safety dataset:
 
@@ -610,7 +610,7 @@ severity:             # Priority classification
 
 <br>
 
-## 💎 Core Differentiation
+## Core Differentiation
 
 SIF detection using NLP/ML has existing research. **PRAVAYA's differentiation is the integrated safety reasoning workflow built around detection:**
 
@@ -659,7 +659,7 @@ SIF detection using NLP/ML has existing research. **PRAVAYA's differentiation is
 
 <br>
 
-## 📸 Screenshots
+## Screenshots
 
 > *Screenshots of the PRAVAYA dashboard and analysis interface will be added here as the prototype UI is finalized.*
 
@@ -685,7 +685,7 @@ Uncomment and update paths when screenshots are available:
 
 <br>
 
-## 🗺️ Roadmap
+## Roadmap
 
 - [x] Core conceptual architecture & safety reasoning model
 - [x] Project structure & documentation
@@ -710,7 +710,7 @@ Uncomment and update paths when screenshots are available:
 
 <br>
 
-## ⚠️ Data & Limitations Disclaimer
+## Data & Limitations Disclaimer
 
 > [!WARNING]
 > **Prototype Status**: PRAVAYA is currently a prototype developed for the Smart India Hackathon 2026. The system demonstrates the proposed analysis workflow and architecture.
@@ -727,18 +727,18 @@ Uncomment and update paths when screenshots are available:
 
 <br>
 
-## 👥 Team Neural Forge
+## Team Neural Forge
 
 <div align="center">
 
-| | Team Member | Role |
+| # | Team Member | Role |
 |:---:|:---|:---|
-| 🧑‍💻 | **Akanksha Shirke** | Team Lead |
-| 🧑‍💻 | *Member 2* | *Role* |
-| 🧑‍💻 | *Member 3* | *Role* |
-| 🧑‍💻 | *Member 4* | *Role* |
-| 🧑‍💻 | *Member 5* | *Role* |
-| 🧑‍💻 | *Member 6* | *Role* |
+| 1 | **Akanksha Shirke** | Team Lead |
+| 2 | *Member 2* | *Role* |
+| 3 | *Member 3* | *Role* |
+| 4 | *Member 4* | *Role* |
+| 5 | *Member 5* | *Role* |
+| 6 | *Member 6* | *Role* |
 
 </div>
 
@@ -750,7 +750,7 @@ Uncomment and update paths when screenshots are available:
 
 <br>
 
-## 📄 License
+## License
 
 This project is developed for the **Smart India Hackathon 2026** under Problem Statement **SIH26165** for **Oil India Limited**.
 
@@ -767,7 +767,7 @@ This project is developed for the **Smart India Hackathon 2026** under Problem S
 
 **PRAVAYA** — *From Near Misses to Foresight.*
 
-Built with ❤️ by **Team Neural Forge** for **Smart India Hackathon 2026**
+Built by **Team Neural Forge** for **Smart India Hackathon 2026**
 
 <br>
 
