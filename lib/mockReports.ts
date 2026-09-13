@@ -1,4 +1,4 @@
-export interface AttachmentItem {
+﻿export interface AttachmentItem {
   name: string;
   size: string;
   type: 'pdf' | 'image' | 'doc';

@@ -10,7 +10,12 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
 const dailyData = [
@@ -35,43 +40,45 @@ const weeklyData = [
 
 export function ReportsOverTimeChart() {
   const [interval, setInterval] = useState<'daily' | 'weekly'>('daily');
-  const activeData = interval === 'daily' ? dailyData : weeklyData;
+
+  const activeData =
+    interval === 'daily' ? dailyData : weeklyData;
 
   return (
-    <Card className="flex flex-col border bg-card/90 shadow-sm h-full">
-      <CardHeader className="p-4 pb-2 flex flex-row items-center justify-between">
+    <Card className="flex flex-col border border-[#D9DDE0] bg-white shadow-none rounded-[2px] h-full">
+      <CardHeader className="p-4 pb-2 flex flex-row items-center justify-between border-b border-[#D9DDE0]">
         <div>
-          <CardTitle className="text-sm font-semibold text-foreground">
+          <CardTitle className="text-sm font-semibold text-[#102F3E]">
             Reports Over Time
           </CardTitle>
-          <p className="text-[11px] text-muted-foreground mt-0.5">
+
+          <p className="text-[11px] text-[#667085] mt-0.5">
             Trend tracking for Total, SIF, and High-SIF incidents
           </p>
         </div>
 
         {/* Daily / Weekly toggle */}
-        <div className="flex items-center rounded-lg border bg-muted/40 p-0.5">
+        <div className="flex items-center rounded-[2px] border border-[#D9DDE0] bg-[#F3F2EE] p-0.5">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setInterval('daily')}
-            className={`h-6 rounded-md px-2 text-[11px] font-medium transition-all ${
-              interval === 'daily'
-                ? 'bg-background text-foreground shadow-xs font-semibold'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
+            className={`h-6 rounded-[2px] px-2 text-[11px] font-medium transition-all ${interval === 'daily'
+                ? 'bg-white text-[#102F3E] shadow-none font-semibold border border-[#D9DDE0]'
+                : 'text-[#667085] hover:text-[#102F3E]'
+              }`}
           >
             Daily
           </Button>
+
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setInterval('weekly')}
-            className={`h-6 rounded-md px-2 text-[11px] font-medium transition-all ${
-              interval === 'weekly'
-                ? 'bg-background text-foreground shadow-xs font-semibold'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
+            className={`h-6 rounded-[2px] px-2 text-[11px] font-medium transition-all ${interval === 'weekly'
+                ? 'bg-white text-[#102F3E] shadow-none font-semibold border border-[#D9DDE0]'
+                : 'text-[#667085] hover:text-[#102F3E]'
+              }`}
           >
             Weekly
           </Button>
@@ -83,7 +90,12 @@ export function ReportsOverTimeChart() {
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={activeData}
-              margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+              margin={{
+                top: 10,
+                right: 10,
+                left: -20,
+                bottom: 0,
+              }}
             >
               <CartesianGrid
                 strokeDasharray="3 3"
@@ -91,6 +103,7 @@ export function ReportsOverTimeChart() {
                 stroke="hsl(var(--border))"
                 opacity={0.6}
               />
+
               <XAxis
                 dataKey="date"
                 stroke="hsl(var(--muted-foreground))"
@@ -98,34 +111,39 @@ export function ReportsOverTimeChart() {
                 tickLine={false}
                 axisLine={false}
               />
+
               <YAxis
                 stroke="hsl(var(--muted-foreground))"
                 fontSize={10}
                 tickLine={false}
                 axisLine={false}
               />
+
               <Tooltip
                 content={({ active, payload, label }) => {
                   if (active && payload && payload.length) {
                     return (
-                      <div className="rounded-lg border bg-popover/95 p-2 shadow-lg backdrop-blur-sm text-xs">
-                        <div className="font-semibold text-foreground mb-1">
+                      <div className="rounded-[2px] border border-[#D9DDE0] bg-white p-2 shadow-md text-xs">
+                        <div className="font-semibold text-[#102F3E] mb-1">
                           {label}
                         </div>
+
                         <div className="space-y-0.5 text-[11px]">
-                          <div className="flex items-center justify-between gap-3 text-sky-400">
+                          <div className="flex items-center justify-between gap-3 text-[#102F3E]">
                             <span>Total Reports:</span>
                             <span className="font-mono font-bold">
                               {payload[0]?.value}
                             </span>
                           </div>
-                          <div className="flex items-center justify-between gap-3 text-amber-400">
+
+                          <div className="flex items-center justify-between gap-3 text-[#D97706]">
                             <span>SIF Potential:</span>
                             <span className="font-mono font-bold">
                               {payload[1]?.value}
                             </span>
                           </div>
-                          <div className="flex items-center justify-between gap-3 text-rose-500">
+
+                          <div className="flex items-center justify-between gap-3 text-[#C92925]">
                             <span>High SIF Potential:</span>
                             <span className="font-mono font-bold">
                               {payload[2]?.value}
@@ -135,54 +153,75 @@ export function ReportsOverTimeChart() {
                       </div>
                     );
                   }
+
                   return null;
                 }}
               />
+
               <Line
                 type="monotone"
                 dataKey="total"
                 name="Total Reports"
-                stroke="#38bdf8"
+                stroke="#102F3E"
                 strokeWidth={2}
                 dot={false}
-                activeDot={{ r: 4, strokeWidth: 0 }}
+                activeDot={{
+                  r: 4,
+                  strokeWidth: 0,
+                }}
               />
+
               <Line
                 type="monotone"
                 dataKey="sif"
                 name="SIF Potential"
-                stroke="#f59e0b"
+                stroke="#D97706"
                 strokeWidth={2}
                 dot={false}
-                activeDot={{ r: 4, strokeWidth: 0 }}
+                activeDot={{
+                  r: 4,
+                  strokeWidth: 0,
+                }}
               />
+
               <Line
                 type="monotone"
                 dataKey="highSif"
                 name="High SIF Potential"
-                stroke="#ef4444"
+                stroke="#C92925"
                 strokeWidth={2}
                 strokeDasharray="4 2"
                 dot={false}
-                activeDot={{ r: 4, strokeWidth: 0 }}
+                activeDot={{
+                  r: 4,
+                  strokeWidth: 0,
+                }}
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
         {/* Chart Legend */}
-        <div className="flex items-center justify-center space-x-4 pt-2 border-t border-border/50 text-[11px]">
+        <div className="flex items-center justify-center space-x-4 pt-2 border-t border-[#D9DDE0] text-[11px]">
           <div className="flex items-center space-x-1.5">
-            <span className="h-2 w-3 rounded-xs bg-[#38bdf8]" />
-            <span className="text-muted-foreground">Total Reports</span>
+            <span className="h-2 w-3 rounded-[1px] bg-[#102F3E]" />
+            <span className="text-[#667085]">
+              Total Reports
+            </span>
           </div>
+
           <div className="flex items-center space-x-1.5">
-            <span className="h-2 w-3 rounded-xs bg-[#f59e0b]" />
-            <span className="text-muted-foreground">SIF Potential</span>
+            <span className="h-2 w-3 rounded-[1px] bg-[#D97706]" />
+            <span className="text-[#667085]">
+              SIF Potential
+            </span>
           </div>
+
           <div className="flex items-center space-x-1.5">
-            <span className="h-2 w-3 rounded-xs bg-[#ef4444] border-b border-dashed border-white" />
-            <span className="text-muted-foreground">High SIF Potential</span>
+            <span className="h-2 w-3 rounded-[1px] bg-[#C92925]" />
+            <span className="text-[#667085]">
+              High SIF Potential
+            </span>
           </div>
         </div>
       </CardContent>

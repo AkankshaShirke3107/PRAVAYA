@@ -12,171 +12,290 @@ import {
   Cell,
   LabelList,
 } from 'recharts';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { AlertTriangle, Layers } from 'lucide-react';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from '@/components/ui/card';
+import { Layers } from 'lucide-react';
 import { useSafetyStore } from '@/lib/store';
 
 const defaultColors: Record<string, string> = {
-  'Work at Height': '#3b82f6',
-  'Energy Isolation': '#f59e0b',
-  'Line of Fire': '#ef4444',
-  'Confined Space': '#8b5cf6',
-  'Safe Mechanical Lifting': '#10b981',
-  'Atmospheric Hazard': '#06b6d4',
-  'Hot Work': '#ea580c',
+  'Work at Height': '#102F3E',
+  'Working at Height': '#102F3E',
+  'Energy Isolation': '#D97706',
+  'Line of Fire': '#C92925',
+  'Confined Space': '#2F6B84',
+  'Safe Mechanical Lifting': '#2A7D78',
+  'Atmospheric Hazard': '#C7972B',
+  'Hot Work': '#C92925',
 };
+
+const fallbackData = [
+  {
+    name: 'Work at Height',
+    count: 18,
+    color: '#102F3E',
+    pct: '28.0%',
+  },
+  {
+    name: 'Energy Isolation',
+    count: 15,
+    color: '#D97706',
+    pct: '23.4%',
+  },
+  {
+    name: 'Line of Fire',
+    count: 13,
+    color: '#C92925',
+    pct: '20.3%',
+  },
+  {
+    name: 'Confined Space',
+    count: 10,
+    color: '#2F6B84',
+    pct: '15.6%',
+  },
+  {
+    name: 'Safe Mechanical Lifting',
+    count: 8,
+    color: '#2A7D78',
+    pct: '12.5%',
+  },
+];
 
 export function TopPrecursorsChart() {
   const { reports } = useSafetyStore();
 
   const topPrecursorsData = React.useMemo(() => {
     if (!reports || reports.length === 0) {
-      return [
-        { name: 'Work at Height', count: 18, color: '#3b82f6', pct: '28.0%' },
-        { name: 'Energy Isolation', count: 15, color: '#f59e0b', pct: '23.4%' },
-        { name: 'Line of Fire', count: 13, color: '#ef4444', pct: '20.3%' },
-        { name: 'Confined Space', count: 10, color: '#8b5cf6', pct: '15.6%' },
-        { name: 'Safe Mechanical Lifting', count: 8, color: '#10b981', pct: '12.5%' },
-      ];
+      return fallbackData;
     }
 
     const counts: Record<string, number> = {};
+
     reports.forEach((r) => {
-      const p = r.precursor || 'General Hazard';
-      counts[p] = (counts[p] || 0) + 1;
+      let precursor = r.precursor || 'General Hazard';
+
+      if (precursor === 'Working at Height') {
+        precursor = 'Work at Height';
+      }
+
+      counts[precursor] = (counts[precursor] || 0) + 1;
     });
 
     const sorted = Object.entries(counts)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5);
 
-    const sum = sorted.reduce((acc, curr) => acc + curr[1], 0);
+    const sum = sorted.reduce(
+      (acc, curr) => acc + curr[1],
+      0
+    );
 
     return sorted.map(([name, count]) => ({
       name,
       count,
-      color: defaultColors[name] || '#64748b',
-      pct: sum > 0 ? `${((count / sum) * 100).toFixed(1)}%` : '0%',
+      color: defaultColors[name] || '#718096',
+      pct:
+        sum > 0
+          ? `${((count / sum) * 100).toFixed(1)}%`
+          : '0%',
     }));
   }, [reports]);
 
-  const totalTop5 = topPrecursorsData.reduce((acc, curr) => acc + curr.count, 0);
+  const totalTop5 = topPrecursorsData.reduce(
+    (acc, curr) => acc + curr.count,
+    0
+  );
+
+  const maxCount = React.useMemo(() => {
+    const highest = Math.max(
+      ...topPrecursorsData.map((d) => d.count),
+      1
+    );
+
+    return Math.ceil(highest * 1.25);
+  }, [topPrecursorsData]);
 
   return (
-    <Card className="flex flex-col border bg-card/95 backdrop-blur-sm shadow-sm h-full">
-      <CardHeader className="p-3.5 sm:p-5 pb-2 flex flex-row items-center justify-between border-b border-border/50">
-        <div>
-          <CardTitle className="text-sm sm:text-base font-bold text-foreground flex items-center gap-2">
-            <Layers className="h-4 w-4 text-amber-500 shrink-0" />
-            Top SIF Precursors
+    <Card className="flex flex-col panel-card panel-accent-navy min-h-[360px] border border-[#D9DDE0] bg-white shadow-none rounded-[2px]">
+      <CardHeader className="p-4 sm:p-5 pb-3 flex flex-col justify-between border-b border-[#D9DDE0]">
+        <div className="flex flex-col w-full relative">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[10px] font-bold text-[#667085] uppercase tracking-wider">
+              PRECURSOR ANALYSIS
+            </span>
+
+            <div
+              className="flex gap-1"
+              aria-hidden="true"
+            >
+              <span className="block w-1.5 h-1.5 bg-[#102F3E]" />
+              <span className="block w-1.5 h-1.5 bg-[#102F3E]" />
+            </div>
+          </div>
+
+          <CardTitle className="text-base font-bold text-[#102F3E] flex justify-between items-center w-full mt-0">
+            <span className="flex items-center gap-2">
+              <Layers className="h-4 w-4 text-[#D97706] shrink-0" />
+              Top SIF precursors
+            </span>
+
+            <span className="hidden sm:inline-flex items-center font-mono text-[11px] font-semibold text-[#667085]">
+              Top 5: {totalTop5} events
+            </span>
           </CardTitle>
-          <p className="text-[11px] sm:text-xs text-muted-foreground mt-0.5">
+
+          <p className="text-xs text-[#667085] mt-1">
             Top 5 precursors ranked by frequency of occurrence
           </p>
         </div>
-
-        <span className="hidden sm:inline-flex items-center rounded-md bg-muted px-2 py-0.5 font-mono text-[11px] font-semibold text-muted-foreground">
-          Top 5: {totalTop5} events
-        </span>
       </CardHeader>
 
-      <CardContent className="p-3.5 sm:p-5 pt-4 flex-1 flex flex-col justify-between">
-        <div className="h-64 w-full">
-          <ResponsiveContainer width="100%" height="100%">
+      <CardContent className="p-3.5 sm:p-4 pt-4 flex-1 flex flex-col justify-between">
+        <div className="h-[300px] w-full min-w-0">
+          <ResponsiveContainer
+            width="100%"
+            height="100%"
+          >
             <BarChart
               data={topPrecursorsData}
               layout="vertical"
-              margin={{ top: 5, right: 35, left: 20, bottom: 5 }}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 10,
+                bottom: 5,
+              }}
             >
               <CartesianGrid
                 strokeDasharray="3 3"
                 horizontal={false}
-                stroke="hsl(var(--border))"
-                opacity={0.6}
+                stroke="#E6EAED"
               />
 
               <XAxis
                 type="number"
-                stroke="hsl(var(--muted-foreground))"
+                stroke="#667085"
                 fontSize={11}
                 tickLine={false}
                 axisLine={false}
-                domain={[0, 95]}
+                domain={[0, maxCount]}
+                allowDecimals={false}
               />
 
               <YAxis
                 type="category"
                 dataKey="name"
-                stroke="hsl(var(--foreground))"
+                stroke="#17202A"
                 fontSize={11}
                 tickLine={false}
                 axisLine={false}
-                width={105}
+                width={110}
               />
 
               <Tooltip
-                cursor={{ fill: 'hsl(var(--muted)/0.25)' }}
+                cursor={{
+                  fill: '#F3F2EE',
+                }}
                 content={({ active, payload }) => {
-                  if (active && payload && payload.length) {
+                  if (
+                    active &&
+                    payload &&
+                    payload.length
+                  ) {
                     const item = payload[0].payload;
+
                     return (
-                      <div className="rounded-xl border bg-card/98 p-3 shadow-xl backdrop-blur-md text-xs space-y-1.5 min-w-[150px]">
-                        <div className="flex items-center space-x-2 font-bold text-foreground">
+                      <div className="rounded-[2px] border border-[#D9DDE0] bg-white p-3 shadow-sm text-xs space-y-1.5 min-w-[150px]">
+                        <div className="flex items-center space-x-2 font-bold text-[#102F3E]">
                           <span
-                            className="h-2.5 w-2.5 rounded-full"
-                            style={{ backgroundColor: item.color }}
+                            className="h-2.5 w-2.5 rounded-[1px]"
+                            style={{
+                              backgroundColor:
+                                item.color,
+                            }}
                           />
+
                           <span>{item.name}</span>
                         </div>
-                        <div className="flex items-center justify-between gap-4 text-muted-foreground pt-1.5 border-t">
-                          <span>Incident Count:</span>
-                          <strong className="text-foreground font-mono text-xs">
+
+                        <div className="flex items-center justify-between gap-4 text-[#667085] pt-1.5 border-t border-[#D9DDE0]">
+                          <span>
+                            Incident Count:
+                          </span>
+
+                          <strong className="text-[#102F3E] font-mono text-xs">
                             {item.count} reports
                           </strong>
                         </div>
-                        <div className="flex items-center justify-between gap-4 text-muted-foreground">
-                          <span>Share of Top 5:</span>
-                          <strong className="text-blue-600 dark:text-blue-400 font-mono text-xs">
+
+                        <div className="flex items-center justify-between gap-4 text-[#667085]">
+                          <span>
+                            Share of Top 5:
+                          </span>
+
+                          <strong className="text-[#102F3E] font-mono text-xs">
                             {item.pct}
                           </strong>
                         </div>
                       </div>
                     );
                   }
+
                   return null;
                 }}
               />
 
               <Bar
                 dataKey="count"
-                radius={[0, 6, 6, 0]}
+                radius={[0, 2, 2, 0]}
                 barSize={20}
               >
-                {topPrecursorsData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
+                {topPrecursorsData.map(
+                  (entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={
+                        entry.color ||
+                        '#718096'
+                      }
+                    />
+                  )
+                )}
+
                 <LabelList
                   dataKey="count"
                   position="right"
                   offset={8}
-                  fill="hsl(var(--foreground))"
+                  fill="#102F3E"
                   className="font-mono font-bold text-xs"
-                  formatter={(val: number) => `${val}`}
+                  formatter={(val: number) =>
+                    `${val}`
+                  }
                 />
               </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        {/* Legend color chips */}
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-1.5 border-t border-border/50 pt-3 text-[11px]">
+        {/* Legend */}
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-1.5 border-t border-[#D9DDE0] pt-3 text-[11px]">
           {topPrecursorsData.map((item) => (
-            <div key={item.name} className="flex items-center space-x-1.5">
+            <div
+              key={item.name}
+              className="flex items-center space-x-1.5"
+            >
               <span
-                className="h-2 w-2 rounded-full"
-                style={{ backgroundColor: item.color }}
+                className="h-2 w-2 rounded-[1px]"
+                style={{
+                  backgroundColor: item.color,
+                }}
               />
-              <span className="text-muted-foreground text-[10px] sm:text-[11px]">
+
+              <span className="text-[#667085] text-[10px] sm:text-[11px]">
                 {item.name}
               </span>
             </div>

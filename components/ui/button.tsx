@@ -4,34 +4,49 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.99]",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#102F3E]/40 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
   {
     variants: {
       variant: {
         default:
-          "bg-[#0ea5e9] text-white shadow-xs hover:bg-[#0284c7] hover:shadow-sm font-semibold",
+          "bg-[#102F3E] text-white shadow-xs hover:bg-[#082735] font-semibold border border-transparent",
+
         destructive:
-          "bg-[#ef4444] text-white shadow-xs hover:bg-[#dc2626] hover:shadow-sm font-semibold",
+          "bg-[#C92925] text-white shadow-xs hover:bg-[#991F1B] font-semibold border border-transparent",
+
         success:
-          "bg-[#22c55e] text-white shadow-xs hover:bg-[#16a34a] hover:shadow-sm font-semibold",
+          "bg-[#2E7D32] text-white shadow-xs hover:bg-[#1E5722] font-semibold border border-transparent",
+
         warning:
-          "bg-[#f59e0b] text-white shadow-xs hover:bg-[#d97706] hover:shadow-sm font-semibold",
+          "bg-[#D97706] text-white shadow-xs hover:bg-[#B45309] font-semibold border border-transparent",
+
         outline:
-          "border border-[#e2e8f0] bg-white text-[#475569] shadow-xs hover:bg-slate-50 hover:text-[#1e293b] dark:bg-card dark:border-border dark:text-slate-300 dark:hover:bg-slate-800",
+          "border border-[#D9DDE0] bg-white text-[#17202A] shadow-xs hover:bg-[#F8FAFC] hover:border-[#102F3E]/40 hover:text-[#102F3E]",
+
         secondary:
-          "bg-slate-100 text-[#1e293b] shadow-xs hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200",
-        ghost: "text-[#475569] hover:bg-slate-100 hover:text-[#1e293b] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200",
-        link: "text-[#0ea5e9] underline-offset-4 hover:underline",
-        filter: "bg-[#0ea5e9] hover:bg-[#0284c7] text-white font-medium shadow-xs",
-        oil: "bg-[#0ea5e9] hover:bg-[#0284c7] text-white font-medium shadow-xs"
+          "bg-[#F3F2EE] border border-[#D9DDE0] text-[#17202A] hover:bg-[#E2E8F0] hover:text-[#102F3E]",
+
+        ghost:
+          "text-[#17202A] hover:bg-[#F1F5F9] hover:text-[#102F3E]",
+
+        link:
+          "text-[#102F3E] underline-offset-4 hover:underline font-medium hover:text-[#C92925]",
+
+        filter:
+          "bg-[#102F3E] hover:bg-[#082735] text-white font-semibold shadow-xs border border-transparent",
+
+        oil:
+          "bg-[#C92925] hover:bg-[#991F1B] text-white font-semibold shadow-xs border border-transparent",
       },
+
       size: {
-        default: "h-9 px-4 py-2",
-        sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-10 rounded-md px-8",
-        icon: "h-9 w-9",
+        default: "h-8 px-3.5 py-1.5",
+        sm: "h-7 rounded-md px-2.5 text-xs",
+        lg: "h-9 rounded-md px-5 text-sm",
+        icon: "h-8 w-8 rounded-md",
       },
     },
+
     defaultVariants: {
       variant: "default",
       size: "default",
@@ -41,13 +56,14 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   asChild?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
@@ -57,6 +73,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     )
   }
 )
+
 Button.displayName = "Button"
 
 export { Button, buttonVariants }

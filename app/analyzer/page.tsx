@@ -596,22 +596,20 @@ export default function AnalyzerPage() {
               <div className="flex flex-wrap items-center gap-3">
                 <Badge
                   variant="outline"
-                  className={`text-sm font-black px-3 py-1 rounded-lg shadow-2xs inline-flex items-center gap-1.5 ${
-                    analysisResult.sifPotential === 'High'
+                  className={`text-sm font-black px-3 py-1 rounded-lg shadow-2xs inline-flex items-center gap-1.5 ${analysisResult.sifPotential === 'High'
                       ? 'bg-red-500/15 text-red-600 dark:text-red-400 border-red-500/40'
                       : analysisResult.sifPotential === 'Medium'
-                      ? 'bg-orange-500/15 text-orange-600 dark:text-orange-400 border-orange-500/40'
-                      : 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/40'
-                  }`}
+                        ? 'bg-orange-500/15 text-orange-600 dark:text-orange-400 border-orange-500/40'
+                        : 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/40'
+                    }`}
                 >
                   <span
-                    className={`h-2 w-2 rounded-full ${
-                      analysisResult.sifPotential === 'High'
+                    className={`h-2 w-2 rounded-full ${analysisResult.sifPotential === 'High'
                         ? 'bg-red-500 animate-pulse'
                         : analysisResult.sifPotential === 'Medium'
-                        ? 'bg-orange-500'
-                        : 'bg-emerald-500'
-                    }`}
+                          ? 'bg-orange-500'
+                          : 'bg-emerald-500'
+                      }`}
                   />
                   SIF Potential: {analysisResult.sifPotential}
                 </Badge>
@@ -635,13 +633,12 @@ export default function AnalyzerPage() {
                   {/* Progress bar */}
                   <div className="w-full bg-muted/80 rounded-full h-2 overflow-hidden border border-border/40">
                     <div
-                      className={`h-full rounded-full transition-all duration-700 ease-out ${
-                        analysisResult.confidence >= 85
+                      className={`h-full rounded-full transition-all duration-700 ease-out ${analysisResult.confidence >= 85
                           ? 'bg-emerald-500'
                           : analysisResult.confidence >= 70
-                          ? 'bg-sky-500'
-                          : 'bg-amber-500'
-                      }`}
+                            ? 'bg-sky-500'
+                            : 'bg-amber-500'
+                        }`}
                       style={{ width: `${analysisResult.confidence}%` }}
                     />
                   </div>
@@ -832,11 +829,10 @@ export default function AnalyzerPage() {
               <Card
                 key={example.id}
                 onClick={() => handleSelectExample(example)}
-                className={`cursor-pointer transition-all duration-200 hover:shadow-md border group ${
-                  isSelected
+                className={`cursor-pointer transition-all duration-200 hover:shadow-md border group ${isSelected
                     ? 'border-sky-500 bg-sky-500/5 ring-1 ring-sky-500'
                     : 'bg-card/90 hover:bg-muted/40 hover:border-sky-500/40'
-                }`}
+                  }`}
               >
                 <CardContent className="p-4 space-y-2.5">
                   <div className="flex items-center justify-between gap-1">

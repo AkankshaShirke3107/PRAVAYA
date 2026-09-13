@@ -8,7 +8,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-xl border border-[#e2e8f0] bg-white text-card-foreground shadow-xs hover:shadow-md transition-all duration-200 ease-in-out dark:bg-card dark:border-border",
+      "rounded-xl border border-blue-500/10 bg-white text-[#17202A] shadow-[0_2px_8px_rgba(30,64,175,0.06)]",
       className
     )}
     {...props}
@@ -22,7 +22,10 @@ const CardHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    className={cn(
+      "flex flex-col space-y-1 p-4 border-b border-[#D9DDE0]",
+      className
+    )}
     {...props}
   />
 ))
@@ -34,7 +37,10 @@ const CardTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={cn("font-bold text-base text-[#1e293b] leading-tight tracking-tight dark:text-slate-100", className)}
+    className={cn(
+      "font-bold text-sm text-[#102F3E] leading-tight tracking-tight",
+      className
+    )}
     {...props}
   />
 ))
@@ -46,7 +52,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-xs text-[#64748b] dark:text-slate-400", className)}
+    className={cn("text-xs text-[#667085]", className)}
     {...props}
   />
 ))
@@ -56,7 +62,11 @@ const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+  <div
+    ref={ref}
+    className={cn("p-4", className)}
+    {...props}
+  />
 ))
 CardContent.displayName = "CardContent"
 
@@ -66,10 +76,20 @@ const CardFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex items-center p-6 pt-0", className)}
+    className={cn(
+      "flex items-center p-4 pt-0 border-t border-[#D9DDE0]",
+      className
+    )}
     {...props}
   />
 ))
 CardFooter.displayName = "CardFooter"
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  CardContent,
+}
