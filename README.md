@@ -728,11 +728,11 @@ Uncomment and update paths when screenshots are available:
 | # | Team Member | Role |
 |:---:|:---|:---|
 | 1 | **Akanksha Shirke** | Team Lead |
-| 2 | *Member 2* | *Role* |
-| 3 | *Member 3* | *Role* |
-| 4 | *Member 4* | *Role* |
-| 5 | *Member 5* | *Role* |
-| 6 | *Member 6* | *Role* |
+| 2 | **Bharti Ambule** | *Role* |
+| 3 | **Ahana Tola** | *Role* |
+| 4 | **Shivam More** | *Role* |
+| 5 | **Gaurav Sarode** | *Role* |
+| 6 | **Sanskar Dhayade** | *Role* |
 
 </div>
 
