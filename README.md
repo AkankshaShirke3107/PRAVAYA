@@ -412,21 +412,32 @@ flowchart LR
 
 <br>
 
-## Proposed Tech Stack
+## Tech Stack
 
-> [!NOTE]
-> The following represents the **planned/proposed technology stack** for PRAVAYA. The specific implementation choices will be finalized as the codebase is built out. Refer to `package.json`, `requirements.txt`, and configuration files for the current implementation status.
+### Current Prototype (Frontend)
 
 | Layer | Technology | Purpose |
 |:---|:---|:---|
-| **Frontend** | React / Next.js | HSE dashboard & report analysis interface |
-| **Styling** | Tailwind CSS / CSS | Dark professional industrial-safety UI |
-| **Backend** | Node.js / Python (FastAPI) | REST API, report ingestion, orchestration |
-| **AI/NLP** | Transformer Models, LLM APIs | Safety narrative understanding & structured extraction |
-| **Embeddings** | Sentence Transformers / OpenAI | Semantic similarity for report comparison |
-| **Vector Store** | Pinecone / ChromaDB / FAISS | Vector similarity search for similar reports |
-| **Database** | PostgreSQL / MongoDB | Report storage, structured analysis results |
-| **Pattern Mining** | scikit-learn, clustering algorithms | Recurring precursor & barrier pattern detection |
+| **Framework** | Next.js 14 (App Router) | Server-side rendering, routing, page generation |
+| **UI Library** | React 18 + TypeScript | Component-based HSE dashboard & analysis interface |
+| **Styling** | Tailwind CSS | Professional OIL HSE-themed industrial UI |
+| **State Management** | Zustand | Client-side store for reports, filters, review state |
+| **Components** | Radix UI Primitives | Accessible dropdowns, dialogs, tabs, tooltips |
+| **Charts** | Recharts | SIF trend charts, precursor distribution, risk patterns |
+| **Icons** | Lucide React | Consistent iconography across the interface |
+| **Data** | Client-side mock data (75 reports) | Representative safety records for demo workflow |
+
+### Proposed Full Architecture
+
+| Layer | Technology | Purpose |
+|:---|:---|:---|
+| **Backend** | Python + FastAPI | REST API, report ingestion, orchestration |
+| **SIF Classification** | DeBERTa-v3-base | SIF potential classification with confidence scoring |
+| **Structured Extraction** | LLM (Structured Reasoning) | Precursor, barrier, consequence extraction from narratives |
+| **Embeddings** | Sentence Transformers | Semantic similarity for similar report retrieval |
+| **Vector Store** | PostgreSQL + pgvector | Vector similarity search for historical reports |
+| **Database** | PostgreSQL | Report storage, structured analysis results |
+| **Pattern Mining** | Clustering + Frequency Analysis | Recurring precursor & barrier pattern detection |
 | **Domain Knowledge** | IOGP LSR, OISD, OSHA rule bases | Safety rule mapping & compliance alignment |
 | **Authentication** | JWT / OAuth 2.0 | Role-based access control for HSE teams |
 
@@ -440,37 +451,41 @@ flowchart LR
 
 ```
 PRAVAYA/
+├── app/                         # Next.js 14 App Router pages
+│   ├── dashboard/page.tsx       # Main HSE dashboard
+│   ├── reports/page.tsx         # Safety reports registry
+│   ├── reports/[id]/page.tsx    # Individual report analysis
+│   ├── analyzer/page.tsx        # SIF screening analyzer
+│   ├── analysis/[id]/page.tsx   # Full report analysis view
+│   ├── patterns/page.tsx        # Risk patterns & trends
+│   ├── compliance/page.tsx      # OISD / IOGP compliance
+│   ├── corrective-actions/      # Corrective actions tracking
+│   ├── actions/page.tsx         # Action items management
+│   ├── guidelines/page.tsx      # Safety guidelines reference
+│   ├── settings/page.tsx        # System settings
+│   └── layout.tsx               # Root layout with Shell
+├── components/
+│   ├── layout/                  # Shell, Sidebar, Header, Breadcrumbs
+│   ├── dashboard/               # Dashboard charts, KPIs, heatmap
+│   ├── reports/                 # Report table, analysis view, filters
+│   ├── analyzer/                # SIF screening analyzer components
+│   ├── patterns/                # Risk pattern visualizations
+│   └── ui/                      # Shared UI primitives (Badge, Card, etc.)
+├── lib/
+│   ├── mockReports.ts           # 75 representative safety reports
+│   ├── store.ts                 # Zustand state management
+│   └── utils.ts                 # Utility functions
+├── types/
+│   └── index.ts                 # TypeScript type definitions
+├── public/                      # Static assets
 ├── docs/
-│   └── assets/                  # Project assets (banner, diagrams)
-├── src/
-│   ├── frontend/                # Web frontend application
-│   │   ├── components/          # UI components
-│   │   ├── pages/               # Application pages/routes
-│   │   ├── styles/              # Styling & theme
-│   │   └── utils/               # Frontend utilities
-│   ├── backend/                 # Backend API server
-│   │   ├── api/                 # API route handlers
-│   │   ├── services/            # Business logic services
-│   │   ├── models/              # Data models
-│   │   └── config/              # Configuration
-│   ├── ai/                      # AI/NLP engine
-│   │   ├── pipeline/            # Analysis pipeline
-│   │   ├── models/              # ML model definitions
-│   │   ├── embeddings/          # Embedding generation
-│   │   └── knowledge/           # Domain knowledge base
-│   └── shared/                  # Shared utilities & types
-├── data/
-│   ├── demo/                    # Demo/representative safety records
-│   └── schemas/                 # Data schemas & validation
-├── tests/                       # Test suites
-├── scripts/                     # Build & deployment scripts
-├── .env.example                 # Environment variable template
-├── README.md
-└── LICENSE
+│   └── assets/                  # Banner, architecture diagrams
+├── package.json
+├── tailwind.config.ts
+├── tsconfig.json
+├── next.config.mjs
+└── README.md
 ```
-
-> [!NOTE]
-> This structure represents the **proposed project layout**. The actual structure may evolve as the codebase is developed. Refer to the repository's current state for the latest structure.
 
 <br>
 
@@ -483,7 +498,6 @@ PRAVAYA/
 ### Prerequisites
 
 - **Node.js** ≥ 18.x
-- **Python** ≥ 3.10 (for AI/NLP engine)
 - **Git**
 
 ### Installation
@@ -493,33 +507,31 @@ PRAVAYA/
 git clone https://github.com/AkankshaShirke3107/PRAVAYA.git
 cd PRAVAYA
 
-# Install frontend dependencies
-cd src/frontend
+# Install dependencies
 npm install
-
-# Install backend/AI dependencies
-cd ../backend
-pip install -r requirements.txt
-
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your configuration
 ```
 
 ### Running the Application
 
 ```bash
-# Start the frontend development server
-cd src/frontend
+# Start the development server
 npm run dev
-
-# Start the backend API (in a separate terminal)
-cd src/backend
-python main.py
 ```
 
-> [!IMPORTANT]
-> Setup instructions will be updated as the project codebase evolves. Check this section for the latest steps.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Production Build
+
+```bash
+# Build for production
+npm run build
+
+# Start production server
+npm run start
+```
+
+> [!NOTE]
+> The current prototype is a **frontend-only** Next.js application with client-side mock data. No backend server or database setup is required to run the demo.
 
 <br>
 
@@ -655,23 +667,34 @@ flowchart TB
 
 ## Screenshots
 
-> *Screenshots of the PRAVAYA dashboard and analysis interface will be added here as the prototype UI is finalized.*
+> *Screenshots of the PRAVAYA prototype demonstrating the complete SIF analysis workflow.*
 
-<!--
-Uncomment and update paths when screenshots are available:
+### HSE Intelligence Dashboard
+<!-- ![PRAVAYA Dashboard](docs/assets/screenshots/dashboard.png) -->
+The main dashboard displays KPI cards (total reports, SIF-potential breakdown), SIF trend charts, top precursors, reports over time, life-saving rule distribution, and a site-level risk heatmap.
 
-### Dashboard
-![PRAVAYA Dashboard](docs/assets/screenshots/dashboard.png)
+### Safety Reports Registry
+<!-- ![Safety Reports](docs/assets/screenshots/reports.png) -->
+75 representative safety reports searchable and filterable by type (UA/UC/Near-Miss), location, precursor, and review status.
 
-### Report Analyzer
-![Report Analyzer](docs/assets/screenshots/report-analyzer.png)
+### Report Analysis View
+<!-- ![Report Analysis](docs/assets/screenshots/report-analysis.png) -->
+Full SIF analysis for each report: SIF potential badge, confidence score, precursor identification, failed barrier, potential consequence, IOGP Life-Saving Rule mapping, evidence highlight, and recommended corrective action.
 
-### SIF Analysis Result
-![SIF Analysis](docs/assets/screenshots/sif-analysis.png)
+### SIF Screening Analyzer
+<!-- ![SIF Analyzer](docs/assets/screenshots/analyzer.png) -->
+Paste or type any raw safety narrative → click Analyze → receive a structured SIF assessment with precursor, barrier failure, IOGP rule mapping, and evidence-grounded explanation.
 
-### Patterns & Trends
-![Patterns & Trends](docs/assets/screenshots/patterns-trends.png)
--->
+### Risk Patterns & Trends
+<!-- ![Risk Patterns](docs/assets/screenshots/patterns.png) -->
+Recurring precursor patterns, barrier failure distributions, site-level trends, and activity-based risk visualizations.
+
+### Compliance Monitoring
+<!-- ![Compliance](docs/assets/screenshots/compliance.png) -->
+IOGP Life-Saving Rules alignment, OISD compliance tracking, and audit readiness status.
+
+> [!TIP]
+> To add actual screenshots, capture them from the running prototype and save to `docs/assets/screenshots/`, then uncomment the image links above.
 
 <br>
 
@@ -681,20 +704,32 @@ Uncomment and update paths when screenshots are available:
 
 ## Roadmap
 
+### ✅ Completed (Prototype)
+
 - [x] Core conceptual architecture & safety reasoning model
 - [x] Project structure & documentation
-- [ ] HSE dashboard — dark professional industrial UI
-- [ ] Report Analyzer with safety narrative input
-- [ ] SIF Potential Detection engine
-- [ ] Precursor identification & barrier analysis
-- [ ] Risk chain reconstruction & visualization
-- [ ] IOGP Life-Saving Rule mapping
-- [ ] Evidence span extraction & grounding
-- [ ] Embedding-based similar report retrieval
-- [ ] Recurring pattern detection across reports
-- [ ] HSE expert validation workflow
-- [ ] OISD / OSHA compliance module
-- [ ] Role-based access control
+- [x] HSE Intelligence Dashboard with KPIs, charts, and site risk heatmap
+- [x] Safety Reports Registry with search, filter, sort, and pagination
+- [x] Report Analysis View with SIF potential, precursor, barrier, consequence, IOGP rule mapping
+- [x] SIF Screening Analyzer with free-text narrative input and structured output
+- [x] Risk Patterns & Trends visualization
+- [x] Compliance Monitoring (IOGP Life-Saving Rules, OISD, Audit)
+- [x] HSE Expert Review workflow (Confirm / Reject / Request Further Review)
+- [x] Corrective Actions tracking
+- [x] Representative demo dataset (75 safety reports)
+- [x] Responsive layout with sidebar navigation
+- [x] Clean production build (zero TS/ESLint errors)
+
+### 🔜 Planned (Full Architecture)
+
+- [ ] DeBERTa-v3-base SIF classification model training & integration
+- [ ] LLM-based structured extraction (precursor, barrier, consequence)
+- [ ] Sentence Transformer embeddings + pgvector similarity search
+- [ ] FastAPI backend with report ingestion API
+- [ ] PostgreSQL database for report storage
+- [ ] Real AI-powered analysis replacing client-side mock logic
+- [ ] Clustering-based pattern detection across reports
+- [ ] Role-based access control & authentication
 - [ ] Deployment pipeline
 - [ ] Authorized OIL data integration (Phase 4)
 
