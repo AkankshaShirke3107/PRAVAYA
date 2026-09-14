@@ -98,7 +98,9 @@ export default function SifReportsPage() {
         locs.add(report.field);
       }
 
-      locs.add(report.location);
+      if (report.location) {
+        locs.add(report.location);
+      }
     });
 
     return Array.from(locs).sort();
@@ -126,11 +128,11 @@ export default function SifReportsPage() {
           report.id.toLowerCase().includes(query) ||
           report.title.toLowerCase().includes(query) ||
           report.description.toLowerCase().includes(query) ||
-          report.activity.toLowerCase().includes(query) ||
+          (report.activity?.toLowerCase().includes(query) || false) ||
           report.precursor.toLowerCase().includes(query) ||
           (report.field &&
             report.field.toLowerCase().includes(query)) ||
-          report.location.toLowerCase().includes(query);
+          (report.location?.toLowerCase().includes(query) || false);
 
         if (!matchesQuery) {
           return false;
@@ -209,8 +211,8 @@ export default function SifReportsPage() {
   // Sort Reports
   const sortedReports = useMemo(() => {
     return [...filteredReports].sort((a, b) => {
-      let valueA: any = a[sortField];
-      let valueB: any = b[sortField];
+      let valueA: any = a[sortField as keyof typeof a];
+      let valueB: any = b[sortField as keyof typeof b];
 
       if (sortField === 'date') {
         valueA = parseMockDate(valueA);
@@ -798,14 +800,14 @@ export default function SifReportsPage() {
                           <div className="flex items-center gap-2 min-w-[100px]">
                             <div className="flex-1 bg-muted rounded-full h-1.5 overflow-hidden">
                               <div
-                                className={`h-full rounded-full transition-all duration-300 ${report.confidence >= 85
+                                className={`h-full rounded-full transition-all duration-300 ${(report.confidence ?? 0) >= 85
                                   ? 'bg-emerald-500'
-                                  : report.confidence >= 70
+                                  : (report.confidence ?? 0) >= 70
                                     ? 'bg-sky-500'
                                     : 'bg-amber-500'
                                   }`}
                                 style={{
-                                  width: `${report.confidence}%`,
+                                  width: `${report.confidence ?? 0}%`,
                                 }}
                               />
                             </div>

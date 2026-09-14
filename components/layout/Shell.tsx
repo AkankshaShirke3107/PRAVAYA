@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 import { Breadcrumbs } from './Breadcrumbs';
@@ -23,12 +23,14 @@ export function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen bg-background text-foreground">
       {/* Sidebar (Mobile drawer & Tablet collapsible) */}
-      <Sidebar
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-        tabletCollapsed={tabletCollapsed}
-        onToggleTablet={() => setTabletCollapsed((prev) => !prev)}
-      />
+      <Suspense fallback={<div className="w-64 border-r border-[#D9DDE0] bg-white hidden lg:block" />}>
+        <Sidebar
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+          tabletCollapsed={tabletCollapsed}
+          onToggleTablet={() => setTabletCollapsed((prev) => !prev)}
+        />
+      </Suspense>
 
       {/* Main Content Area */}
       <div className="flex flex-1 flex-col overflow-x-hidden min-w-0">

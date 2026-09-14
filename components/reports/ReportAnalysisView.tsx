@@ -49,8 +49,10 @@ import {
   DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { ReportItem, mockReportsData } from '@/lib/mockReports';
+import { mockReportsData } from '@/lib/mockReports';
+import { SafetyReport, ReportStatus } from '@/types';
 import { formatReadableDate } from '@/lib/utils';
+import { useSafetyStore } from '@/lib/store';
 import { formatLsrName } from '@/components/dashboard/LsrDistributionChart';
 import { toast } from 'sonner';
 
@@ -68,9 +70,11 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
   const router = useRouter();
 
   // Find report in mockReportsData or fallback to first
-  const report: ReportItem =
+  const report: SafetyReport =
     mockReportsData.find((r) => r.id === reportId) ||
     mockReportsData[0];
+
+  const { updateReportStatus } = useSafetyStore();
 
   // Expert Review States
   const [reviewStatus, setReviewStatus] = useState<string>(() => {
@@ -147,13 +151,19 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
       });
 
       let statusLabel = '';
+      let newStatus: ReportStatus = 'Under Review';
       if (selectedDecision === 'confirm') {
         statusLabel = 'Reviewed by Er. R. K. Neog (Chief Safety Inspector)';
+        newStatus = 'Confirmed';
       } else if (selectedDecision === 'reject') {
         statusLabel = 'Rejected by Er. R. K. Neog (Chief Safety Inspector)';
+        newStatus = 'Rejected';
       } else {
         statusLabel = 'Further Review Requested by Er. R. K. Neog (Chief Safety Inspector)';
+        newStatus = 'Under Review';
       }
+
+      updateReportStatus(report.id, newStatus);
 
       setReviewStatus(statusLabel);
       setSubmittedReview({
@@ -285,12 +295,12 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
   const radius = 38;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset =
-    circumference - (report.confidence / 100) * circumference;
+    circumference - ((report.confidence ?? 0) / 100) * circumference;
 
   const confidenceStroke =
-    report.confidence >= 85
+    (report.confidence ?? 0) >= 85
       ? 'stroke-emerald-500'
-      : report.confidence >= 70
+      : (report.confidence ?? 0) >= 70
       ? 'stroke-sky-500'
       : 'stroke-amber-500';
 
@@ -721,7 +731,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
             </CardHeader>
             <CardContent className="p-4 pt-1 space-y-2">
               <div className="flex flex-wrap gap-2">
-                {iogpRules.map((rule, idx) => (
+                {iogpRules.map((rule: string, idx: number) => (
                   <Badge
                     key={idx}
                     variant="outline"

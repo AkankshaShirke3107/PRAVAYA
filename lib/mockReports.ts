@@ -1,40 +1,6 @@
-﻿export interface AttachmentItem {
-  name: string;
-  size: string;
-  type: 'pdf' | 'image' | 'doc';
-}
+import { SafetyReport, AttachmentItem } from '@/types';
 
-export interface ReportItem {
-  id: string;
-  reportType: 'UA' | 'UC' | 'NM';
-  date: string;
-  location: string;
-  site: string;
-  field: string;
-  activity: string;
-  sifPotential: 'Yes' | 'No' | 'Review';
-  sifLevel?: 'High' | 'Medium' | 'Low';
-  precursor: string;
-  confidence: number; // 0-100
-  confidenceScore?: number; // 0.0 - 1.0
-  status: 'Pending' | 'Confirmed' | 'Rejected';
-  title: string;
-  description: string;
-  lsrViolated: string;
-  iogpRules?: string[];
-  reportedBy: string;
-  department: string;
-  recommendedAction: string;
-  rootCause: string;
-  severity: number;
-  probability: number;
-  potentialConsequence?: string;
-  evidenceHighlight?: string;
-  aiExplanation?: string;
-  attachments?: AttachmentItem[];
-}
-
-export const mockReportsData: ReportItem[] = [
+export const mockReportsData: SafetyReport[] = [
   {
     "id": "RPT-001",
     "reportType": "UA",

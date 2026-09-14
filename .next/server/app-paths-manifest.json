@@ -1,9 +1,0 @@
-{
-  "/dashboard/page": "app/dashboard/page.js",
-  "/reports/page": "app/reports/page.js",
-  "/analyzer/page": "app/analyzer/page.js",
-  "/patterns/page": "app/patterns/page.js",
-  "/actions/page": "app/actions/page.js",
-  "/compliance/page": "app/compliance/page.js",
-  "/settings/page": "app/settings/page.js"
-}

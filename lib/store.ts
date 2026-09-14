@@ -30,7 +30,7 @@ const initialFilters: FilterState = {
 };
 
 export const useSafetyStore = create<SafetyStoreState>((set) => ({
-  reports: mockReportsData as unknown as SafetyReport[],
+  reports: mockReportsData,
   selectedReport: null,
   filters: initialFilters,
   isQuickViewOpen: false,
