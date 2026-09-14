@@ -173,23 +173,21 @@ export function LsrDistributionChart() {
 
   return (
     <Card className="flex flex-col panel-card panel-accent-navy min-h-[360px]">
-      <CardHeader className="p-4 sm:p-5 pb-3 flex flex-col justify-between border-b border-[#D9DDE0]">
+      <CardHeader className="p-4 sm:p-5 pb-3 flex flex-col justify-between">
         <div className="flex flex-col w-full relative">
-          <span className="text-[10px] font-bold text-[#667085] uppercase tracking-wider mb-1">
+          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">
             DISTRIBUTION METRICS
           </span>
 
-          <CardTitle className="text-base font-bold text-[#102F3E] flex justify-between items-center w-full mt-0">
+          <CardTitle className="text-sm font-semibold text-foreground flex justify-between items-center w-full mt-0">
             <span>Life-Saving Rule distribution</span>
-
-            <span className="hidden sm:inline-flex items-center font-mono text-[11px] font-semibold text-[#667085]">
+            <span className="hidden sm:inline-flex items-center font-mono text-[11px] font-medium text-muted-foreground">
               6 Categories
             </span>
           </CardTitle>
 
-          <p className="text-xs text-[#667085] mt-1">
-            Distribution of IOGP Life-Saving Rules mapped to audited
-            safety events
+          <p className="text-xs text-muted-foreground mt-1">
+            Distribution of IOGP Life-Saving Rules mapped to audited safety events
           </p>
         </div>
       </CardHeader>
@@ -209,30 +207,25 @@ export function LsrDistributionChart() {
                         .payload as LsrSegment;
 
                       return (
-                        <div className="rounded-[2px] border border-[#D9DDE0] bg-white p-3 shadow-md text-xs space-y-1.5 min-w-[150px]">
-                          <div className="flex items-center space-x-2 font-bold text-[#102F3E]">
+                        <div className="rounded-[2px] border border-border bg-card p-3 shadow-md text-xs space-y-1.5 min-w-[150px] dark:bg-[#182130] dark:border-[#232E3B]">
+                          <div className="flex items-center space-x-2 font-semibold text-foreground">
                             <span
                               className="h-2.5 w-2.5 rounded-[1px]"
-                              style={{
-                                backgroundColor: item.color,
-                              }}
+                              style={{ backgroundColor: item.color }}
                             />
-
                             <span>{item.name}</span>
                           </div>
 
-                          <div className="flex items-center justify-between gap-3 text-[#667085] pt-1 border-t border-[#D9DDE0]">
+                          <div className="flex items-center justify-between gap-3 text-muted-foreground pt-1 border-t border-border">
                             <span>Share:</span>
-
-                            <strong className="text-[#102F3E] font-mono text-xs">
+                            <strong className="text-foreground font-mono text-xs">
                               {item.value}%
                             </strong>
                           </div>
 
-                          <div className="flex items-center justify-between gap-3 text-[#667085]">
-                            <span>Estimated Events:</span>
-
-                            <strong className="text-[#102F3E] font-mono text-xs">
+                          <div className="flex items-center justify-between gap-3 text-muted-foreground">
+                            <span>Events:</span>
+                            <strong className="text-foreground font-mono text-xs">
                               {item.reportsCount}
                             </strong>
                           </div>
@@ -283,13 +276,13 @@ export function LsrDistributionChart() {
 
             {/* Donut Center */}
             <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center select-none p-2">
-              <span className="text-2xl sm:text-3xl font-black font-mono tracking-tight text-[#102F3E] leading-none transition-all duration-200">
+              <span className="text-xl sm:text-2xl font-bold font-mono tracking-tight text-foreground leading-none transition-all duration-200">
                 {activeItem
                   ? `${activeItem.value}%`
                   : `${lsrDistributionData[0].value}%`}
               </span>
 
-              <span className="text-[11px] font-semibold text-[#667085] mt-1 truncate max-w-[105px] sm:max-w-[120px] px-1 leading-tight transition-all duration-200">
+              <span className="text-[11px] font-medium text-muted-foreground mt-1 truncate max-w-[105px] sm:max-w-[120px] px-1 leading-tight transition-all duration-200">
                 {activeItem
                   ? activeItem.name
                   : lsrDistributionData[0].name}
@@ -298,10 +291,10 @@ export function LsrDistributionChart() {
           </div>
 
           {/* Legend */}
-          <div className="flex-1 w-full space-y-1.5 self-center min-w-0">
-            <div className="text-[11px] font-bold text-[#667085] uppercase tracking-wider mb-1 px-1 flex items-center justify-between">
+          <div className="flex-1 w-full space-y-1 self-center min-w-0">
+            <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1 px-1 flex items-center justify-between">
               <span>Rule Category</span>
-              <span>Distribution</span>
+              <span>Share</span>
             </div>
 
             <div className="space-y-1.5">
@@ -323,9 +316,9 @@ export function LsrDistributionChart() {
                         prev === index ? null : index
                       )
                     }
-                    className={`flex items-center justify-between p-2 rounded-[2px] transition-colors cursor-pointer border ${isItemActive
-                        ? 'bg-[#F3F2EE] border-[#D9DDE0]'
-                        : 'hover:bg-[#F3F2EE]/60 border-transparent'
+                    className={`flex items-center justify-between p-1.5 rounded-[2px] transition-colors cursor-pointer border ${isItemActive
+                        ? 'bg-muted border-border'
+                        : 'hover:bg-muted/50 border-transparent'
                       }`}
                   >
                     <div className="flex items-center space-x-2.5 min-w-0">
@@ -337,17 +330,14 @@ export function LsrDistributionChart() {
                       />
 
                       <span
-                        className={`text-xs truncate ${isItemActive
-                            ? 'text-[#102F3E] font-semibold'
-                            : 'text-[#17202A] font-medium'
-                          }`}
-                      >
+                         className={`text-xs truncate ${ isItemActive ? 'text-foreground font-semibold' : 'text-foreground font-medium' }`}
+                       >
                         {item.name}
                       </span>
                     </div>
 
                     <div className="flex items-center space-x-2 shrink-0">
-                      <span className="font-mono text-xs font-bold text-[#102F3E]">
+                      <span className="font-mono text-xs font-semibold text-foreground">
                         {item.value}%
                       </span>
                     </div>
@@ -359,15 +349,12 @@ export function LsrDistributionChart() {
         </div>
 
         {/* Footer Info */}
-        <div className="mt-4 flex items-center justify-between border-t border-[#D9DDE0] pt-3 text-[11px] text-[#667085]">
+        <div className="mt-4 flex items-center justify-between border-t border-border pt-3 text-[11px] text-muted-foreground">
           <span className="flex items-center gap-1.5">
-            <Info className="h-3 w-3 text-[#667085]" />
+            <Info className="h-3 w-3" />
             Hover or click segments to inspect rule percentages
           </span>
-
-          <span className="font-mono text-[10px] text-[#667085]">
-            Total: 100%
-          </span>
+          <span className="font-mono text-[10px]">Total: 100%</span>
         </div>
       </CardContent>
     </Card>

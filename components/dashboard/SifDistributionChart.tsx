@@ -44,7 +44,7 @@ const data = [
 
 export function SifDistributionChart() {
   return (
-    <Card className="flex flex-col border border-[#D9DDE0] bg-white shadow-none rounded-[2px] h-full">
+    <Card className="flex flex-col panel-card panel-accent-red h-full">
       <CardHeader className="p-4 pb-2 flex flex-row items-center justify-between border-b border-[#D9DDE0]">
         <div>
           <CardTitle className="text-sm font-semibold text-[#102F3E]">
@@ -68,7 +68,7 @@ export function SifDistributionChart() {
                     const item = payload[0].payload;
 
                     return (
-                      <div className="rounded-[2px] border border-[#D9DDE0] bg-white p-2 shadow-md text-xs">
+                      <div className="rounded-[2px] border border-border bg-card p-2 shadow-md text-xs">
                         <div className="flex items-center space-x-1.5 font-semibold text-[#102F3E]">
                           <span
                             className="h-2.5 w-2.5 rounded-[1px]"

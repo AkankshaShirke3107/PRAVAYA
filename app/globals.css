@@ -4,55 +4,46 @@
 
 @layer base {
   :root {
-    /* Main page background */
-    --background: 45 12% 94%;
-    --foreground: 215 30% 13%;
+    /* ======================================================
+       LIGHT MODE — PRIMARY EXPERIENCE
+       Warm off-white background, white surfaces, navy primary
+       ====================================================== */
 
-    /* Cards and panels */
-    --card: 0 0% 100%;
+    /* Page background */
+    --background: 45 12% 94%;         /* #F3F2EE warm off-white */
+    --foreground: 215 30% 13%;        /* #17202A near-black body text */
+
+    /* Cards & panels */
+    --card: 0 0% 100%;                /* #FFFFFF white */
     --card-foreground: 215 30% 13%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 215 30% 13%;
 
     /* Primary navy */
-    --primary: 199 59% 15%;
+    --primary: 199 59% 15%;           /* #102F3E */
     --primary-foreground: 0 0% 100%;
 
-    /* Oil India red */
-    --oil: 2 69% 47%;
-    --oil-dark: 2 70% 35%;
-    --oil-foreground: 0 0% 100%;
-
-    /* Risk indicators */
-    --success: 123 46% 34%;
-    --success-foreground: 0 0% 100%;
-
-    --warning: 36 94% 44%;
-    --warning-foreground: 0 0% 100%;
-
-    --danger: 2 69% 47%;
-    --danger-foreground: 0 0% 100%;
-
-    /* Secondary */
+    /* Secondary / muted */
     --secondary: 45 12% 94%;
     --secondary-foreground: 215 30% 13%;
 
     --muted: 45 12% 94%;
-    --muted-foreground: 220 13% 46%;
+    --muted-foreground: 220 13% 46%;  /* #667085 */
 
     --accent: 45 12% 94%;
     --accent-foreground: 199 59% 15%;
 
-    --destructive: 2 69% 47%;
+    /* Status */
+    --destructive: 2 69% 47%;         /* #C92925 */
     --destructive-foreground: 0 0% 100%;
 
-    /* Borders */
-    --border: 206 9% 86%;
+    /* Borders & inputs */
+    --border: 206 9% 86%;             /* #D9DDE0 */
     --input: 206 9% 86%;
     --ring: 199 59% 15%;
 
-    /* Rectangular enterprise panels */
+    /* Radius — sharp/square enterprise UI */
     --radius: 2px;
 
     /* Sidebar */
@@ -61,42 +52,78 @@
     --sidebar-muted: 45 12% 94%;
     --sidebar-border: 206 9% 86%;
     --sidebar-accent: 199 59% 15%;
+
+    /* Oil India red accent */
+    --oil: 2 69% 47%;
+    --oil-foreground: 0 0% 100%;
+
+    /* Semantic colors */
+    --success: 123 46% 34%;           /* #2E7D32 */
+    --warning: 36 94% 44%;            /* #D97706 */
+    --danger: 2 69% 47%;
   }
 
   .dark {
-    --background: 45 12% 94%;
-    --foreground: 215 30% 13%;
+    /* ======================================================
+       DARK MODE — SECONDARY EXPERIENCE
+       Near-black charcoal, restrained, engineering-focused
+       GitHub dark restraint + Oil India identity
+       ====================================================== */
 
-    --card: 0 0% 100%;
-    --card-foreground: 215 30% 13%;
+    /* Page background — deep charcoal, NOT pure black */
+    --background: 216 19% 7%;         /* #0D1117 — base layer */
+    --foreground: 210 22% 92%;        /* #E6EAF0 — primary text, near-white */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 215 30% 13%;
+    /* Cards — one step lighter than background */
+    --card: 215 19% 10%;              /* #141B22 — primary surface */
+    --card-foreground: 210 22% 92%;   /* matches foreground */
 
-    --primary: 199 59% 15%;
+    /* Popovers/dropdowns — slightly elevated above cards */
+    --popover: 215 20% 12%;           /* #18202B */
+    --popover-foreground: 210 22% 92%;
+
+    /* Primary — restrained teal-blue for interactive elements */
+    --primary: 199 50% 42%;           /* #337E99 */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 45 12% 94%;
-    --secondary-foreground: 215 30% 13%;
+    /* Secondary surfaces — elevated panels */
+    --secondary: 215 17% 14%;         /* #1A2230 */
+    --secondary-foreground: 210 15% 80%; /* #B8C4D0 — readable secondary text */
 
-    --muted: 45 12% 94%;
-    --muted-foreground: 220 13% 46%;
+    /* Muted surfaces and muted text */
+    --muted: 215 17% 13%;             /* #182030 */
+    --muted-foreground: 213 14% 60%;  /* #8898A8 — clearly readable secondary text */
 
-    --accent: 45 12% 94%;
-    --accent-foreground: 199 59% 15%;
+    /* Accent — for hover states and highlighted items */
+    --accent: 215 17% 16%;            /* #1D2B3A */
+    --accent-foreground: 210 22% 92%;
 
-    --destructive: 2 69% 47%;
+    /* Status — destructive/danger */
+    --destructive: 2 65% 50%;         /* #D43030 */
     --destructive-foreground: 0 0% 100%;
 
-    --border: 206 9% 86%;
-    --input: 206 9% 86%;
-    --ring: 199 59% 15%;
+    /* Borders — subtle but clearly visible dividers */
+    --border: 215 14% 22%;            /* #2A3545 */
+    --input: 215 14% 22%;
+    --ring: 199 50% 50%;              /* focus ring — brighter teal */
 
-    --sidebar: 0 0% 100%;
-    --sidebar-foreground: 215 30% 13%;
-    --sidebar-muted: 45 12% 94%;
-    --sidebar-border: 206 9% 86%;
-    --sidebar-accent: 199 59% 15%;
+    --radius: 2px;
+
+    /* Sidebar — slightly darker than card surface */
+    --sidebar: 216 22% 8%;            /* #0E1620 */
+    --sidebar-foreground: 210 18% 82%; /* #C2CDD8 */
+    --sidebar-muted: 215 17% 12%;
+    --sidebar-border: 215 14% 18%;    /* #222E3A */
+    --sidebar-accent: 199 50% 42%;
+
+    /* Oil India red — retained at high-enough contrast */
+    --oil: 2 68% 52%;                 /* #D63432 */
+    --oil-foreground: 0 0% 100%;
+
+    /* Semantic status colors — restrained, professional */
+    --success: 145 45% 40%;           /* #38885A */
+    --warning: 35 85% 48%;            /* #D98A14 */
+    --danger: 2 65% 50%;
   }
 }
 
@@ -106,15 +133,8 @@
   }
 
   body {
-    @apply text-foreground;
-
-    background: linear-gradient(160deg,
-        #f0f6ff 0%,
-        #e6edfb 45%,
-        #dbe7fa 100%);
-
-    background-attachment: fixed;
-    color: #17202a;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
 
     font-family:
       'Inter',
@@ -129,19 +149,19 @@
     min-height: 100vh;
   }
 
-  /* Typography consistency */
+  /* Typography — controlled hierarchy, no aggressive weights */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    color: #102f3e;
-    font-weight: 700;
-    letter-spacing: -0.015em;
+    color: hsl(var(--foreground));
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
 
-  /* Smooth transitions */
+  /* Smooth state transitions */
   button,
   a,
   input,
@@ -150,15 +170,15 @@
   [role="button"],
   tr {
     transition:
-      background-color 0.15s ease,
-      border-color 0.15s ease,
-      color 0.15s ease;
+      background-color 0.12s ease,
+      border-color 0.12s ease,
+      color 0.12s ease,
+      opacity 0.12s ease;
     touch-action: manipulation;
   }
 
-  /* Optimize touch targets on mobile */
+  /* Coarse pointer (touch) minimum targets */
   @media (pointer: coarse) {
-
     button,
     [role="button"],
     a.btn {
@@ -167,7 +187,7 @@
     }
   }
 
-  /* Smooth scrolling for tables and charts */
+  /* Momentum scrolling on mobile */
   .overflow-x-auto,
   .overflow-y-auto {
     -webkit-overflow-scrolling: touch;
@@ -175,7 +195,7 @@
 }
 
 /* =========================================================
-   Skeleton pulse & shimmer animation
+   Skeleton shimmer animation
    ========================================================= */
 
 @keyframes shimmer {
@@ -196,87 +216,126 @@
   bottom: 0;
   left: 0;
   transform: translateX(-100%);
-
-  background-image: linear-gradient(90deg,
-      rgba(255, 255, 255, 0) 0,
-      rgba(255, 255, 255, 0.4) 20%,
-      rgba(255, 255, 255, 0.7) 60%,
-      rgba(255, 255, 255, 0) 100%);
-
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.3) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
   animation: shimmer 1.5s infinite;
   content: '';
 }
 
-/* =========================================================
-   Industrial HSE Header & Panel Styles
-   ========================================================= */
-
-.navy-header-gradient {
-  background: linear-gradient(120deg,
-      #082735 0%,
-      #102f3e 58%,
-      #17495d 100%);
-
-  position: relative;
+.dark .animate-shimmer::after {
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.06) 20%,
+    rgba(255, 255, 255, 0.1) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
 }
 
-.navy-header-gradient::before {
-  content: '';
-  border-top: 3px solid #102f3e !important;
+/* =========================================================
+   Industrial Panel — Enterprise Surface System
+   =========================================================
+   panel-card: base card surface, no background override
+   (background comes from the card component itself)
+   panel-accent-*: top accent border, 2px, semantic color
+   ========================================================= */
+
+.panel-card {
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius, 2px);
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+}
+
+/* Accent borders — 2px top border for panel identity */
+.panel-accent-navy {
+  border-top: 2px solid #102F3E !important;
+}
+
+.dark .panel-accent-navy {
+  border-top: 2px solid #337E99 !important;
 }
 
 .panel-accent-teal {
-  border-top: 3px solid #1d8278 !important;
+  border-top: 2px solid #1d8278 !important;
 }
 
 .panel-accent-red {
-  border-top: 3px solid #c92925 !important;
+  border-top: 2px solid #C92925 !important;
 }
 
 .panel-accent-amber {
-  border-top: 3px solid #d97706 !important;
+  border-top: 2px solid #D97706 !important;
 }
 
 .panel-accent-green {
-  border-top: 3px solid #2e7d32 !important;
+  border-top: 2px solid #2E7D32 !important;
 }
 
-/* Gradient panel variants */
+/* =========================================================
+   Dashboard Page Header — Navy gradient
+   ========================================================= */
 
-.panel-grad-primary {
-  background: linear-gradient(135deg,
-      #ffffff 0%,
-      #f4f8f9 100%);
+.navy-header-gradient {
+  background: linear-gradient(
+    120deg,
+    #082735 0%,
+    #102F3E 58%,
+    #17495d 100%
+  );
+  position: relative;
 }
 
-.panel-grad-blue {
-  background: linear-gradient(135deg,
-      #f0f6ff 0%,
-      #e6edfb 100%);
+/* =========================================================
+   Table Row States — Industrial
+   ========================================================= */
+
+/* Alternating row — very subtle */
+.industrial-row-even {
+  background-color: hsl(var(--muted) / 0.45);
 }
 
-.panel-grad-teal {
-  background: linear-gradient(135deg,
-      #e5f5f2 0%,
-      #cde9e3 100%);
+.dark .industrial-row-even {
+  background-color: hsl(215 17% 11% / 0.7);
 }
 
-.panel-grad-amber {
-  background: linear-gradient(135deg,
-      #fff5df 0%,
-      #fbe5b5 100%);
+/* Row hover */
+.industrial-row-hover:hover {
+  background-color: hsl(var(--primary) / 0.06) !important;
 }
 
-.panel-grad-red {
-  background: linear-gradient(135deg,
-      #fce9e8 0%,
-      #f4cbc8 100%);
+.dark .industrial-row-hover:hover {
+  background-color: hsl(199 50% 42% / 0.12) !important;
 }
 
-.panel-grad-green {
-  background: linear-gradient(135deg,
-      #e8f5ea 0%,
-      #cde8d1 100%);
+/* High-priority left border — P1 critical rows */
+.high-priority-left-border {
+  border-left: 2px solid #C92925 !important;
+}
+
+/* =========================================================
+   Button — Primary Red (CTA)
+   ========================================================= */
+
+.btn-primary-red {
+  background-color: #C92925;
+  border: 1px solid #991F1B;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.btn-primary-red:hover {
+  background-color: #991F1B;
+}
+
+.btn-primary-red:active {
+  background-color: #7A1815;
+  transform: scale(0.99);
 }
 
 /* =========================================================
@@ -289,11 +348,10 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #667085;
+  color: hsl(var(--muted-foreground));
 }
 
 /* Enterprise numeric formatting */
-
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
@@ -303,8 +361,19 @@
    ========================================================= */
 
 .recharts-default-tooltip {
-  background-color: #ffffff !important;
-  border-left: 3px solid #c92925 !important;
+  background-color: hsl(var(--card)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-left: 2px solid #C92925 !important;
+  color: hsl(var(--foreground)) !important;
+  border-radius: 2px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+.dark .recharts-default-tooltip {
+  background-color: hsl(215 20% 13%) !important;
+  border: 1px solid hsl(215 14% 22%) !important;
+  border-left: 2px solid #C92925 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
 }
 
 /* =========================================================
@@ -312,19 +381,60 @@
    ========================================================= */
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f3f2ee;
+  background: hsl(var(--muted));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d9dde0;
+  background: hsl(var(--border));
   border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #667085;
+  background: hsl(var(--muted-foreground) / 0.6);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: hsl(216 19% 9%);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: hsl(215 14% 26%);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: hsl(215 14% 36%);
+}
+
+/* =========================================================
+   Dark Mode — Native form element overrides
+   Prevents browser from rendering light-mode default
+   styling on date inputs, checkboxes, etc.
+   ========================================================= */
+
+.dark input[type="date"],
+.dark input[type="datetime-local"],
+.dark input[type="time"] {
+  background-color: hsl(215 17% 13%);
+  border-color: hsl(215 14% 22%);
+  color: hsl(210 22% 92%);
+  color-scheme: dark;
+}
+
+.dark input[type="date"]:focus,
+.dark input[type="datetime-local"]:focus,
+.dark input[type="time"]:focus {
+  border-color: hsl(199 50% 50%);
+  outline: none;
+  ring: 1px hsl(199 50% 50%);
+}
+
+/* Checkboxes — use accent-color for dark mode */
+.dark input[type="checkbox"] {
+  accent-color: hsl(199 50% 50%);
+  border-color: hsl(215 14% 30%);
 }

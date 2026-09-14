@@ -154,45 +154,44 @@ export function SifTrendChart() {
   ).toFixed(1);
 
   return (
-    <Card className="flex flex-col panel-card panel-accent-navy min-h-[360px] border border-[#D9DDE0] bg-white shadow-none rounded-[2px]">
-      <CardHeader className="p-4 sm:p-5 pb-3 flex flex-col justify-between border-b border-[#D9DDE0]">
+    <Card className="flex flex-col panel-card panel-accent-navy min-h-[360px]">
+      <CardHeader className="p-4 sm:p-5 pb-3 flex flex-col justify-between">
         <div className="flex flex-col w-full relative">
-          <span className="text-[10px] font-bold text-[#667085] uppercase tracking-wider mb-1">
+          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">
             TREND ANALYSIS
           </span>
 
-          <CardTitle className="text-base font-bold text-[#102F3E] flex justify-between items-center w-full">
+          <CardTitle className="text-sm font-semibold text-foreground flex justify-between items-center w-full">
             <span className="flex items-center gap-2">
-              <Activity className="h-4 w-4 text-[#2F6B84] shrink-0" />
+              <Activity className="h-4 w-4 text-muted-foreground shrink-0" />
               SIF trend over time
             </span>
 
             <div className="hidden sm:flex items-center space-x-4 text-xs font-normal">
               <div className="text-right">
-                <span className="text-[10px] text-[#667085] uppercase font-bold block">
+                <span className="text-[10px] text-muted-foreground uppercase font-bold block">
                   12-Mo Total
                 </span>
-                <span className="font-mono font-bold text-[#102F3E]">
+                <span className="font-mono font-semibold text-foreground">
                   {totalSif} SIFs
                 </span>
               </div>
 
-              <div className="text-right pl-3 border-l border-[#D9DDE0]">
-                <span className="text-[10px] text-[#667085] uppercase font-bold block">
+              <div className="text-right pl-3 border-l border-border">
+                <span className="text-[10px] text-muted-foreground uppercase font-bold block">
                   Monthly Avg
                 </span>
-                <span className="font-mono font-bold text-[#102F3E]">
+                <span className="font-mono font-semibold text-foreground">
                   {avgMonthly}
                 </span>
               </div>
             </div>
           </CardTitle>
 
-          <div className="w-8 h-[2px] bg-[#C92925] mt-2 mb-1" />
+          <div className="w-6 h-[2px] bg-[#C92925] mt-2 mb-1" />
 
-          <p className="text-xs text-[#667085] mt-1">
-            Monthly SIF-potential reports over the last 12 months
-            (Jun 2025 – May 2026)
+          <p className="text-xs text-muted-foreground mt-1">
+            Monthly SIF-potential reports over the last 12 months (Jun 2025–May 2026)
           </p>
         </div>
       </CardHeader>
@@ -212,7 +211,8 @@ export function SifTrendChart() {
               <CartesianGrid
                 strokeDasharray="3 3"
                 vertical={false}
-                stroke="#E6EAED"
+                stroke="#D9DDE0"
+                className="dark:[stroke:#232E3B]"
               />
 
               <XAxis
@@ -254,23 +254,21 @@ export function SifTrendChart() {
                     const data = payload[0].payload;
 
                     return (
-                      <div className="rounded-[2px] border border-[#D9DDE0] bg-white p-3 shadow-sm text-xs space-y-1.5 min-w-[150px]">
-                        <div className="font-bold text-[#102F3E] border-b border-[#D9DDE0] pb-1 text-xs">
+                      <div className="rounded-[2px] border border-border bg-card p-3 shadow-md text-xs space-y-1.5 min-w-[140px] dark:bg-[#182130] dark:border-[#232E3B]">
+                        <div className="font-semibold text-foreground border-b border-border pb-1 text-xs">
                           {data.fullMonth}
                         </div>
 
-                        <div className="flex items-center justify-between text-[#102F3E]">
-                          <span className="font-medium">
-                            SIF Reports:
-                          </span>
-                          <span className="font-mono font-black text-sm">
+                        <div className="flex items-center justify-between text-foreground">
+                          <span className="text-muted-foreground">SIF Reports:</span>
+                          <span className="font-mono font-bold text-sm">
                             {data.count}
                           </span>
                         </div>
 
-                        <div className="flex items-center justify-between text-[#C92925] text-[11px]">
-                          <span>High-Risk subset:</span>
-                          <span className="font-mono font-bold">
+                        <div className="flex items-center justify-between text-[#C92925] dark:text-[#F87171] text-[11px]">
+                          <span>High-Risk:</span>
+                          <span className="font-mono font-semibold">
                             {data.highRisk}
                           </span>
                         </div>
@@ -319,26 +317,26 @@ export function SifTrendChart() {
           </ResponsiveContainer>
         </div>
 
-        <div className="mt-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-t border-[#D9DDE0] pt-3 text-xs">
+        <div className="mt-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-t border-border pt-3 text-xs">
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center space-x-2">
-              <span className="flex h-2.5 w-2.5 rounded-full bg-[#102F3E]" />
-              <span className="font-medium text-[#667085] text-[11px]">
+              <span className="flex h-2 w-2 rounded-[1px] bg-[#102F3E] dark:bg-[#2F6B84]" />
+              <span className="font-medium text-muted-foreground text-[11px]">
                 All Reports
               </span>
             </div>
 
             <div className="flex items-center space-x-2">
-              <span className="flex h-2.5 w-2.5 rounded-full bg-[#C92925]" />
-              <span className="font-medium text-[#667085] text-[11px]">
+              <span className="flex h-2 w-2 rounded-[1px] bg-[#C92925]" />
+              <span className="font-medium text-muted-foreground text-[11px]">
                 High-Risk SIF
               </span>
             </div>
           </div>
 
-          <span className="text-[11px] text-[#2E7D32] font-medium flex items-center gap-1">
+          <span className="text-[11px] text-[#2E7D32] dark:text-[#4ADE80] font-medium flex items-center gap-1">
             <TrendingUp className="h-3 w-3" />
-            Overall 2025 Trend Stable
+            2025 Trend Stable
           </span>
         </div>
       </CardContent>

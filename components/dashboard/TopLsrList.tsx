@@ -167,7 +167,7 @@ export function TopLsrList() {
   }, [reports]);
 
   return (
-    <Card className="flex flex-col panel-card panel-accent-navy h-full border border-[#D9DDE0] bg-white shadow-none rounded-[2px]">
+    <Card className="flex flex-col panel-card panel-accent-navy h-full">
       <CardHeader className="p-4 pb-2 flex flex-row items-center justify-between border-b border-[#D9DDE0]">
         <div>
           <CardTitle className="text-sm font-semibold text-[#102F3E]">

@@ -96,23 +96,22 @@ export function RecentReportsTable() {
 
   return (
     <Card className="flex flex-col panel-card panel-accent-navy">
-      <CardHeader className="p-4 flex flex-row items-center justify-between border-b border-[#D9DDE0]">
+      <CardHeader className="p-4 flex flex-row items-center justify-between">
         <div>
-          <CardTitle className="text-base font-bold text-[#102F3E] flex items-center gap-2">
+          <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
             Safety Observations &amp; SIF Precursor Records
           </CardTitle>
 
-          <p className="text-xs text-[#667085] mt-0.5 font-normal">
-            Corporate Oil India safety log: Unsafe Acts (UA), Unsafe Conditions
-            (UC), and Near Misses (NM)
+          <p className="text-xs text-muted-foreground mt-0.5 font-normal">
+            Corporate Oil India safety log: Unsafe Acts (UA), Unsafe Conditions (UC), and Near Misses (NM)
           </p>
         </div>
 
         <Link
           href="/reports"
-          className="text-xs font-semibold text-[#102F3E] hover:text-[#C92925] flex items-center hover:underline"
+          className="text-xs font-semibold text-muted-foreground hover:text-[#C92925] flex items-center hover:underline shrink-0"
         >
-          View all reports
+          View all
           <ChevronRight className="h-3.5 w-3.5 ml-0.5" />
         </Link>
       </CardHeader>
@@ -120,8 +119,8 @@ export function RecentReportsTable() {
       <CardContent className="p-0 flex-1 min-w-0">
         <div className="overflow-x-auto min-w-0">
           <Table>
-            <TableHeader className="bg-[#082735]">
-              <TableRow className="text-xs border-b border-[#D9DDE0]">
+            <TableHeader className="bg-[#082735] dark:bg-[#0B1520]">
+              <TableRow className="text-xs border-b border-border">
                 <TableHead className="w-[120px] font-bold text-white">
                   Report ID
                 </TableHead>
@@ -168,16 +167,16 @@ export function RecentReportsTable() {
                     className="h-48 text-center py-8"
                   >
                     <div className="flex flex-col items-center justify-center max-w-sm mx-auto text-center space-y-2">
-                      <div className="w-9 h-9 rounded-[2px] bg-[#F3F2EE] flex items-center justify-center text-[#667085]">
+                      <div className="w-9 h-9 rounded-[2px] bg-muted flex items-center justify-center text-muted-foreground">
                         <FilterX className="h-4 w-4" />
                       </div>
 
                       <div>
-                        <h4 className="text-xs font-bold text-[#102F3E]">
+                        <h4 className="text-xs font-bold text-foreground">
                           No Safety Reports Found
                         </h4>
 
-                        <p className="text-[11px] text-[#667085] mt-0.5">
+                        <p className="text-[11px] text-muted-foreground mt-0.5">
                           Try clearing active search or site filters.
                         </p>
                       </div>
@@ -195,7 +194,7 @@ export function RecentReportsTable() {
                               'All dashboard filters cleared to defaults.',
                           });
                         }}
-                        className="text-xs h-7 px-3 gap-1.5 mt-1 border-[#D9DDE0] rounded-[2px]"
+                        className="text-xs h-7 px-3 gap-1.5 mt-1 rounded-[2px]"
                       >
                         <RotateCcw className="h-3 w-3" />
                         Reset Filters
@@ -213,25 +212,25 @@ export function RecentReportsTable() {
                   return (
                     <TableRow
                       key={report.id}
-                      className={`cursor-pointer industrial-row-hover transition-colors border-b border-[#D9DDE0] ${idx % 2 === 1
+                      className={`cursor-pointer industrial-row-hover transition-colors ${idx % 2 === 1
                           ? 'industrial-row-even'
-                          : 'bg-white'
+                          : ''
                         } ${isHighPriority
                           ? 'high-priority-left-border'
                           : ''
                         }`}
                       onClick={() => setSelectedReport(report)}
                     >
-                      <TableCell className="font-mono text-xs font-bold text-[#102F3E] hover:text-[#C92925] hover:underline whitespace-nowrap py-2.5">
+                      <TableCell className="font-mono text-xs font-bold text-[#102F3E] dark:text-[#60C0D8] hover:text-[#C92925] hover:underline whitespace-nowrap py-2.5">
                         {report.id}
                       </TableCell>
 
-                      <TableCell className="hidden md:table-cell text-[#667085] whitespace-nowrap py-2.5">
+                      <TableCell className="hidden md:table-cell text-muted-foreground whitespace-nowrap py-2.5">
                         {formatReadableDate(report.date)}
                       </TableCell>
 
                       <TableCell
-                        className="hidden md:table-cell font-semibold text-[#17202A] max-w-[160px] truncate py-2.5"
+                        className="hidden md:table-cell font-semibold max-w-[160px] truncate py-2.5"
                         title={report.site}
                       >
                         {report.site}
@@ -247,7 +246,7 @@ export function RecentReportsTable() {
                       </TableCell>
 
                       <TableCell
-                        className="hidden md:table-cell font-medium text-[#475569] max-w-[150px] truncate py-2.5"
+                        className="hidden md:table-cell font-medium text-muted-foreground max-w-[150px] truncate py-2.5"
                         title={report.precursor}
                       >
                         {report.precursor}
@@ -277,7 +276,7 @@ export function RecentReportsTable() {
                       </TableCell>
 
                       <TableCell
-                        className="hidden lg:table-cell text-[#667085] max-w-[140px] truncate py-2.5"
+                        className="hidden lg:table-cell text-muted-foreground max-w-[140px] truncate py-2.5"
                         title={report.lsrViolated}
                       >
                         {report.lsrViolated}
@@ -300,7 +299,7 @@ export function RecentReportsTable() {
                             e.stopPropagation();
                             setSelectedReport(report);
                           }}
-                          className="h-7 w-7 p-0 text-[#667085] hover:text-[#2563EB]"
+                          className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
                           title="View Report Details"
                         >
                           <Eye className="h-4 w-4" />
@@ -315,21 +314,21 @@ export function RecentReportsTable() {
         </div>
 
         {/* Pagination Footer */}
-        <div className="flex items-center justify-between px-4 py-3 border-t border-[#D9DDE0] text-xs bg-white">
-          <span className="text-[#667085] text-[11px]">
+        <div className="flex items-center justify-between px-4 py-2.5 border-t border-border text-xs bg-card">
+          <span className="text-muted-foreground text-[11px]">
             Showing{' '}
-            <strong className="text-[#102F3E] font-semibold">
+            <strong className="text-foreground font-semibold">
               {filteredReports.length > 0 ? startIndex + 1 : 0}
             </strong>{' '}
             to{' '}
-            <strong className="text-[#102F3E] font-semibold">
+            <strong className="text-foreground font-semibold">
               {Math.min(
                 startIndex + pageSize,
                 filteredReports.length
               )}
             </strong>{' '}
             of{' '}
-            <strong className="text-[#102F3E] font-semibold">
+            <strong className="text-foreground font-semibold">
               {filteredReports.length}
             </strong>{' '}
             entries
@@ -343,7 +342,7 @@ export function RecentReportsTable() {
                 setCurrentPage((p) => Math.max(1, p - 1))
               }
               disabled={currentPage === 1}
-              className="h-7 w-7 p-0 text-xs border-[#D9DDE0] rounded-[2px]"
+              className="h-7 w-7 p-0 text-xs rounded-[2px]"
             >
               <ChevronLeft className="h-3.5 w-3.5" />
             </Button>
@@ -361,9 +360,10 @@ export function RecentReportsTable() {
                     }
                     size="sm"
                     onClick={() => setCurrentPage(p)}
-                    className={`h-7 w-7 p-0 text-xs font-semibold rounded-[2px] ${currentPage === p
-                        ? 'bg-[#102F3E] hover:bg-[#082735] text-white'
-                        : 'border-[#D9DDE0] text-[#17202A]'
+                    className={`h-7 w-7 p-0 text-xs font-semibold rounded-[2px] ${
+                        currentPage === p
+                          ? ''
+                          : 'border-border text-foreground'
                       }`}
                   >
                     {p}
@@ -374,7 +374,7 @@ export function RecentReportsTable() {
 
             {totalPages > 5 && (
               <>
-                <span className="px-1 text-[#667085]">...</span>
+                <span className="px-1 text-muted-foreground">...</span>
 
                 <Button
                   variant={
@@ -384,9 +384,10 @@ export function RecentReportsTable() {
                   }
                   size="sm"
                   onClick={() => setCurrentPage(totalPages)}
-                  className={`h-7 w-7 p-0 text-xs font-semibold border-[#D9DDE0] rounded-[2px] ${currentPage === totalPages
-                      ? 'bg-[#102F3E] hover:bg-[#082735] text-white'
-                      : 'text-[#17202A]'
+                  className={`h-7 w-7 p-0 text-xs font-semibold rounded-[2px] ${
+                      currentPage === totalPages
+                        ? ''
+                        : 'border-border text-foreground'
                     }`}
                 >
                   {totalPages}
@@ -403,7 +404,7 @@ export function RecentReportsTable() {
                 )
               }
               disabled={currentPage === totalPages}
-              className="h-7 w-7 p-0 text-xs border-[#D9DDE0] rounded-[2px]"
+              className="h-7 w-7 p-0 text-xs rounded-[2px]"
             >
               <ChevronRight className="h-3.5 w-3.5" />
             </Button>

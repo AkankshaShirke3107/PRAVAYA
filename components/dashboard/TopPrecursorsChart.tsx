@@ -120,11 +120,11 @@ export function TopPrecursorsChart() {
   }, [topPrecursorsData]);
 
   return (
-    <Card className="flex flex-col panel-card panel-accent-navy min-h-[360px] border border-[#D9DDE0] bg-white shadow-none rounded-[2px]">
-      <CardHeader className="p-4 sm:p-5 pb-3 flex flex-col justify-between border-b border-[#D9DDE0]">
+    <Card className="flex flex-col panel-card panel-accent-navy min-h-[360px]">
+      <CardHeader className="p-4 sm:p-5 pb-3 flex flex-col justify-between">
         <div className="flex flex-col w-full relative">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[10px] font-bold text-[#667085] uppercase tracking-wider">
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
               PRECURSOR ANALYSIS
             </span>
 
@@ -137,18 +137,18 @@ export function TopPrecursorsChart() {
             </div>
           </div>
 
-          <CardTitle className="text-base font-bold text-[#102F3E] flex justify-between items-center w-full mt-0">
+          <CardTitle className="text-sm font-semibold text-foreground flex justify-between items-center w-full mt-0">
             <span className="flex items-center gap-2">
-              <Layers className="h-4 w-4 text-[#D97706] shrink-0" />
+              <Layers className="h-4 w-4 text-muted-foreground shrink-0" />
               Top SIF precursors
             </span>
 
-            <span className="hidden sm:inline-flex items-center font-mono text-[11px] font-semibold text-[#667085]">
+            <span className="hidden sm:inline-flex items-center font-mono text-[11px] font-medium text-muted-foreground">
               Top 5: {totalTop5} events
             </span>
           </CardTitle>
 
-          <p className="text-xs text-[#667085] mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             Top 5 precursors ranked by frequency of occurrence
           </p>
         </div>
@@ -173,7 +173,8 @@ export function TopPrecursorsChart() {
               <CartesianGrid
                 strokeDasharray="3 3"
                 horizontal={false}
-                stroke="#E6EAED"
+                stroke="#D9DDE0"
+                className="dark:[stroke:#232E3B]"
               />
 
               <XAxis
@@ -209,35 +210,25 @@ export function TopPrecursorsChart() {
                     const item = payload[0].payload;
 
                     return (
-                      <div className="rounded-[2px] border border-[#D9DDE0] bg-white p-3 shadow-sm text-xs space-y-1.5 min-w-[150px]">
-                        <div className="flex items-center space-x-2 font-bold text-[#102F3E]">
+                      <div className="rounded-[2px] border border-border bg-card p-3 shadow-md text-xs space-y-1.5 min-w-[150px] dark:bg-[#182130] dark:border-[#232E3B]">
+                        <div className="flex items-center space-x-2 font-semibold text-foreground">
                           <span
                             className="h-2.5 w-2.5 rounded-[1px]"
-                            style={{
-                              backgroundColor:
-                                item.color,
-                            }}
+                            style={{ backgroundColor: item.color }}
                           />
-
                           <span>{item.name}</span>
                         </div>
 
-                        <div className="flex items-center justify-between gap-4 text-[#667085] pt-1.5 border-t border-[#D9DDE0]">
-                          <span>
-                            Incident Count:
-                          </span>
-
-                          <strong className="text-[#102F3E] font-mono text-xs">
+                        <div className="flex items-center justify-between gap-4 text-muted-foreground pt-1.5 border-t border-border">
+                          <span>Count:</span>
+                          <strong className="text-foreground font-mono text-xs">
                             {item.count} reports
                           </strong>
                         </div>
 
-                        <div className="flex items-center justify-between gap-4 text-[#667085]">
-                          <span>
-                            Share of Top 5:
-                          </span>
-
-                          <strong className="text-[#102F3E] font-mono text-xs">
+                        <div className="flex items-center justify-between gap-4 text-muted-foreground">
+                          <span>Share of Top 5:</span>
+                          <strong className="text-foreground font-mono text-xs">
                             {item.pct}
                           </strong>
                         </div>
@@ -282,20 +273,14 @@ export function TopPrecursorsChart() {
         </div>
 
         {/* Legend */}
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-1.5 border-t border-[#D9DDE0] pt-3 text-[11px]">
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-1.5 border-t border-border pt-3 text-[11px]">
           {topPrecursorsData.map((item) => (
-            <div
-              key={item.name}
-              className="flex items-center space-x-1.5"
-            >
+            <div key={item.name} className="flex items-center space-x-1.5">
               <span
-                className="h-2 w-2 rounded-[1px]"
-                style={{
-                  backgroundColor: item.color,
-                }}
+                className="h-2 w-2 rounded-[1px] shrink-0"
+                style={{ backgroundColor: item.color }}
               />
-
-              <span className="text-[#667085] text-[10px] sm:text-[11px]">
+              <span className="text-muted-foreground text-[10px] sm:text-[11px]">
                 {item.name}
               </span>
             </div>

@@ -147,24 +147,24 @@ export function DashboardFilterBar() {
   };
 
   return (
-    <div className="rounded-[2px] border border-[#D9DDE0] bg-white p-3.5 shadow-none space-y-3">
+    <div className="rounded-[2px] border border-border bg-card p-3.5 shadow-none space-y-3">
       {/* Horizontal row of filter controls */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
 
           {/* 1. Date Range Picker Dropdown */}
           <div className="flex items-center gap-1.5">
-            <span className="text-xs font-semibold text-[#667085] flex items-center gap-1">
-              <Calendar className="h-3.5 w-3.5 text-[#102F3E]" />
+            <span className="text-xs font-semibold text-muted-foreground flex items-center gap-1">
+              <Calendar className="h-3.5 w-3.5 text-foreground/70" />
               <span className="hidden sm:inline">Range:</span>
             </span>
 
             <Select value={dateRange} onValueChange={setDateRange}>
-              <SelectTrigger className="h-8 min-w-[130px] sm:min-w-[145px] text-xs font-medium bg-white border-[#D9DDE0] rounded-[2px] text-[#17202A]">
+              <SelectTrigger className="h-8 min-w-[130px] sm:min-w-[145px] text-xs font-medium rounded-[2px]">
                 <SelectValue placeholder="Select Range" />
               </SelectTrigger>
 
-              <SelectContent className="bg-white border-[#D9DDE0] rounded-[2px]">
+              <SelectContent className="rounded-[2px]">
                 {dateRangeOptions.map((opt) => (
                   <SelectItem
                     key={opt.value}
@@ -180,17 +180,17 @@ export function DashboardFilterBar() {
 
           {/* 2. Site / Location Dropdown */}
           <div className="flex items-center gap-1.5">
-            <span className="text-xs font-semibold text-[#667085] flex items-center gap-1">
-              <MapPin className="h-3.5 w-3.5 text-[#102F3E]" />
+            <span className="text-xs font-semibold text-muted-foreground flex items-center gap-1">
+              <MapPin className="h-3.5 w-3.5 text-foreground/70" />
               <span className="hidden sm:inline">Location:</span>
             </span>
 
             <Select value={site} onValueChange={setSite}>
-              <SelectTrigger className="h-8 min-w-[125px] sm:min-w-[140px] text-xs font-medium bg-white border-[#D9DDE0] rounded-[2px] text-[#17202A]">
+              <SelectTrigger className="h-8 min-w-[125px] sm:min-w-[140px] text-xs font-medium rounded-[2px]">
                 <SelectValue placeholder="Select Site" />
               </SelectTrigger>
 
-              <SelectContent className="bg-white border-[#D9DDE0] rounded-[2px]">
+              <SelectContent className="rounded-[2px]">
                 {siteOptions.map((opt) => (
                   <SelectItem
                     key={opt}
@@ -205,9 +205,9 @@ export function DashboardFilterBar() {
           </div>
 
           {/* 3. Report Type Multi-Select Checkboxes */}
-          <div className="flex items-center gap-2.5 rounded-[2px] border border-[#D9DDE0] bg-white px-3 py-1.5 text-xs shadow-none">
-            <span className="text-xs font-semibold text-[#667085] flex items-center gap-1 shrink-0">
-              <CheckSquare className="h-3.5 w-3.5 text-[#102F3E]" />
+          <div className="flex items-center gap-2.5 rounded-[2px] border border-border bg-card px-3 py-1.5 text-xs shadow-none">
+            <span className="text-xs font-semibold text-muted-foreground flex items-center gap-1 shrink-0">
+              <CheckSquare className="h-3.5 w-3.5 text-foreground/70" />
               <span className="hidden md:inline">Report Type:</span>
             </span>
 
@@ -218,7 +218,7 @@ export function DashboardFilterBar() {
                 return (
                   <label
                     key={opt.value}
-                    className="flex items-center gap-1.5 cursor-pointer select-none text-xs font-medium text-[#17202A] hover:text-[#102F3E] transition-colors"
+                    className="flex items-center gap-1.5 cursor-pointer select-none text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <input
                       type="checkbox"
@@ -226,14 +226,14 @@ export function DashboardFilterBar() {
                       onChange={() =>
                         handleToggleReportType(opt.value)
                       }
-                      className="h-3.5 w-3.5 rounded-[2px] border-[#D9DDE0] text-[#102F3E] focus:ring-[#102F3E] cursor-pointer accent-[#102F3E]"
+                      className="h-3.5 w-3.5 rounded-[2px] cursor-pointer"
                     />
 
                     <span
                       className={
                         isChecked
-                          ? 'text-[#102F3E] font-semibold'
-                          : 'text-[#667085]'
+                          ? 'text-foreground font-semibold'
+                          : 'text-muted-foreground'
                       }
                     >
                       {opt.label}
@@ -246,17 +246,17 @@ export function DashboardFilterBar() {
 
           {/* 4. Risk Level Dropdown */}
           <div className="flex items-center gap-1.5">
-            <span className="text-xs font-semibold text-[#667085] flex items-center gap-1">
+            <span className="text-xs font-semibold text-muted-foreground flex items-center gap-1">
               <AlertTriangle className="h-3.5 w-3.5 text-[#D97706]" />
               <span className="hidden sm:inline">Risk Level:</span>
             </span>
 
             <Select value={riskLevel} onValueChange={setRiskLevel}>
-              <SelectTrigger className="h-8 min-w-[120px] sm:min-w-[135px] text-xs font-medium bg-white border-[#D9DDE0] rounded-[2px] text-[#17202A]">
+              <SelectTrigger className="h-8 min-w-[120px] sm:min-w-[135px] text-xs font-medium rounded-[2px]">
                 <SelectValue placeholder="Select Risk Level" />
               </SelectTrigger>
 
-              <SelectContent className="bg-white border-[#D9DDE0] rounded-[2px]">
+              <SelectContent className="rounded-[2px]">
                 {riskLevelOptions.map((opt) => (
                   <SelectItem
                     key={opt.value}
@@ -285,7 +285,7 @@ export function DashboardFilterBar() {
             variant="outline"
             size="sm"
             onClick={handleReset}
-            className="h-8 px-3 text-xs gap-1.5 border-[#D9DDE0] text-[#667085] hover:text-[#17202A] rounded-[2px]"
+            className="h-8 px-3 text-xs gap-1.5 rounded-[2px]"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             Reset
@@ -295,7 +295,7 @@ export function DashboardFilterBar() {
             variant="default"
             size="sm"
             onClick={handleApply}
-            className="h-8 px-4 text-xs font-semibold gap-1.5 bg-[#102F3E] hover:bg-[#082735] text-white rounded-[2px] shadow-none"
+            className="h-8 px-4 text-xs font-semibold gap-1.5 rounded-[2px] shadow-none"
           >
             <Filter className="h-3.5 w-3.5" />
             Apply Filters
@@ -311,9 +311,9 @@ export function DashboardFilterBar() {
 
       {/* Expandable Custom Date Range */}
       {dateRange === 'custom' && (
-        <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-[#D9DDE0] text-xs text-[#667085] animate-in fade-in-50 duration-200">
-          <span className="font-semibold text-[#102F3E] flex items-center gap-1">
-            <Calendar className="h-3 w-3 text-[#102F3E]" />
+        <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-border text-xs text-muted-foreground animate-in fade-in-50 duration-200">
+          <span className="font-semibold text-foreground flex items-center gap-1">
+            <Calendar className="h-3 w-3" />
             Custom Date Range:
           </span>
 
@@ -327,7 +327,7 @@ export function DashboardFilterBar() {
                 onChange={(e) =>
                   setCustomStartDate(e.target.value)
                 }
-                className="h-7 rounded-[2px] border border-[#D9DDE0] bg-white px-2 text-xs font-mono text-[#17202A] focus:outline-none focus:ring-1 focus:ring-[#102F3E]"
+                className="h-7 rounded-[2px] border border-border bg-card px-2 text-xs font-mono text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
               />
             </label>
 
@@ -340,7 +340,7 @@ export function DashboardFilterBar() {
                 onChange={(e) =>
                   setCustomEndDate(e.target.value)
                 }
-                className="h-7 rounded-[2px] border border-[#D9DDE0] bg-white px-2 text-xs font-mono text-[#17202A] focus:outline-none focus:ring-1 focus:ring-[#102F3E]"
+                className="h-7 rounded-[2px] border border-border bg-card px-2 text-xs font-mono text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
               />
             </label>
           </div>

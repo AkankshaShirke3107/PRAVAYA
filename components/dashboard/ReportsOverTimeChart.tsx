@@ -45,7 +45,7 @@ export function ReportsOverTimeChart() {
     interval === 'daily' ? dailyData : weeklyData;
 
   return (
-    <Card className="flex flex-col border border-[#D9DDE0] bg-white shadow-none rounded-[2px] h-full">
+    <Card className="flex flex-col panel-card panel-accent-navy h-full">
       <CardHeader className="p-4 pb-2 flex flex-row items-center justify-between border-b border-[#D9DDE0]">
         <div>
           <CardTitle className="text-sm font-semibold text-[#102F3E]">
@@ -64,7 +64,7 @@ export function ReportsOverTimeChart() {
             size="sm"
             onClick={() => setInterval('daily')}
             className={`h-6 rounded-[2px] px-2 text-[11px] font-medium transition-all ${interval === 'daily'
-                ? 'bg-white text-[#102F3E] shadow-none font-semibold border border-[#D9DDE0]'
+                ? 'bg-card text-foreground shadow-none font-semibold border border-border'
                 : 'text-[#667085] hover:text-[#102F3E]'
               }`}
           >
@@ -76,7 +76,7 @@ export function ReportsOverTimeChart() {
             size="sm"
             onClick={() => setInterval('weekly')}
             className={`h-6 rounded-[2px] px-2 text-[11px] font-medium transition-all ${interval === 'weekly'
-                ? 'bg-white text-[#102F3E] shadow-none font-semibold border border-[#D9DDE0]'
+                ? 'bg-card text-foreground shadow-none font-semibold border border-border'
                 : 'text-[#667085] hover:text-[#102F3E]'
               }`}
           >
@@ -123,7 +123,7 @@ export function ReportsOverTimeChart() {
                 content={({ active, payload, label }) => {
                   if (active && payload && payload.length) {
                     return (
-                      <div className="rounded-[2px] border border-[#D9DDE0] bg-white p-2 shadow-md text-xs">
+                      <div className="rounded-[2px] border border-border bg-card p-2 shadow-md text-xs">
                         <div className="font-semibold text-[#102F3E] mb-1">
                           {label}
                         </div>

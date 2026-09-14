@@ -60,7 +60,7 @@ function CardSkeleton({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "rounded-[2px] border border-[#D9DDE0] bg-white p-6 shadow-none space-y-4",
+        "rounded-[2px] border border-border bg-card p-6 shadow-none space-y-4",
         className
       )}
     >
@@ -81,7 +81,7 @@ function ChartSkeleton({ className, title }: { className?: string; title?: strin
   return (
     <div
       className={cn(
-        "rounded-[2px] border border-[#D9DDE0] bg-white p-6 shadow-none space-y-5",
+        "rounded-[2px] border border-border bg-card p-6 shadow-none space-y-5",
         className
       )}
     >
