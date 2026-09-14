@@ -1,33 +1,30 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { Suspense, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import {
-  ShieldCheck,
-  FileCheck,
+  AlertCircle,
   AlertTriangle,
+  ArrowRight,
+  Box,
   Calendar,
-  Download,
-  Search,
-  Filter,
-  ExternalLink,
+  Car,
   CheckCircle2,
-  Clock,
-  ArrowUpRight,
-  Shield,
-  Layers,
-  ChevronRight,
-  FileText,
-  BadgeAlert,
-  Info,
   CheckSquare,
-  Square,
-  Sparkles,
+  ChevronRight,
+  FileCheck,
+  FileText,
+  Flame,
+  Info,
+  ShieldAlert,
+  ShieldCheck,
+  Zap,
 } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -36,780 +33,665 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { toast } from 'sonner';
+import { useSafetyStore } from '@/lib/store';
+import type { SafetyReport } from '@/types';
 
-interface ComplianceStandard {
-  id: string;
-  code: string;
-  title: string;
-  authority: 'OISD' | 'OSHA' | 'DGMS';
-  domain: string;
-  mappedLsr: string;
-  status: 'Compliant' | 'Under Review' | 'Action Required';
-  linkedReportsCount: number;
-  lastAuditDate: string;
-  nextAuditDate: string;
-  summary: string;
-}
+type Rule = {
+  id: number;
+  name: string;
+  action: string;
+  purpose: string;
+  color: string;
+  background: string;
+};
 
-const STANDARDS_DATA: ComplianceStandard[] = [
+const LIFE_SAVING_RULES: Rule[] = [
   {
-    id: 'std-1',
-    code: 'OISD-STD-105',
-    title: 'Work Permit System in Hydrocarbon Industry',
-    authority: 'OISD',
-    domain: 'Permit to Work',
-    mappedLsr: 'Bypassing Safety Controls',
-    status: 'Compliant',
-    linkedReportsCount: 18,
-    lastAuditDate: '2026-04-12',
-    nextAuditDate: '2026-10-12',
-    summary:
-      'Mandates statutory cold/hot work authorization, electrical lockout tags, positive mechanical blind flanging, and gas free certification before cold/hot work.',
+    id: 1,
+    name: 'Bypassing Safety Controls',
+    action: 'Obtain authorisation before overriding or disabling safety controls.',
+    purpose: 'Ensures critical alarms, interlocks, and protective barriers are not bypassed without approval.',
+    color: '#C92925',
+    background: '#FEF2F2',
   },
   {
-    id: 'std-2',
-    code: 'OISD-GDN-166',
-    title: 'Guidelines on Working at Height in Oil & Gas Assets',
-    authority: 'OISD',
-    domain: 'Work at Height',
-    mappedLsr: 'Working at Height',
-    status: 'Compliant',
-    linkedReportsCount: 14,
-    lastAuditDate: '2026-04-18',
-    nextAuditDate: '2026-10-18',
-    summary:
-      'Requires 100% continuous tie-off above 1.8 meters, dual-lanyard shock absorbers, certified inertia reels on derrick monkey boards, and daily harness inspections.',
+    id: 2,
+    name: 'Confined Space',
+    action: 'Obtain authorisation before entering a confined space and verify atmospheric testing.',
+    purpose: 'Prevents toxic exposure, oxygen deficiency, entrapment, and delayed rescue.',
+    color: '#D97706',
+    background: '#FFFBEB',
   },
   {
-    id: 'std-3',
-    code: 'OISD-STD-112',
-    title: 'Safe Handling of Electrical Equipment in Hazardous Areas',
-    authority: 'OISD',
-    domain: 'Electrical & LOTO',
-    mappedLsr: 'Energy Isolation',
-    status: 'Compliant',
-    linkedReportsCount: 11,
-    lastAuditDate: '2026-05-02',
-    nextAuditDate: '2026-11-02',
-    summary:
-      'Governs multi-padlock lockout/tagout (LOTO) protocols, motor control center isolations, and flame-proof Zone 0/1 electrical apparatus integrity.',
+    id: 3,
+    name: 'Driving',
+    action: 'Wear a seatbelt, follow speed limits, and avoid mobile-phone use while driving.',
+    purpose: 'Reduces collision, rollover, and vehicle-pedestrian interaction risk.',
+    color: '#2F6B84',
+    background: '#F0F9FF',
   },
   {
-    id: 'std-4',
-    code: 'OSHA 1910.146',
-    title: 'Permit-Required Confined Spaces Standards',
-    authority: 'OSHA',
-    domain: 'Confined Space',
-    mappedLsr: 'Confined Space',
-    status: 'Under Review',
-    linkedReportsCount: 8,
-    lastAuditDate: '2026-03-20',
-    nextAuditDate: '2026-09-20',
-    summary:
-      'Demands continuous atmospheric oxygen/toxic gas monitoring, calibrated multi-gas bump checks, authorized standby attendants, and mechanical retrieval winches.',
+    id: 4,
+    name: 'Energy Isolation',
+    action: 'Verify isolation and zero energy before work begins.',
+    purpose: 'Prevents exposure to electrical, mechanical, pressure, and stored energy.',
+    color: '#102F3E',
+    background: '#F1F5F9',
   },
   {
-    id: 'std-5',
-    code: 'OSHA 1910.147',
-    title: 'The Control of Hazardous Energy (Lockout/Tagout)',
-    authority: 'OSHA',
-    domain: 'Process Safety',
-    mappedLsr: 'Energy Isolation',
-    status: 'Compliant',
-    linkedReportsCount: 12,
-    lastAuditDate: '2026-04-25',
-    nextAuditDate: '2026-10-25',
-    summary:
-      'Mandates zero-energy verification across hydrostatic, pneumatic, mechanical, and gravitational systems prior to servicing process piping or pump seals.',
+    id: 5,
+    name: 'Hot Work',
+    action: 'Control flammable gas sources and ignition hazards before hot work.',
+    purpose: 'Prevents fire, explosion, and burn exposure during welding, cutting, and grinding.',
+    color: '#C65D1E',
+    background: '#FFF7ED',
   },
   {
-    id: 'std-6',
-    code: 'OISD-STD-129',
-    title: 'Inspection and Maintenance of Fire Protection Equipment',
-    authority: 'OISD',
-    domain: 'Fire Protection',
-    mappedLsr: 'Hot Work',
-    status: 'Action Required',
-    linkedReportsCount: 6,
-    lastAuditDate: '2026-02-14',
-    nextAuditDate: '2026-08-14',
-    summary:
-      'Defines hydrostatic testing cycles for deluge valves, foam proportioners, dry chemical skid bottles, and quarterly fire-water pump discharge tests.',
+    id: 6,
+    name: 'Line of Fire',
+    action: 'Stay clear of moving machinery, suspended loads, and released energy.',
+    purpose: 'Prevents struck-by, caught-between, crush, and pressure-release injuries.',
+    color: '#991F1B',
+    background: '#FEF2F2',
   },
   {
-    id: 'std-7',
-    code: 'OSHA 1926.1400',
-    title: 'Cranes and Derricks in Heavy Construction & Rig Moves',
-    authority: 'OSHA',
-    domain: 'Lifting & Rigging',
-    mappedLsr: 'Safe Mechanical Lifting',
-    status: 'Compliant',
-    linkedReportsCount: 9,
-    lastAuditDate: '2026-04-05',
-    nextAuditDate: '2026-10-05',
-    summary:
-      'Specifies load chart compliance, outrigger ground-bearing capacity calculations, engineered timber spreader mats, and exclusion perimeter barricades.',
+    id: 7,
+    name: 'Safe Mechanical Lifting',
+    action: 'Plan lifting operations and control access below suspended loads.',
+    purpose: 'Prevents lifting-related struck-by and crush events.',
+    color: '#1D8278',
+    background: '#F0FDFA',
   },
   {
-    id: 'std-8',
-    code: 'OISD-GDN-155',
-    title: 'Personal Protective Equipment & Respiratory Safety',
-    authority: 'OISD',
-    domain: 'Toxic Gas / Chemical',
-    mappedLsr: 'Toxic Gas / Chemical Exposure',
-    status: 'Compliant',
-    linkedReportsCount: 5,
-    lastAuditDate: '2026-05-10',
-    nextAuditDate: '2026-11-10',
-    summary:
-      'Mandates dual-sensor H2S/CO personal monitors, positive-pressure self-contained breathing apparatus (SCBA) escape hoods, and chemical barrier suits.',
+    id: 8,
+    name: 'Work Authorisation',
+    action: 'Obtain a valid permit before starting work and follow permit requirements.',
+    purpose: 'Ensures hazards, controls, and work boundaries are reviewed before work begins.',
+    color: '#2BA6A0',
+    background: '#F0FDFA',
   },
   {
-    id: 'std-9',
-    code: 'DGMS Tech Circular 04',
-    title: 'Safety Interlocks on High Pressure Wellhead Rigs',
-    authority: 'DGMS',
-    domain: 'Drilling Safety',
-    mappedLsr: 'Line of Fire',
-    status: 'Compliant',
-    linkedReportsCount: 7,
-    lastAuditDate: '2026-03-30',
-    nextAuditDate: '2026-09-30',
-    summary:
-      'Enforces rotary table safety dogs, crown-o-matic upper traveling block limiters, and pressure relief valve (PRV) testing logs on mud manifold lines.',
+    id: 9,
+    name: 'Work at Height',
+    action: 'Protect yourself against falls and secure tools when working at height.',
+    purpose: 'Prevents falls and dropped-object exposure during elevated work.',
+    color: '#C92925',
+    background: '#FEF2F2',
   },
 ];
 
-interface AuditCheckItem {
-  id: string;
-  category: string;
-  standard: string;
-  title: string;
-  description: string;
-  completed: boolean;
+function RuleIcon({ id }: { id: number }) {
+  const className = 'h-4 w-4';
+
+  if (id === 1) return <ShieldAlert className={className} />;
+  if (id === 2) return <Box className={className} />;
+  if (id === 3) return <Car className={className} />;
+  if (id === 4) return <Zap className={className} />;
+  if (id === 5) return <Flame className={className} />;
+  if (id === 6) return <AlertTriangle className={className} />;
+  if (id === 7) return <CheckSquare className={className} />;
+  if (id === 8) return <FileCheck className={className} />;
+
+  return <ShieldCheck className={className} />;
 }
 
-const INITIAL_CHECKLIST: AuditCheckItem[] = [
-  {
-    id: 'chk-1',
-    category: 'Permit to Work',
-    standard: 'OISD-STD-105',
-    title: 'PTW Cross-Verification with Live Gas Testing',
-    description: 'Ensure daily cold/hot work permits have calibrated multi-gas test records attached before shift start.',
-    completed: true,
-  },
-  {
-    id: 'chk-2',
-    category: 'Work at Height',
-    standard: 'OISD-GDN-166',
-    title: '100% Double-Lanyard Harness Inspection Tags',
-    description: 'Verify 6-month third-party pull test inspection certification tags on all derrick safety harnesses.',
-    completed: true,
-  },
-  {
-    id: 'chk-3',
-    category: 'Electrical & LOTO',
-    standard: 'OISD-STD-112',
-    title: 'MCC Lockout Padlocks & Isolation Keys Audit',
-    description: 'Perform physical count of red lockout padlocks and verify key isolation log in Motor Control Centers.',
-    completed: true,
-  },
-  {
-    id: 'chk-4',
-    category: 'Confined Space',
-    standard: 'OSHA 1910.146',
-    title: 'Confined Space Bump Test & Attendant Log',
-    description: 'Verify 4-gas bump test certificates completed within 24h prior to crude tank de-silting entry.',
-    completed: true,
-  },
-  {
-    id: 'chk-5',
-    category: 'Fire Protection',
-    standard: 'OISD-STD-129',
-    title: 'Fire Water Ring Main Quarterly Flow Hydro-Test',
-    description: 'Complete quarterly hydrostatic flow rate and nozzle pressure verification across Moran GGS-1 ring main.',
-    completed: false,
-  },
-  {
-    id: 'chk-6',
-    category: 'Lifting & Rigging',
-    standard: 'OSHA 1926.1400',
-    title: 'Crane Outrigger Soil Compaction Verification',
-    description: 'Inspect mobile crane engineered timber spreader pads and ground load calculations on drilling pads.',
-    completed: true,
-  },
-  {
-    id: 'chk-7',
-    category: 'Toxic Gas & Chemical',
-    standard: 'OISD-GDN-155',
-    title: 'Cascade Breathing Apparatus Bottle Pressure > 200 Bar',
-    description: 'Verify manifold cylinder pressure across H2S emergency refuge shelters at Naharkatia.',
-    completed: true,
-  },
-  {
-    id: 'chk-8',
-    category: 'Permit to Work',
-    standard: 'OISD-STD-105',
-    title: 'Mechanical Blind Slip Log & Spectacle Position',
-    description: 'Ensure blind flange isolation tag board corresponds 1:1 with P&ID line diagrams on crude manifolds.',
-    completed: false,
-  },
-];
+function reportMatchesRule(report: SafetyReport, ruleName: string) {
+  const target = ruleName.toLowerCase().trim();
 
-export default function CompliancePage() {
-  const [standards, setStandards] = useState<ComplianceStandard[]>(STANDARDS_DATA);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedAuthority, setSelectedAuthority] = useState('All Authorities');
-  const [selectedDomain, setSelectedDomain] = useState('All Domains');
-  const [checklist, setChecklist] = useState<AuditCheckItem[]>(INITIAL_CHECKLIST);
+  const primaryRule = String(report.lsrViolated || '')
+    .toLowerCase()
+    .trim();
 
-  // Filtered Standards
-  const filteredStandards = useMemo(() => {
-    return standards.filter((std) => {
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        const matches =
-          std.code.toLowerCase().includes(q) ||
-          std.title.toLowerCase().includes(q) ||
-          std.domain.toLowerCase().includes(q) ||
-          std.mappedLsr.toLowerCase().includes(q);
-        if (!matches) return false;
-      }
-      if (selectedAuthority !== 'All Authorities' && std.authority !== selectedAuthority) {
-        return false;
-      }
-      if (selectedDomain !== 'All Domains' && std.domain !== selectedDomain) {
-        return false;
-      }
-      return true;
-    });
-  }, [standards, searchQuery, selectedAuthority, selectedDomain]);
+  const ruleList = Array.isArray(report.iogpRules)
+    ? report.iogpRules.map((rule) => String(rule).toLowerCase().trim())
+    : [];
 
-  // Unique domains
-  const domains = useMemo(() => {
-    const set = new Set<string>();
-    STANDARDS_DATA.forEach((s) => set.add(s.domain));
-    return ['All Domains', ...Array.from(set).sort()];
-  }, []);
+  const matches = (value: string) =>
+    value === target ||
+    (target === 'work at height' && value.includes('height')) ||
+    (target === 'work authorisation' &&
+      (value.includes('permit') || value.includes('authorisation'))) ||
+    (target === 'driving' &&
+      (value.includes('driving') || value.includes('transport'))) ||
+    value.includes(target);
 
-  // Checklist Calculations
-  const completedCount = checklist.filter((c) => c.completed).length;
-  const totalCount = checklist.length;
-  const complianceScore = Math.round((completedCount / totalCount) * 100);
+  return (primaryRule.length > 0 && matches(primaryRule)) || ruleList.some(matches);
+}
 
-  // Toggle Checklist item
-  const toggleCheckItem = (id: string) => {
-    setChecklist((prev) =>
-      prev.map((item) => {
-        if (item.id === id) {
-          const nextState = !item.completed;
-          toast.info(nextState ? `Marked Completed: ${item.standard}` : `Marked Open: ${item.standard}`);
-          return { ...item, completed: nextState };
-        }
-        return item;
-      })
+function getTypeIconBadge(type: string) {
+  switch (type) {
+    case 'UA':
+    case 'Unsafe Act':
+      return (
+        <span className="inline-flex items-center gap-1.5 font-semibold text-amber-700 bg-amber-500/10 px-2.5 py-0.5 border border-amber-500/30 rounded-full text-xs">
+          <AlertTriangle className="h-3.5 w-3.5 text-amber-600 shrink-0" />
+          <span>UA</span>
+        </span>
+      );
+    case 'UC':
+    case 'Unsafe Condition':
+      return (
+        <span className="inline-flex items-center gap-1.5 font-semibold text-blue-700 bg-blue-500/10 px-2.5 py-0.5 border border-blue-500/30 rounded-full text-xs">
+          <Info className="h-3.5 w-3.5 text-blue-600 shrink-0" />
+          <span>UC</span>
+        </span>
+      );
+    case 'NM':
+    case 'Near Miss':
+      return (
+        <span className="inline-flex items-center gap-1.5 font-semibold text-purple-700 bg-purple-500/10 px-2.5 py-0.5 border border-purple-500/30 rounded-full text-xs">
+          <AlertCircle className="h-3.5 w-3.5 text-purple-600 shrink-0" />
+          <span>NM</span>
+        </span>
+      );
+    default:
+      return (
+        <span className="inline-flex items-center gap-1.5 font-medium text-slate-700 bg-slate-100 px-2.5 py-0.5 border border-slate-300 rounded-full text-xs">
+          <FileText className="h-3.5 w-3.5 text-slate-500 shrink-0" />
+          <span>{type || 'Report'}</span>
+        </span>
+      );
+  }
+}
+
+function getSifIconBadge(sifState: string) {
+  switch (sifState) {
+    case 'Yes':
+    case 'High':
+      return (
+        <span className="inline-flex items-center gap-1.5 font-bold text-red-700 bg-red-500/10 px-2.5 py-0.5 border border-red-500/30 rounded-full text-xs">
+          <Flame className="h-3.5 w-3.5 fill-red-600 text-red-600 shrink-0" />
+          <span>Yes</span>
+        </span>
+      );
+    case 'Review':
+    case 'Medium':
+      return (
+        <span className="inline-flex items-center gap-1.5 font-semibold text-amber-700 bg-amber-500/10 px-2.5 py-0.5 border border-amber-500/30 rounded-full text-xs">
+          <AlertTriangle className="h-3.5 w-3.5 text-amber-600 shrink-0" />
+          <span>Review</span>
+        </span>
+      );
+    default:
+      return (
+        <span className="inline-flex items-center gap-1.5 font-medium text-slate-600 bg-slate-100 px-2.5 py-0.5 border border-slate-300 rounded-full text-xs">
+          <CheckCircle2 className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+          <span>No</span>
+        </span>
+      );
+  }
+}
+
+function LifeSavingRulesView() {
+  const reports = useSafetyStore((state) => state.reports) || [];
+  const setSelectedReport = useSafetyStore((state) => state.setSelectedReport);
+  const [selectedRuleId, setSelectedRuleId] = useState(1);
+
+  const selectedRule = useMemo(() => {
+    return (
+      LIFE_SAVING_RULES.find((rule) => rule.id === selectedRuleId) ||
+      LIFE_SAVING_RULES[0]
     );
-  };
+  }, [selectedRuleId]);
 
-  const handleExportDossier = () => {
-    toast.success('Statutory Compliance Dossier Exported', {
-      description: 'Downloaded OISD / OSHA Audit Ready PDF Package (6.4 MB).',
-    });
-  };
-
-  const getStatusBadge = (status: ComplianceStandard['status']) => {
-    switch (status) {
-      case 'Compliant':
-        return (
-          <Badge className="bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 gap-1 text-[11px]">
-            <CheckCircle2 className="h-3 w-3" />
-            Compliant
-          </Badge>
-        );
-      case 'Under Review':
-        return (
-          <Badge className="bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30 gap-1 text-[11px]">
-            <Clock className="h-3 w-3" />
-            Under Review
-          </Badge>
-        );
-      case 'Action Required':
-        return (
-          <Badge className="bg-rose-500/15 text-rose-700 dark:text-rose-400 border-rose-500/30 gap-1 text-[11px]">
-            <AlertTriangle className="h-3 w-3" />
-            Action Required
-          </Badge>
-        );
-    }
-  };
+  const selectedReports = useMemo(() => {
+    return reports.filter((report) =>
+      reportMatchesRule(report, selectedRule.name)
+    );
+  }, [reports, selectedRule.name]);
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12 animate-in fade-in-50 duration-300">
-      {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-5">
-        <div>
-          <div className="flex items-center space-x-2.5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-500 shadow-sm">
-              <ShieldCheck className="h-5 w-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
-                  OISD / OSHA Statutory Compliance
-                </h1>
-                <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/30 text-[10px] font-mono">
-                  Audit Grade
-                </Badge>
-              </div>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                Statutory regulatory monitoring, OISD standards mapping, and statutory audit readiness for Oil India assets
-              </p>
-            </div>
+    <div className="space-y-8">
+      <section className="border border-[#D9DDE0] bg-gradient-to-r from-[#102F3E] via-[#17495D] to-[#102F3E] p-6 text-white">
+        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+          <div>
+            <p className="text-xs font-bold tracking-[0.15em] text-[#9BD7D2] uppercase">
+              COMPLIANCE
+            </p>
+            <h1 className="mt-1 text-2xl font-extrabold text-white">Life-Saving Rules</h1>
+            <p className="mt-1 text-sm text-slate-300 font-normal">
+              Rule-based screening reference for high-potential safety exposures.
+            </p>
+          </div>
+
+          <div className="border border-white/20 bg-white/10 px-4 py-3 text-right text-white">
+            <p className="text-2xl font-bold text-white">{reports.length}</p>
+            <p className="text-xs text-slate-300">Reports in demonstration dataset</p>
           </div>
         </div>
+      </section>
 
-        <div className="flex items-center gap-2.5">
-          <Button
-            onClick={handleExportDossier}
-            variant="outline"
-            className="text-xs h-9 gap-1.5 shadow-sm"
-          >
-            <Download className="h-3.5 w-3.5" />
-            Export Compliance Dossier
-          </Button>
-          <Link href="/reports?sif=High">
-            <Button className="text-xs h-9 bg-sky-600 hover:bg-sky-500 text-white gap-1.5 shadow-sm">
-              <FileCheck className="h-3.5 w-3.5" />
-              View Linked Incidents
-            </Button>
-          </Link>
+      <section>
+        <div className="mb-4 flex items-center justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold tracking-[0.12em] text-[#667085]">
+              REFERENCE FRAMEWORK
+            </p>
+            <h2 className="text-lg font-bold text-[#102F3E]">
+              IOGP Life-Saving Rules
+            </h2>
+          </div>
+          <p className="text-xs text-[#667085]">Select a rule to view mapped reports</p>
         </div>
-      </div>
 
-      {/* Top 4 Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Metric 1 */}
-        <Card className="border bg-card/80 backdrop-blur-sm shadow-sm">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-muted-foreground">Compliance Rating</span>
-              <div className="h-8 w-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                <ShieldCheck className="h-4 w-4" />
-              </div>
-            </div>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-2xl font-bold font-mono tracking-tight text-foreground">
-                {complianceScore}%
-              </span>
-              <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-                +2.4% vs last qtr
-              </span>
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Verified against 14 mandatory upstream safety standards
-            </p>
-          </CardContent>
-        </Card>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {LIFE_SAVING_RULES.map((rule) => {
+            const count = reports.filter((report) =>
+              reportMatchesRule(report, rule.name)
+            ).length;
 
-        {/* Metric 2 */}
-        <Card className="border bg-card/80 backdrop-blur-sm shadow-sm">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-muted-foreground">Standards Monitored</span>
-              <div className="h-8 w-8 rounded-lg bg-sky-500/10 flex items-center justify-center text-sky-500">
-                <Layers className="h-4 w-4" />
-              </div>
-            </div>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-2xl font-bold font-mono tracking-tight text-foreground">
-                14
-              </span>
-              <span className="text-[11px] text-muted-foreground">
-                (9 OISD • 4 OSHA • 1 DGMS)
-              </span>
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Covering drilling, GGS, pipelines, &amp; tank farms
-            </p>
-          </CardContent>
-        </Card>
+            const selected = rule.id === selectedRuleId;
 
-        {/* Metric 3 */}
-        <Card className="border bg-card/80 backdrop-blur-sm shadow-sm">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-muted-foreground">Open Action Items</span>
-              <div className="h-8 w-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
-                <AlertTriangle className="h-4 w-4" />
-              </div>
-            </div>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-2xl font-bold font-mono tracking-tight text-amber-500">
-                {totalCount - completedCount} Minor
-              </span>
-              <span className="text-[11px] text-emerald-500 font-semibold">
-                0 Critical
-              </span>
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              All high-priority preventive actions closed out
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* Metric 4 */}
-        <Card className="border bg-card/80 backdrop-blur-sm shadow-sm">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-muted-foreground">Next Regulatory Audit</span>
-              <div className="h-8 w-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-500">
-                <Calendar className="h-4 w-4" />
-              </div>
-            </div>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-xl font-bold font-mono tracking-tight text-foreground">
-                15 Oct 2026
-              </span>
-              <Badge variant="outline" className="text-[10px] font-medium py-0">
-                DGMS Annual
-              </Badge>
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Statutory inspection for Assam Basin installations
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Main Tabs Section */}
-      <Tabs defaultValue="standards" className="space-y-4">
-        <TabsList className="bg-muted/60 p-1 border">
-          <TabsTrigger value="standards" className="text-xs gap-1.5">
-            <FileText className="h-3.5 w-3.5" />
-            Standards Registry
-          </TabsTrigger>
-          <TabsTrigger value="alignment" className="text-xs gap-1.5">
-            <Shield className="h-3.5 w-3.5" />
-            IOGP Life-Saving Rules Alignment
-          </TabsTrigger>
-          <TabsTrigger value="checklist" className="text-xs gap-1.5">
-            <CheckSquare className="h-3.5 w-3.5" />
-            Statutory Audit Checklist ({completedCount}/{totalCount})
-          </TabsTrigger>
-        </TabsList>
-
-        {/* TAB 1: Standards Registry */}
-        <TabsContent value="standards" className="space-y-4">
-          <Card className="border shadow-sm">
-            <CardHeader className="p-4 border-b flex flex-col md:flex-row md:items-center justify-between gap-3">
-              <div>
-                <CardTitle className="text-sm font-semibold text-foreground">
-                  Statutory Safety Standards Catalog
-                </CardTitle>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Mandatory regulatory directives mapped to upstream oilfield operations
-                </p>
-              </div>
-
-              {/* Filters */}
-              <div className="flex flex-wrap items-center gap-2">
-                <div className="relative w-56">
-                  <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
-                  <Input
-                    placeholder="Search standards or rules..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-8 h-8 text-xs bg-background"
-                  />
-                </div>
-
-                <select
-                  value={selectedAuthority}
-                  onChange={(e) => setSelectedAuthority(e.target.value)}
-                  className="h-8 rounded-md border border-input bg-background px-2.5 py-1 text-xs text-foreground shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
-                >
-                  <option value="All Authorities">All Authorities</option>
-                  <option value="OISD">OISD (India)</option>
-                  <option value="OSHA">OSHA (USA)</option>
-                  <option value="DGMS">DGMS</option>
-                </select>
-
-                <select
-                  value={selectedDomain}
-                  onChange={(e) => setSelectedDomain(e.target.value)}
-                  className="h-8 rounded-md border border-input bg-background px-2.5 py-1 text-xs text-foreground shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
-                >
-                  {domains.map((dom) => (
-                    <option key={dom} value={dom}>
-                      {dom}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </CardHeader>
-
-            <CardContent className="p-0">
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader className="bg-muted/40">
-                    <TableRow className="text-xs">
-                      <TableHead className="w-[130px]">Standard Code</TableHead>
-                      <TableHead className="min-w-[260px]">Title &amp; Statutory Scope</TableHead>
-                      <TableHead className="w-[100px]">Authority</TableHead>
-                      <TableHead className="min-w-[160px]">Mapped LSR</TableHead>
-                      <TableHead className="w-[125px]">Compliance</TableHead>
-                      <TableHead className="w-[100px]">Linked Events</TableHead>
-                      <TableHead className="w-[110px]">Next Audit</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody className="text-xs">
-                    {filteredStandards.map((std) => (
-                      <TableRow key={std.id} className="hover:bg-muted/30 transition-colors">
-                        <TableCell className="font-mono font-bold text-sky-500 py-3 whitespace-nowrap">
-                          {std.code}
-                        </TableCell>
-                        <TableCell className="py-3">
-                          <div className="space-y-0.5 max-w-md">
-                            <p className="font-medium text-foreground">{std.title}</p>
-                            <p className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed">
-                              {std.summary}
-                            </p>
-                          </div>
-                        </TableCell>
-                        <TableCell className="py-3 whitespace-nowrap">
-                          <Badge variant="outline" className="font-mono text-[10px]">
-                            {std.authority}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="py-3 whitespace-nowrap">
-                          <span className="inline-flex items-center text-xs font-medium text-foreground">
-                            {std.mappedLsr}
-                          </span>
-                        </TableCell>
-                        <TableCell className="py-3 whitespace-nowrap">
-                          {getStatusBadge(std.status)}
-                        </TableCell>
-                        <TableCell className="py-3 whitespace-nowrap font-mono text-muted-foreground">
-                          <Link
-                            href={`/reports?q=${encodeURIComponent(std.mappedLsr)}`}
-                            className="text-sky-500 hover:underline flex items-center gap-1"
-                          >
-                            <span>{std.linkedReportsCount} records</span>
-                            <ArrowUpRight className="h-3 w-3" />
-                          </Link>
-                        </TableCell>
-                        <TableCell className="py-3 whitespace-nowrap font-mono text-[11px] text-muted-foreground">
-                          {std.nextAuditDate}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* TAB 2: IOGP Life-Saving Rules Alignment */}
-        <TabsContent value="alignment" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              {
-                rule: 'Working at Height',
-                oisd: 'OISD-GDN-166',
-                osha: 'OSHA 1910.28',
-                barrierScore: '98% Defended',
-                controls: '100% continuous tie-off, certified anchor points (>22 kN), twin-leg shock absorbing lanyards.',
-                status: 'Optimal',
-              },
-              {
-                rule: 'Energy Isolation',
-                oisd: 'OISD-STD-105 / 112',
-                osha: 'OSHA 1910.147',
-                barrierScore: '96% Defended',
-                controls: 'Double block and bleed positive mechanical blinding, multi-lock LOTO, zero residual pressure verification.',
-                status: 'Optimal',
-              },
-              {
-                rule: 'Confined Space',
-                oisd: 'OISD-STD-105',
-                osha: 'OSHA 1910.146',
-                barrierScore: '92% Defended',
-                controls: 'Continuous 4-gas monitoring, calibrated bump tests, certified attendant, tripod rescue winch.',
-                status: 'Review',
-              },
-              {
-                rule: 'Safe Mechanical Lifting',
-                oisd: 'OISD-RP-110',
-                osha: 'OSHA 1926.1400',
-                barrierScore: '97% Defended',
-                controls: 'Engineered lift plan, ground compaction plates, drop zone exclusion barricades, tag-lines.',
-                status: 'Optimal',
-              },
-              {
-                rule: 'Line of Fire',
-                oisd: 'OISD-GDN-145',
-                osha: 'OSHA 1910.212',
-                barrierScore: '95% Defended',
-                controls: 'Whip-check safety cables, pressurized flange shields, rotary table guards, exclusion zones.',
-                status: 'Optimal',
-              },
-              {
-                rule: 'Hot Work',
-                oisd: 'OISD-STD-105',
-                osha: 'NFPA 51B',
-                barrierScore: '94% Defended',
-                controls: 'Continuous hydrocarbon gas monitor (0% LEL), fire watch 30-min post work, spark containment blankets.',
-                status: 'Optimal',
-              },
-              {
-                rule: 'Bypassing Safety Controls',
-                oisd: 'OISD-STD-112',
-                osha: 'IEC 61511',
-                barrierScore: '99% Defended',
-                controls: 'Formal Management of Change (MoC), bypass register log, asset manager signoff, 4-hour max bypass.',
-                status: 'Optimal',
-              },
-              {
-                rule: 'Safe Driving & Transport',
-                oisd: 'OISD-GDN-169',
-                osha: 'Motor Carrier Safety',
-                barrierScore: '96% Defended',
-                controls: 'In-vehicle telematics (IVMS), speed governors (40 km/h in field), journey management approval.',
-                status: 'Optimal',
-              },
-              {
-                rule: 'Toxic Gas / Chemical Exposure',
-                oisd: 'OISD-GDN-155',
-                osha: 'OSHA 1910.1000',
-                barrierScore: '98% Defended',
-                controls: 'Dual-sensor H2S personal gas monitor, positive-pressure SCBA escape set, windsock orientation.',
-                status: 'Optimal',
-              },
-            ].map((item, idx) => (
-              <Card key={idx} className="border bg-card shadow-sm hover:border-sky-500/50 transition-colors">
-                <CardHeader className="p-4 pb-2 flex flex-row items-start justify-between">
-                  <div>
-                    <CardTitle className="text-sm font-semibold text-foreground">
-                      {item.rule}
-                    </CardTitle>
-                    <div className="flex items-center gap-1.5 mt-1 font-mono text-[10px] text-muted-foreground">
-                      <span>{item.oisd}</span>
-                      <span>•</span>
-                      <span>{item.osha}</span>
-                    </div>
+            return (
+              <button
+                key={rule.id}
+                type="button"
+                onClick={() => setSelectedRuleId(rule.id)}
+                className={`border p-4 text-left transition ${selected
+                  ? 'border-[#102F3E] bg-[#F8FAFC] shadow-sm'
+                  : 'border-[#D9DDE0] bg-white hover:border-[#2F6B84]'
+                  }`}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div
+                    className="flex h-9 w-9 shrink-0 items-center justify-center"
+                    style={{ backgroundColor: rule.background, color: rule.color }}
+                  >
+                    <RuleIcon id={rule.id} />
                   </div>
                   <Badge
                     variant="outline"
-                    className={
-                      item.status === 'Optimal'
-                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 text-[10px]'
-                        : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30 text-[10px]'
-                    }
+                    className="border-[#D9DDE0] bg-white text-xs text-[#102F3E]"
                   >
-                    {item.barrierScore}
+                    {count} records
                   </Badge>
-                </CardHeader>
-                <CardContent className="p-4 pt-2">
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    {item.controls}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-
-        {/* TAB 3: Statutory Audit Checklist */}
-        <TabsContent value="checklist" className="space-y-4">
-          <Card className="border shadow-sm">
-            <CardHeader className="p-4 border-b flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
-                  Pre-Audit Inspection Readiness Checklist
-                  <Badge variant="outline" className="text-[10px] bg-sky-500/10 text-sky-500 border-sky-500/30">
-                    {completedCount} of {totalCount} Verified
-                  </Badge>
-                </CardTitle>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Interactive statutory compliance checklist for upcoming DGMS and OISD facility inspections
-                </p>
-              </div>
-
-              <Button
-                size="sm"
-                onClick={() => {
-                  toast.success('Checklist Synchronized', {
-                    description: 'Audit checkpoints updated to the central OISD HSE compliance repository.',
-                  });
-                }}
-                className="h-8 bg-sky-600 hover:bg-sky-500 text-white text-xs gap-1.5"
-              >
-                <CheckCircle2 className="h-3.5 w-3.5" />
-                Save Audit State
-              </Button>
-            </CardHeader>
-
-            <CardContent className="p-4 space-y-3">
-              {checklist.map((item) => (
-                <div
-                  key={item.id}
-                  onClick={() => toggleCheckItem(item.id)}
-                  className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
-                    item.completed
-                      ? 'bg-muted/30 border-border hover:bg-muted/50'
-                      : 'bg-amber-500/5 border-amber-500/30 hover:bg-amber-500/10'
-                  }`}
-                >
-                  <button
-                    type="button"
-                    className="mt-0.5 shrink-0 text-sky-500 hover:opacity-80 transition-opacity"
-                  >
-                    {item.completed ? (
-                      <CheckSquare className="h-5 w-5 text-emerald-500" />
-                    ) : (
-                      <Square className="h-5 w-5 text-amber-500" />
-                    )}
-                  </button>
-
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span
-                        className={`text-xs font-semibold ${
-                          item.completed ? 'text-foreground line-through opacity-80' : 'text-foreground'
-                        }`}
-                      >
-                        {item.title}
-                      </span>
-                      <Badge variant="outline" className="font-mono text-[9px] py-0">
-                        {item.standard}
-                      </Badge>
-                      <span className="text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
-                        {item.category}
-                      </span>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                      {item.description}
-                    </p>
-                  </div>
-
-                  <span
-                    className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${
-                      item.completed
-                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-                        : 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
-                    }`}
-                  >
-                    {item.completed ? 'Verified' : 'Pending Verification'}
-                  </span>
                 </div>
-              ))}
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+
+                <p className="mt-3 text-xs font-semibold tracking-[0.12em] text-[#667085]">
+                  RULE {rule.id}
+                </p>
+                <h3 className="mt-1 font-bold text-[#102F3E]">{rule.name}</h3>
+                <p className="mt-2 text-sm leading-5 text-[#475467]">
+                  {rule.action}
+                </p>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="border border-[#D9DDE0] bg-white">
+        <div className="border-b border-[#D9DDE0] bg-[#F8FAFC] p-5">
+          <div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
+            <div>
+              <p className="text-xs font-semibold tracking-[0.12em] text-[#667085]">
+                SELECTED RULE
+              </p>
+              <h2 className="text-lg font-bold text-[#102F3E]">
+                {selectedRule.name}
+              </h2>
+              <p className="mt-1 text-sm text-[#475467]">{selectedRule.purpose}</p>
+            </div>
+
+            <Link href={`/reports?q=${encodeURIComponent(selectedRule.name)}`}>
+              <Button
+                variant="outline"
+                className="border-[#102F3E] text-[#102F3E]"
+              >
+                View related reports
+                <ChevronRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+
+        <div className="p-5">
+          <h3 className="mb-3 text-sm font-bold text-[#102F3E]">
+            Mapped demonstration reports ({selectedReports.length})
+          </h3>
+
+          {selectedReports.length === 0 ? (
+            <div className="border border-dashed border-[#D9DDE0] bg-[#F8FAFC] p-8 text-center">
+              <Info className="mx-auto mb-2 h-6 w-6 text-[#667085]" />
+              <p className="text-sm font-medium text-[#102F3E]">
+                No demonstration reports are currently mapped to this rule.
+              </p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-[#102F3E] hover:bg-[#102F3E]">
+                    <TableHead className="text-white">Report ID</TableHead>
+                    <TableHead className="text-white">Site</TableHead>
+                    <TableHead className="text-white">Type</TableHead>
+                    <TableHead className="text-white">Title</TableHead>
+                    <TableHead className="text-white">SIF state</TableHead>
+                    <TableHead className="text-right text-white">Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {selectedReports.map((report) => (
+                    <TableRow key={report.id} className="hover:bg-[#F6FAFB]">
+                      <TableCell className="font-mono font-semibold">
+                        {report.id}
+                      </TableCell>
+                      <TableCell>{report.site}</TableCell>
+                      <TableCell>{getTypeIconBadge(report.reportType)}</TableCell>
+                      <TableCell>{report.title}</TableCell>
+                      <TableCell>{getSifIconBadge(report.sifPotential)}</TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setSelectedReport(report)}
+                        >
+                          Inspect
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </div>
+      </section>
     </div>
+  );
+}
+
+function OisdComplianceView() {
+  const reports = useSafetyStore((state) => state.reports) || [];
+
+  const metrics = useMemo(() => {
+    const total = reports.length;
+    const hasType = reports.filter((report) => Boolean(report.reportType)).length;
+    const hasNarrative = reports.filter(
+      (report) => Boolean(report.description && report.description.trim())
+    ).length;
+    const hasSite = reports.filter((report) => Boolean(report.site)).length;
+    const requiresReview = reports.filter(
+      (report) =>
+        report.sifPotential === 'Review' ||
+        report.status === 'Pending' ||
+        report.status === 'Under Review'
+    ).length;
+
+    return { total, hasType, hasNarrative, hasSite, requiresReview };
+  }, [reports]);
+
+  const controls = [
+    ['Report type recorded', `${metrics.hasType}/${metrics.total} records have a report type`, 'Available'],
+    ['Safety narrative available', `${metrics.hasNarrative}/${metrics.total} records include a description`, 'Available'],
+    ['Site or location recorded', `${metrics.hasSite}/${metrics.total} records include a site`, 'Available'],
+    ['PSIF review status', `${metrics.requiresReview} records require manual review`, 'Requires Review'],
+    ['Final HSE decision', 'Reviewer decision depends on workflow completion', 'Partial'],
+  ];
+
+  return (
+    <div className="space-y-8">
+      <section className="border border-[#D9DDE0] bg-gradient-to-r from-[#102F3E] via-[#17495D] to-[#102F3E] p-6 text-white">
+        <p className="text-xs font-bold tracking-[0.15em] text-[#9BD7D2] uppercase">
+          COMPLIANCE
+        </p>
+        <h1 className="mt-1 text-2xl font-extrabold text-white">OISD Compliance Readiness</h1>
+        <p className="mt-1 text-sm text-slate-300 font-normal">
+          Safety-reporting completeness and review controls for prototype records.
+        </p>
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <Card className="border-[#D9DDE0]">
+          <CardContent className="p-5">
+            <p className="text-xs font-semibold text-[#667085]">REPORT TYPE AVAILABLE</p>
+            <p className="mt-2 text-2xl font-bold text-[#102F3E]">
+              {metrics.hasType}/{metrics.total}
+            </p>
+          </CardContent>
+        </Card>
+        <Card className="border-[#D9DDE0]">
+          <CardContent className="p-5">
+            <p className="text-xs font-semibold text-[#667085]">NARRATIVE AVAILABLE</p>
+            <p className="mt-2 text-2xl font-bold text-[#1D8278]">
+              {metrics.hasNarrative}/{metrics.total}
+            </p>
+          </CardContent>
+        </Card>
+        <Card className="border-[#D9DDE0]">
+          <CardContent className="p-5">
+            <p className="text-xs font-semibold text-[#667085]">SITE AVAILABLE</p>
+            <p className="mt-2 text-2xl font-bold text-[#2F6B84]">
+              {metrics.hasSite}/{metrics.total}
+            </p>
+          </CardContent>
+        </Card>
+        <Card className="border-[#D9DDE0]">
+          <CardContent className="p-5">
+            <p className="text-xs font-semibold text-[#667085]">REQUIRES REVIEW</p>
+            <p className="mt-2 text-2xl font-bold text-[#C92925]">
+              {metrics.requiresReview}
+            </p>
+          </CardContent>
+        </Card>
+      </section>
+
+      <section className="border border-[#D9DDE0] bg-white">
+        <div className="border-b border-[#D9DDE0] bg-[#F8FAFC] p-5">
+          <h2 className="text-lg font-bold text-[#102F3E]">
+            Reporting completeness checklist
+          </h2>
+          <p className="mt-1 text-sm text-[#667085]">
+            Prototype readiness view for safety-report data.
+          </p>
+        </div>
+
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-[#102F3E] hover:bg-[#102F3E]">
+                <TableHead className="text-white">Reporting control</TableHead>
+                <TableHead className="text-white">Current demonstration status</TableHead>
+                <TableHead className="text-white">Required action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {controls.map(([control, detail, status]) => (
+                <TableRow key={control}>
+                  <TableCell className="font-medium text-[#102F3E]">
+                    {control}
+                  </TableCell>
+                  <TableCell>{detail}</TableCell>
+                  <TableCell>
+                    <Badge
+                      className={
+                        status === 'Available'
+                          ? 'bg-[#2E7D32] text-white'
+                          : status === 'Partial'
+                            ? 'bg-[#D97706] text-white'
+                            : 'bg-[#C92925] text-white'
+                      }
+                    >
+                      {status}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </section>
+
+      <section className="border border-[#D9DDE0] bg-[#F8FAFC] p-4 text-sm text-[#667085]">
+        <div className="flex gap-2">
+          <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#102F3E]" />
+          <p>
+            Prototype readiness view; final compliance assessment requires approved
+            OISD and OIL procedures.
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function AuditStandardsView() {
+  const standards = [
+    ['Permit to work', 'Permit controls and task authorization', 'Evidence pending review'],
+    ['Energy isolation', 'LOTO and zero-energy verification', 'Evidence pending review'],
+    ['Work at height', 'Fall protection and dropped-object controls', 'Evidence pending review'],
+    ['Confined-space entry', 'Gas testing, ventilation, attendant, and rescue readiness', 'Evidence pending review'],
+    ['Hot work', 'Gas testing, fire watch, and ignition control', 'Evidence pending review'],
+    ['Mechanical lifting', 'Lift planning, rigging, exclusion zone, and load control', 'Evidence pending review'],
+    ['Emergency preparedness', 'Emergency response equipment and readiness', 'Audit schedule not connected'],
+  ];
+
+  const stages = [
+    'Planned',
+    'Evidence collection',
+    'HSE review',
+    'Action assignment',
+    'Closure verification',
+  ];
+
+  return (
+    <div className="space-y-8">
+      <section className="border border-[#D9DDE0] bg-gradient-to-r from-[#102F3E] via-[#17495D] to-[#102F3E] p-6 text-white">
+        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+          <div>
+            <p className="text-xs font-bold tracking-[0.15em] text-[#9BD7D2] uppercase">
+              COMPLIANCE
+            </p>
+            <h1 className="mt-1 text-2xl font-extrabold text-white">Audit &amp; Standards</h1>
+            <p className="mt-1 text-sm text-slate-300 font-normal">
+              Track safety-control verification, audit evidence, and open observations.
+            </p>
+          </div>
+
+          <Link href="/actions">
+            <Button className="bg-[#C92925] text-white hover:bg-[#991F1B]">
+              View Corrective Actions
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      <section className="border border-[#D9DDE0] bg-white">
+        <div className="border-b border-[#D9DDE0] bg-[#F8FAFC] p-5">
+          <h2 className="text-lg font-bold text-[#102F3E]">Standards register</h2>
+          <p className="mt-1 text-sm text-[#667085]">
+            Audit planning framework for key safety-control areas.
+          </p>
+        </div>
+
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-[#102F3E] hover:bg-[#102F3E]">
+                <TableHead className="text-white">Control area</TableHead>
+                <TableHead className="text-white">Focus area</TableHead>
+                <TableHead className="text-white">Prototype status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {standards.map(([area, focus, status]) => (
+                <TableRow key={area}>
+                  <TableCell className="font-medium text-[#102F3E]">{area}</TableCell>
+                  <TableCell>{focus}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="border-[#D9DDE0]">
+                      {status}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </section>
+
+      <section className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+        <Card className="border-[#D9DDE0]">
+          <CardHeader className="border-b border-[#D9DDE0] bg-[#F8FAFC]">
+            <CardTitle className="flex items-center gap-2 text-[#102F3E]">
+              <Calendar className="h-4 w-4 text-[#1D8278]" />
+              Audit workflow
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 p-5">
+            {stages.map((stage, index) => (
+              <div
+                key={stage}
+                className="flex items-center gap-3 border border-[#D9DDE0] bg-[#F8FAFC] p-3"
+              >
+                <span className="flex h-7 w-7 items-center justify-center bg-[#102F3E] text-xs font-bold text-white">
+                  {index + 1}
+                </span>
+                <span className="text-sm font-medium text-[#102F3E]">{stage}</span>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card className="border-[#D9DDE0]">
+          <CardHeader className="border-b border-[#D9DDE0] bg-[#F8FAFC]">
+            <CardTitle className="flex items-center gap-2 text-[#102F3E]">
+              <CheckSquare className="h-4 w-4 text-[#C92925]" />
+              Corrective actions
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 p-5">
+            <p className="text-sm leading-6 text-[#475467]">
+              This prototype links audit observations to corrective-action tracking.
+              Formal audit schedules and evidence records are not connected.
+            </p>
+            <Link href="/actions" className="block">
+              <Button className="w-full bg-[#102F3E] text-white hover:bg-[#082735]">
+                View Corrective Actions
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </section>
+
+      <section className="border border-[#D9DDE0] bg-[#F8FAFC] p-4 text-sm text-[#667085]">
+        This prototype supports audit preparation and does not replace formal OISD/OIL
+        audit processes.
+      </section>
+    </div>
+  );
+}
+
+function ComplianceContent() {
+  const searchParams = useSearchParams();
+  const tab = searchParams.get('tab');
+
+  if (tab === 'oisd') {
+    return <OisdComplianceView />;
+  }
+
+  if (tab === 'audit') {
+    return <AuditStandardsView />;
+  }
+
+  return <LifeSavingRulesView />;
+}
+
+export default function CompliancePage() {
+  return (
+    <main className="mx-auto min-w-0 max-w-[1600px] space-y-8 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <Suspense
+        fallback={
+          <div className="p-8 text-center text-sm text-[#667085]">
+            Loading compliance views...
+          </div>
+        }
+      >
+        <ComplianceContent />
+      </Suspense>
+    </main>
   );
 }

@@ -21,7 +21,8 @@ export function KpiCards() {
       isPositive: true,
       subtext: 'UA, UC & Near Miss',
       icon: FileText,
-      iconBg: 'bg-indigo-500/10 text-indigo-500 border border-indigo-500/20',
+      iconBg:
+        'bg-[#102F3E]/10 text-[#102F3E] border border-[#102F3E]/20',
     },
     {
       title: 'SIF Potential Reports',
@@ -30,16 +31,18 @@ export function KpiCards() {
       isPositive: false, // High SIF increase is bad
       subtext: '14.6% of total reports',
       icon: AlertTriangle,
-      iconBg: 'bg-amber-500/10 text-amber-500 border border-amber-500/20',
+      iconBg:
+        'bg-[#D97706]/10 text-[#D97706] border border-[#D97706]/25',
     },
     {
       title: 'High SIF Potential',
       value: '98',
       change: '-2.3% vs last 28 days',
-      isPositive: true, // decrease in high SIF is good
+      isPositive: true, // Decrease in high SIF is good
       subtext: '28.7% of SIF reports',
       icon: Flame,
-      iconBg: 'bg-rose-500/10 text-rose-500 border border-rose-500/20',
+      iconBg:
+        'bg-[#C92925]/10 text-[#C92925] border border-[#C92925]/25',
     },
     {
       title: 'Top Precursor / Hazard',
@@ -49,7 +52,8 @@ export function KpiCards() {
       isNeutral: true,
       subtext: '64 critical incidents',
       icon: Zap,
-      iconBg: 'bg-amber-500/10 text-amber-400 border border-amber-500/20',
+      iconBg:
+        'bg-[#D97706]/10 text-[#D97706] border border-[#D97706]/25',
     },
     {
       title: 'Reports Mapped to LSR',
@@ -58,7 +62,8 @@ export function KpiCards() {
       isNeutral: true,
       subtext: 'Oil India Life-Saving Rules',
       icon: ShieldCheck,
-      iconBg: 'bg-sky-500/10 text-sky-500 border border-sky-500/20',
+      iconBg:
+        'bg-[#2E7D32]/10 text-[#2E7D32] border border-[#2E7D32]/25',
     },
   ];
 
@@ -66,22 +71,24 @@ export function KpiCards() {
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
       {kpis.map((kpi, idx) => {
         const Icon = kpi.icon;
+
         return (
           <Card
             key={idx}
-            className="overflow-hidden border bg-card/90 shadow-sm transition-all hover:shadow-md hover:border-sky-500/30 group"
+            className="overflow-hidden border border-[#D9DDE0] bg-white shadow-none rounded-[2px] transition-colors hover:border-[#102F3E]/30 group"
           >
             <CardContent className="p-4">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
+                  <p className="text-[10px] font-bold text-[#667085] uppercase tracking-wider">
                     {kpi.title}
                   </p>
+
                   <h3
                     className={
                       kpi.isStringValue
-                        ? 'text-sm font-bold text-foreground mt-1 truncate max-w-[140px]'
-                        : 'text-2xl font-black text-foreground mt-1 font-mono tracking-tight'
+                        ? 'text-sm font-bold text-[#102F3E] mt-1 truncate max-w-[140px]'
+                        : 'text-2xl font-black text-[#102F3E] mt-1 font-mono tracking-tight'
                     }
                     title={kpi.value}
                   >
@@ -90,21 +97,20 @@ export function KpiCards() {
                 </div>
 
                 <div
-                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${kpi.iconBg} transition-transform group-hover:scale-105`}
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[2px] ${kpi.iconBg}`}
                 >
-                  <Icon className="h-5 w-5" />
+                  <Icon className="h-4 w-4" />
                 </div>
               </div>
 
-              <div className="mt-3 flex items-center justify-between pt-2 border-t border-border/50 text-[11px]">
+              <div className="mt-3 flex items-center justify-between pt-2 border-t border-[#D9DDE0] text-[11px]">
                 <span
-                  className={`flex items-center font-medium ${
-                    kpi.isNeutral
-                      ? 'text-sky-500'
+                  className={`flex items-center font-semibold ${kpi.isNeutral
+                      ? 'text-[#102F3E]'
                       : kpi.isPositive
-                      ? 'text-emerald-500'
-                      : 'text-rose-500'
-                  }`}
+                        ? 'text-[#2E7D32]'
+                        : 'text-[#C92925]'
+                    }`}
                 >
                   {!kpi.isNeutral &&
                     (kpi.isPositive ? (
@@ -112,9 +118,11 @@ export function KpiCards() {
                     ) : (
                       <TrendingUp className="mr-1 h-3 w-3" />
                     ))}
+
                   {kpi.change}
                 </span>
-                <span className="text-[10px] text-muted-foreground truncate ml-1">
+
+                <span className="text-[10px] text-[#667085] truncate ml-1">
                   {kpi.subtext}
                 </span>
               </div>

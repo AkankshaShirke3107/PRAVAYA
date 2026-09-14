@@ -1,72 +1,136 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
+
 import { DashboardFilterBar } from '@/components/dashboard/DashboardFilterBar';
 import { StatCards } from '@/components/dashboard/StatCards';
+import { HseReviewQueue } from '@/components/dashboard/HseReviewQueue';
+import { RecentReportsTable } from '@/components/dashboard/RecentReportsTable';
+import { RecentHighRiskReports } from '@/components/dashboard/RecentHighRiskReports';
 import { SifTrendChart } from '@/components/dashboard/SifTrendChart';
 import { TopPrecursorsChart } from '@/components/dashboard/TopPrecursorsChart';
 import { LsrDistributionChart } from '@/components/dashboard/LsrDistributionChart';
-import { RecentHighRiskReports } from '@/components/dashboard/RecentHighRiskReports';
-import { RecentReportsTable } from '@/components/dashboard/RecentReportsTable';
 import { SiteHeatMap } from '@/components/dashboard/SiteHeatMap';
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-8 max-w-7xl mx-auto">
-      {/* Filter Bar above the stat cards */}
-      <DashboardFilterBar />
-
-      {/* Top Section: 4 Key Safety Metrics Stat Cards */}
-      <section className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-bold tracking-tight text-[#1e293b] dark:text-slate-100 sm:text-xl">
-              Operational Safety Overview
-            </h2>
-            <p className="text-xs text-[#475569] dark:text-slate-400 mt-0.5">
-              Key safety metrics and real-time SIF precursor distribution across assets
-            </p>
-          </div>
-          <span className="hidden sm:inline-flex items-center rounded-md bg-white dark:bg-card border border-[#e2e8f0] dark:border-border px-3 py-1 text-xs font-medium text-[#64748b]">
-            Current Period: May 2026
-          </span>
+    <div className="space-y-8 max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      {/* Industrial Editorial Navy Header */}
+      <header className="relative w-full navy-header-gradient overflow-hidden rounded-md border border-[#102F3E]">
+        {/* Geometric square accents */}
+        <div
+          className="absolute top-3 right-4 flex items-center gap-1 z-10"
+          aria-hidden="true"
+        >
+          <span className="block w-2.5 h-2.5 bg-[#C92925]" />
+          <span className="block w-2 h-2 bg-white" />
+          <span className="block w-1.5 h-1.5 bg-[#C92925]" />
         </div>
+
+        <div
+          className="absolute bottom-3 right-4 flex items-center gap-1 z-10"
+          aria-hidden="true"
+        >
+          <span className="block w-1.5 h-1.5 bg-white/60" />
+          <span className="block w-2 h-2 bg-[#C92925]" />
+        </div>
+
+        {/* Header Content */}
+        <div className="relative z-10 px-6 py-6 sm:px-8 sm:py-7 flex flex-col md:flex-row md:items-end md:justify-between gap-5">
+          <div className="max-w-2xl">
+            <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-[#C92925] mb-2">
+              OIL INDIA&ensp;|&ensp;HSE MONITORING
+            </p>
+
+            <h1 className="text-lg sm:text-xl font-extrabold tracking-tight text-white leading-snug mb-2">
+              Operational Safety Overview
+            </h1>
+
+            <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed font-normal mb-3">
+              SIF precursor screening across safety observations, near misses,
+              and incident reports.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px] text-[#A0AEC0] font-medium tracking-wide uppercase">
+              <span>Reporting period: Current selection</span>
+              <span className="hidden sm:inline text-[#4A5568]">•</span>
+              <span>Prototype data — workflow demonstration</span>
+            </div>
+          </div>
+
+          <div className="shrink-0">
+            <Link
+              href="/analyzer"
+              className="inline-flex items-center justify-center btn-primary-red text-white text-xs font-bold tracking-wider uppercase px-5 py-2.5 transition-all duration-150 rounded-[4px]"
+            >
+              SCREEN A REPORT
+            </Link>
+          </div>
+        </div>
+
+        {/* Bottom rule accent */}
+        <div className="h-[3px] w-full flex" aria-hidden="true">
+          <div
+            className="h-full bg-[#C92925]"
+            style={{ width: '35%' }}
+          />
+          <div
+            className="h-full bg-white/20"
+            style={{ width: '65%' }}
+          />
+        </div>
+      </header>
+
+      {/* Filters */}
+      <div>
+        <DashboardFilterBar />
+      </div>
+
+      {/* Key Safety Metrics */}
+      <section className="space-y-3">
+        <h2 className="text-xs font-bold text-[#667085] uppercase tracking-wider">
+          Safety Performance Summary
+        </h2>
 
         <StatCards />
       </section>
 
-      {/* Charts Section 1 (Side by Side: 60% Left, 40% Right) */}
-      <section className="grid grid-cols-1 gap-8 lg:grid-cols-5">
-        {/* Chart 1 (Left - 60% width): SIF Trend Over Time */}
-        <div className="lg:col-span-3">
+      {/* Main Dashboard Columns */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Main Column */}
+        <div className="min-w-0 lg:col-span-7 flex flex-col gap-6">
+          <HseReviewQueue />
+
           <SifTrendChart />
         </div>
 
-        {/* Chart 2 (Right - 40% width): Top SIF Precursors */}
-        <div className="lg:col-span-2">
+        {/* Secondary Column */}
+        <div className="min-w-0 lg:col-span-5 flex flex-col gap-6">
           <TopPrecursorsChart />
-        </div>
-      </section>
 
-      {/* Charts Section 2 (Side by Side: 50% Left, 50% Right) */}
-      <section className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        {/* Chart 3 (Left - 50% width): Life-Saving Rule Distribution */}
-        <div className="h-full">
           <LsrDistributionChart />
         </div>
+      </div>
 
-        {/* Chart 4 (Right - 50% width): Recent High-Risk Reports */}
-        <div className="h-full">
-          <RecentHighRiskReports />
+      {/* Operational Safety Reports */}
+      <section className="space-y-3 min-w-0">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xs font-bold text-[#667085] uppercase tracking-wider">
+            Operational Safety Log &amp; Incident Register
+          </h2>
         </div>
+
+        <RecentReportsTable />
       </section>
 
-      {/* Lower Section: Recent Reports & Operational Site Heat Map */}
-      <section className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-        <div className="lg:col-span-8">
-          <RecentReportsTable />
+      {/* Operational Risk Heatmap & High-Risk Incidents */}
+      <section className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+        <div className="min-w-0 lg:col-span-7">
+          <RecentHighRiskReports />
         </div>
-        <div className="lg:col-span-4">
+
+        <div className="min-w-0 lg:col-span-5">
           <SiteHeatMap />
         </div>
       </section>

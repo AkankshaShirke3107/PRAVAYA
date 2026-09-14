@@ -1,4 +1,4 @@
-// File: C:\Users\gaura\OneDrive\Desktop\NeuralForage\app\dashboard\page.tsx
+// File: C:\Users\Ambule\Documents\PRAVAYA-main\PRAVAYA-main\app\dashboard\page.tsx
 import * as entry from '../../../../app/dashboard/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

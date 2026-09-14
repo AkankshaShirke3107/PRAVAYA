@@ -8,64 +8,80 @@ export function cn(...inputs: ClassValue[]) {
 
 export function getSifBadgeColor(level: SifPotential) {
   switch (level) {
-    case 'Yes':
-    case 'High':
-      return 'bg-red-500/15 text-red-700 dark:text-red-400 border-red-500/30 hover:bg-red-500/25';
-    case 'Review':
-    case 'Medium':
-      return 'bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30 hover:bg-amber-500/25';
-    case 'No':
-    case 'Low':
-      return 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/25';
-    case 'Non-SIF':
+    case "Yes":
+    case "High":
+      return "bg-[#C92925]/10 text-[#C92925] border-[#C92925]/30 hover:bg-[#C92925]/20 font-bold rounded-full";
+
+    case "Review":
+    case "Medium":
+      return "bg-[#D97706]/10 text-[#D97706] border-[#D97706]/30 hover:bg-[#D97706]/20 font-bold rounded-full";
+
+    case "No":
+    case "Low":
+      return "bg-[#2E7D32]/10 text-[#2E7D32] border-[#2E7D32]/30 hover:bg-[#2E7D32]/20 font-bold rounded-full";
+
+    case "Non-SIF":
     default:
-      return 'bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/30 hover:bg-slate-500/20';
+      return "bg-[#F3F2EE] text-[#64748B] border-[#D9DDE0] hover:bg-[#D9DDE0]/50 rounded-full";
   }
 }
 
-export function getStatusBadgeColor(status: ReportStatus) {
+export function getStatusBadgeColor(status: ReportStatus | string) {
   switch (status) {
-    case 'Confirmed':
-      return 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 font-semibold';
-    case 'Pending':
-      return 'bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30 font-medium';
-    case 'Rejected':
-      return 'bg-red-500/15 text-red-700 dark:text-red-400 border-red-500/30 font-medium';
-    case 'New':
-      return 'bg-sky-500/15 text-sky-700 dark:text-sky-400 border-sky-500/30';
-    case 'Under Review':
-      return 'bg-indigo-500/15 text-indigo-700 dark:text-indigo-400 border-indigo-500/30';
-    case 'Escalated':
-      return 'bg-rose-500/15 text-rose-700 dark:text-rose-400 border-rose-500/40 font-semibold';
-    case 'Action Taken':
-      return 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30';
-    case 'Closed':
+    case "Confirmed":
+    case "Action Taken":
+    case "Closed":
+      return "bg-[#2E7D32]/10 text-[#2E7D32] border-[#2E7D32]/30 font-semibold";
+
+    case "Pending":
+    case "Needs Review":
+      return "bg-[#64748B]/10 text-[#64748B] border-[#64748B]/30 font-medium";
+
+    case "Under Review":
+      return "bg-[#2F6B84]/10 text-[#2F6B84] border-[#2F6B84]/30 font-medium";
+
+    case "Escalated":
+      return "bg-[#C65D1E]/10 text-[#C65D1E] border-[#C65D1E]/30 font-bold";
+
+    case "Rejected":
+      return "bg-[#C92925]/10 text-[#C92925] border-[#C92925]/30 font-medium";
+
+    case "New":
     default:
-      return 'bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/20';
+      return "bg-[#F3F2EE] text-[#64748B] border-[#D9DDE0]";
   }
 }
 
-export function getTypeBadgeColor(type: ReportType) {
+export function getTypeBadgeColor(type: ReportType | string) {
   switch (type) {
-    case 'UA':
-      return 'bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30 font-semibold';
-    case 'UC':
-      return 'bg-purple-500/15 text-purple-700 dark:text-purple-400 border-purple-500/30 font-semibold';
-    case 'NM':
-    case 'Near Miss':
-      return 'bg-rose-500/15 text-rose-700 dark:text-rose-400 border-rose-500/30 font-semibold';
+    case "UA":
+    case "Unsafe Act":
+      return "bg-[#C92925]/10 text-[#C92925] border-[#C92925]/30 font-semibold";
+
+    case "UC":
+    case "Unsafe Condition":
+      return "bg-[#2F6B84]/10 text-[#2F6B84] border-[#2F6B84]/30 font-semibold";
+
+    case "NM":
+    case "Near Miss":
+      return "bg-[#2A7D78]/10 text-[#2A7D78] border-[#2A7D78]/30 font-semibold";
+
+    case "Incident":
+      return "bg-[#102F3E]/10 text-[#102F3E] border-[#102F3E]/30 font-semibold";
+
     default:
-      return 'bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/25';
+      return "bg-[#F3F2EE] text-[#64748B] border-[#D9DDE0]";
   }
 }
 
 export function formatReadableDate(dateString: string) {
   try {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
+
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
     });
   } catch {
     return dateString;

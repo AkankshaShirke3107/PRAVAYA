@@ -2,219 +2,468 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ChevronRight, MapPin, AlertCircle } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import {
+  MapPin,
+  ChevronRight,
+  ListFilter,
+  Map as MapIcon,
+} from 'lucide-react';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { useSafetyStore } from '@/lib/store';
 
-interface FieldNode {
-  name: string;
+export interface SiteRiskData {
+  site: string;
+  riskLevel: 'HIGH' | 'MODERATE' | 'LOW';
+  badgeColor: string;
+  dotColor: string;
+  reports: number;
+  sifCount: number;
+  density: number;
+  topPrecursor: string;
+  facilities: string;
   x: number;
   y: number;
-  highCount: number;
-  medCount: number;
-  risk: 'High' | 'Medium' | 'Low';
-  facilities: string;
 }
 
+export const OPERATIONAL_SITES: SiteRiskData[] = [
+  {
+    site: 'Duliajan',
+    riskLevel: 'HIGH',
+    badgeColor: 'bg-[#C92925] text-white',
+    dotColor: '#C92925',
+    reports: 18,
+    sifCount: 9,
+    density: 50.0,
+    topPrecursor: 'Work at Height (4)',
+    facilities: 'CPF, GGS-4, Compressor Station #2',
+    x: 190,
+    y: 95,
+  },
+  {
+    site: 'Naharkatia',
+    riskLevel: 'HIGH',
+    badgeColor: 'bg-[#C92925] text-white',
+    dotColor: '#C92925',
+    reports: 16,
+    sifCount: 6,
+    density: 37.5,
+    topPrecursor: 'Energy Isolation (3)',
+    facilities: 'Separation Plant, Substation 33kV',
+    x: 130,
+    y: 130,
+  },
+  {
+    site: 'Moran',
+    riskLevel: 'MODERATE',
+    badgeColor: 'bg-[#D97706] text-white',
+    dotColor: '#D97706',
+    reports: 14,
+    sifCount: 4,
+    density: 28.6,
+    topPrecursor: 'Line of Fire (2)',
+    facilities: 'GGS-1, Flow Station 3',
+    x: 65,
+    y: 120,
+  },
+  {
+    site: 'Digboi',
+    riskLevel: 'LOW',
+    badgeColor: 'bg-[#2E7D32] text-white',
+    dotColor: '#2E7D32',
+    reports: 12,
+    sifCount: 2,
+    density: 16.7,
+    topPrecursor: 'Confined Space (1)',
+    facilities: 'Wellhead Rig #4, Field Unit 3',
+    x: 255,
+    y: 75,
+  },
+  {
+    site: 'Jorajan',
+    riskLevel: 'MODERATE',
+    badgeColor: 'bg-[#D97706] text-white',
+    dotColor: '#D97706',
+    reports: 10,
+    sifCount: 3,
+    density: 30.0,
+    topPrecursor: 'Mechanical Lifting (2)',
+    facilities: 'Power Hub, Storage Battery',
+    x: 165,
+    y: 145,
+  },
+  {
+    site: 'Sadiya',
+    riskLevel: 'LOW',
+    badgeColor: 'bg-[#2E7D32] text-white',
+    dotColor: '#2E7D32',
+    reports: 8,
+    sifCount: 1,
+    density: 12.5,
+    topPrecursor: 'Mechanical Lifting (1)',
+    facilities: 'Pipeline Spool 9, Wharf Station',
+    x: 295,
+    y: 45,
+  },
+];
+
 export function SiteHeatMap() {
-  const { reports, setFilter } = useSafetyStore();
-  const [hoveredField, setHoveredField] = useState<FieldNode | null>(null);
+  const { setFilter } = useSafetyStore();
 
-  const fieldNodes: FieldNode[] = React.useMemo(() => {
-    const locations = [
-      { name: 'Duliajan', x: 180, y: 85, facilities: 'CPF, GGS-4, Compressor Stn #2' },
-      { name: 'Naharkatia', x: 130, y: 135, facilities: 'Separation Plant, Substation 33kV' },
-      { name: 'Moran', x: 80, y: 110, facilities: 'GGS-1, Flow Station 3, Gas Comp A' },
-      { name: 'Jorajan', x: 40, y: 155, facilities: 'Power Hub, Storage Battery, Skid' },
-      { name: 'Digboi', x: 250, y: 65, facilities: 'Wellhead Rig #4, Refinery Unit 3' },
-      { name: 'Sadiya', x: 290, y: 40, facilities: 'Pipeline Spool 9, Wharf, Trench' },
-    ];
+  const [selectedSite, setSelectedSite] =
+    useState<SiteRiskData>(OPERATIONAL_SITES[0]);
 
-    return locations.map((loc) => {
-      const siteReports = reports ? reports.filter((r) => r.field === loc.name) : [];
-      const highCount = siteReports.filter(
-        (r) => r.sifPotential === 'Yes' || r.sifLevel === 'High'
-      ).length;
-      const medCount = siteReports.filter(
-        (r) => r.sifPotential === 'Review' || r.sifLevel === 'Medium'
-      ).length;
-
-      const risk: 'High' | 'Medium' | 'Low' =
-        highCount >= 6 ? 'High' : highCount >= 3 || medCount >= 3 ? 'Medium' : 'Low';
-
-      return {
-        ...loc,
-        highCount: highCount || 3,
-        medCount: medCount || 4,
-        risk,
-      };
-    });
-  }, [reports]);
+  const [viewMode, setViewMode] =
+    useState<'map' | 'grid'>('map');
 
   return (
-    <Card className="flex flex-col border bg-card/90 shadow-sm h-full">
-      <CardHeader className="p-4 pb-2 flex flex-row items-center justify-between">
+    <Card className="panel-card panel-accent-navy flex flex-col h-full min-w-0">
+      <CardHeader className="p-4 border-b border-[#D9DDE0] bg-[#F3F2EE] flex flex-row items-center justify-between">
         <div>
-          <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-1.5">
-            <MapPin className="h-4 w-4 text-rose-500" />
-            SIF Potential Heat Map (Sites)
+          <CardTitle className="text-sm font-bold text-[#102F3E] flex items-center gap-2">
+            <MapPin className="h-4 w-4 text-[#C92925]" />
+            OIL OPERATIONAL RISK MAP
           </CardTitle>
-          <p className="text-[11px] text-muted-foreground mt-0.5">
-            Geographic risk density across Oil India operational assets
+
+          <p className="text-xs text-[#667085] mt-0.5 font-normal">
+            Operational HSE risk density &amp; SIF precursor analysis by site
           </p>
         </div>
-        <Link
-          href="/patterns#heatmap"
-          className="text-[11px] font-medium text-sky-500 hover:text-sky-400 flex items-center hover:underline"
-        >
-          View all
-          <ChevronRight className="h-3 w-3 ml-0.5" />
-        </Link>
+
+        <div className="flex items-center gap-1.5">
+          <div className="inline-flex rounded-[2px] border border-[#D9DDE0] bg-[#F3F2EE] p-0.5">
+            <button
+              type="button"
+              onClick={() => setViewMode('map')}
+              className={`px-2 py-1 text-xs font-semibold rounded-[2px] flex items-center gap-1 ${viewMode === 'map'
+                  ? 'bg-[#102F3E] text-white'
+                  : 'text-[#667085] hover:text-[#102F3E]'
+                }`}
+            >
+              <MapIcon className="h-3 w-3" />
+              Map View
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              className={`px-2 py-1 text-xs font-semibold rounded-[2px] flex items-center gap-1 ${viewMode === 'grid'
+                  ? 'bg-[#102F3E] text-white'
+                  : 'text-[#667085] hover:text-[#102F3E]'
+                }`}
+            >
+              <ListFilter className="h-3 w-3" />
+              List View
+            </button>
+          </div>
+        </div>
       </CardHeader>
 
-      <CardContent className="p-4 pt-1 flex-1 flex flex-col justify-between">
-        {/* Visual Map Area */}
-        <div className="relative h-44 w-full rounded-lg bg-gradient-to-b from-sky-950/20 via-slate-900/30 to-slate-900/60 p-2 border border-border/40 overflow-hidden flex items-center justify-center">
-          <svg
-            viewBox="0 0 340 180"
-            className="w-full h-full"
-            style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}
-          >
-            {/* Background schematic terrain contour for Upper Assam / Arunachal */}
-            <path
-              d="M 20,160 Q 60,130 110,145 T 200,90 T 260,60 T 320,35 L 330,170 L 10,170 Z"
-              fill="currentColor"
-              className="text-emerald-900/10 dark:text-emerald-500/5 stroke-emerald-600/20"
-              strokeWidth="1"
-            />
-            {/* River Brahmaputra corridor line */}
-            <path
-              d="M 10,130 Q 70,115 140,110 T 230,70 T 310,45"
-              fill="none"
-              stroke="#0ea5e9"
-              strokeWidth="2"
-              strokeOpacity="0.3"
-              strokeDasharray="4 2"
-            />
+      <CardContent className="p-4 flex-1 flex flex-col justify-between space-y-4 min-w-0">
+        {viewMode === 'map' ? (
+          <div className="space-y-4">
+            {/* Simple Light SVG Map of Upper Assam region */}
+            <div className="relative w-full h-52 rounded-[2px] bg-[#F3F2EE] border border-[#D9DDE0] p-2 overflow-hidden flex items-center justify-center">
+              <svg
+                viewBox="0 0 350 180"
+                className="w-full h-full"
+              >
+                {/* Light terrain background contour */}
+                <path
+                  d="M 20,165 Q 70,135 120,150 T 210,95 T 270,65 T 330,35 L 340,175 L 10,175 Z"
+                  fill="#E5E4DE"
+                  stroke="#D9DDE0"
+                  strokeWidth="1.5"
+                />
 
-            {/* Connecting operational pipeline network */}
-            <line x1="40" y1="155" x2="80" y2="110" stroke="#64748b" strokeWidth="1" strokeDasharray="2 2" opacity="0.5" />
-            <line x1="80" y1="110" x2="130" y2="140" stroke="#64748b" strokeWidth="1" strokeDasharray="2 2" opacity="0.5" />
-            <line x1="80" y1="110" x2="180" y2="85" stroke="#64748b" strokeWidth="1" strokeDasharray="2 2" opacity="0.5" />
-            <line x1="180" y1="85" x2="250" y2="65" stroke="#64748b" strokeWidth="1" strokeDasharray="2 2" opacity="0.5" />
-            <line x1="250" y1="65" x2="290" y2="40" stroke="#64748b" strokeWidth="1" strokeDasharray="2 2" opacity="0.5" />
+                {/* River corridor */}
+                <path
+                  d="M 10,140 Q 80,120 150,115 T 240,75 T 320,45"
+                  fill="none"
+                  stroke="#102F3E"
+                  strokeWidth="2"
+                  strokeOpacity="0.3"
+                />
 
-            {/* Field Nodes */}
-            {fieldNodes.map((field) => {
-              const isHigh = field.risk === 'High';
-              const isMed = field.risk === 'Medium';
-              const nodeColor = isHigh
-                ? '#ef4444'
-                : isMed
-                ? '#f59e0b'
-                : '#10b981';
-
-              return (
-                <g
-                  key={field.name}
-                  className="cursor-pointer transition-transform hover:scale-110"
-                  onMouseEnter={() => setHoveredField(field)}
-                  onMouseLeave={() => setHoveredField(null)}
-                  onClick={() => setFilter('site', field.name)}
+                <text
+                  x="40"
+                  y="125"
+                  fill="#667085"
+                  className="text-[8px] font-semibold italic"
                 >
-                  {/* Pulse ring for high risk */}
-                  {isHigh && (
-                    <circle
-                      cx={field.x}
-                      cy={field.y}
-                      r="16"
-                      fill={nodeColor}
-                      fillOpacity="0.15"
-                      className="animate-ping"
-                    />
-                  )}
-                  {/* Outer circle */}
-                  <circle
-                    cx={field.x}
-                    cy={field.y}
-                    r={isHigh ? 11 : isMed ? 9 : 7}
-                    fill={nodeColor}
-                    fillOpacity="0.3"
-                    stroke={nodeColor}
-                    strokeWidth="1.5"
-                  />
-                  {/* Core dot */}
-                  <circle
-                    cx={field.x}
-                    cy={field.y}
-                    r="4"
-                    fill={nodeColor}
-                  />
-                  {/* Label */}
-                  <text
-                    x={field.x}
-                    y={field.y - 13}
-                    textAnchor="middle"
-                    fill="currentColor"
-                    className="text-[9px] font-bold tracking-tight fill-foreground"
-                  >
-                    {field.name}
-                  </text>
-                </g>
-              );
-            })}
-          </svg>
+                  Brahmaputra River Corridor
+                </text>
 
-          {/* Hover Popover */}
-          {hoveredField && (
-            <div className="absolute top-2 left-2 right-2 pointer-events-none rounded-md bg-popover/95 border p-2 shadow-lg backdrop-blur-sm text-xs">
-              <div className="flex items-center justify-between font-bold text-foreground">
-                <span className="flex items-center gap-1">
-                  <MapPin className="h-3 w-3 text-sky-500" />
-                  {hoveredField.name} Field
-                </span>
-                <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded font-semibold ${
-                    hoveredField.risk === 'High'
-                      ? 'bg-rose-500/10 text-rose-500 border border-rose-500/20'
-                      : hoveredField.risk === 'Medium'
-                      ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
-                      : 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
-                  }`}
-                >
-                  {hoveredField.risk} SIF Risk
-                </span>
-              </div>
-              <p className="text-[10px] text-muted-foreground mt-0.5">
-                {hoveredField.facilities}
-              </p>
-              <div className="mt-1 flex items-center gap-3 text-[10px]">
-                <span className="text-rose-500 font-medium">
-                  {hoveredField.highCount} High SIF
-                </span>
-                <span className="text-amber-500 font-medium">
-                  {hoveredField.medCount} Med SIF
-                </span>
-              </div>
+                {/* Site Connections */}
+                <line
+                  x1="65"
+                  y1="120"
+                  x2="130"
+                  y2="130"
+                  stroke="#CBD5E1"
+                  strokeWidth="1"
+                  strokeDasharray="3 3"
+                />
+
+                <line
+                  x1="130"
+                  y1="130"
+                  x2="165"
+                  y2="145"
+                  stroke="#CBD5E1"
+                  strokeWidth="1"
+                  strokeDasharray="3 3"
+                />
+
+                <line
+                  x1="130"
+                  y1="130"
+                  x2="190"
+                  y2="95"
+                  stroke="#CBD5E1"
+                  strokeWidth="1"
+                  strokeDasharray="3 3"
+                />
+
+                <line
+                  x1="190"
+                  y1="95"
+                  x2="255"
+                  y2="75"
+                  stroke="#CBD5E1"
+                  strokeWidth="1"
+                  strokeDasharray="3 3"
+                />
+
+                <line
+                  x1="255"
+                  y1="75"
+                  x2="295"
+                  y2="45"
+                  stroke="#CBD5E1"
+                  strokeWidth="1"
+                  strokeDasharray="3 3"
+                />
+
+                {/* Operational Site Markers */}
+                {OPERATIONAL_SITES.map((site) => {
+                  const isSelected =
+                    selectedSite.site === site.site;
+
+                  const radius =
+                    site.riskLevel === 'HIGH'
+                      ? 9
+                      : site.riskLevel === 'MODERATE'
+                        ? 8
+                        : 7;
+
+                  return (
+                    <g
+                      key={site.site}
+                      className="cursor-pointer"
+                      onClick={() => {
+                        setSelectedSite(site);
+                        setFilter('site', site.site);
+                      }}
+                    >
+                      {/* Selected Highlight Ring */}
+                      {isSelected && (
+                        <circle
+                          cx={site.x}
+                          cy={site.y}
+                          r={radius + 5}
+                          fill="none"
+                          stroke="#102F3E"
+                          strokeWidth="2"
+                          strokeDasharray="2 2"
+                        />
+                      )}
+
+                      {/* Solid Marker Circle */}
+                      <circle
+                        cx={site.x}
+                        cy={site.y}
+                        r={radius}
+                        fill={site.dotColor}
+                        stroke="#FFFFFF"
+                        strokeWidth="2"
+                      />
+
+                      {/* Site Label */}
+                      <text
+                        x={site.x}
+                        y={site.y - 12}
+                        textAnchor="middle"
+                        className={`text-[9px] font-bold ${isSelected
+                            ? 'fill-[#102F3E] underline'
+                            : 'fill-[#17202A]'
+                          }`}
+                      >
+                        {site.site}
+                      </text>
+                    </g>
+                  );
+                })}
+              </svg>
             </div>
-          )}
-        </div>
 
-        {/* Heatmap Legend */}
-        <div className="flex items-center justify-between pt-2 border-t border-border/50 text-[11px]">
-          <span className="text-muted-foreground">SIF Risk Level:</span>
-          <div className="flex items-center space-x-3">
-            <span className="flex items-center gap-1 text-[10px]">
-              <span className="h-2 w-2 rounded-full bg-rose-500" />
-              High (&gt;15%)
+            {/* Selected Site Detail Card */}
+            {selectedSite && (
+              <div className="p-3.5 rounded-[2px] border border-[#D9DDE0] bg-[#F3F2EE] space-y-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="font-bold text-sm text-[#102F3E] truncate">
+                      {selectedSite.site} Field
+                    </span>
+
+                    <Badge
+                      className={`${selectedSite.badgeColor} font-bold text-xs px-2 py-0.5 rounded-full border-none shrink-0`}
+                    >
+                      {selectedSite.riskLevel}
+                    </Badge>
+                  </div>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    asChild
+                    className="h-7 text-xs border-[#D9DDE0] text-[#102F3E] hover:text-[#C92925] bg-white rounded-[2px] shrink-0"
+                  >
+                    <Link
+                      href={`/reports?site=${encodeURIComponent(
+                        selectedSite.site
+                      )}`}
+                    >
+                      View Site Reports
+                      <ChevronRight className="h-3.5 w-3.5 ml-1" />
+                    </Link>
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 text-xs pt-1 border-t border-[#D9DDE0]">
+                  <div>
+                    <span className="text-[#667085] block text-[11px]">
+                      Total Reports
+                    </span>
+
+                    <span className="font-bold text-[#102F3E]">
+                      {selectedSite.reports}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="text-[#667085] block text-[11px]">
+                      SIF Precursors
+                    </span>
+
+                    <span className="font-bold text-[#C92925]">
+                      {selectedSite.sifCount} (
+                      {selectedSite.density.toFixed(1)}%)
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="text-[#667085] block text-[11px]">
+                      Top Precursor
+                    </span>
+
+                    <span className="font-medium text-[#17202A] truncate block">
+                      {selectedSite.topPrecursor}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          /* Grid View of all operational sites */
+          <div className="space-y-2.5">
+            {OPERATIONAL_SITES.map((site) => (
+              <div
+                key={site.site}
+                className="p-3 rounded-[2px] border border-[#D9DDE0] bg-[#F3F2EE] flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:border-[#102F3E]/40 transition-colors text-xs"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-sm text-[#102F3E]">
+                      {site.site}
+                    </span>
+
+                    <Badge
+                      className={`${site.badgeColor} font-bold text-[10px] px-1.5 py-0.2 rounded-full border-none`}
+                    >
+                      {site.riskLevel}
+                    </Badge>
+                  </div>
+
+                  <div className="text-[#667085] text-[11px] flex flex-wrap gap-x-3 gap-y-0.5">
+                    <span>
+                      Reports:{' '}
+                      <strong className="text-[#102F3E]">
+                        {site.reports}
+                      </strong>
+                    </span>
+
+                    <span>
+                      SIF:{' '}
+                      <strong className="text-[#C92925]">
+                        {site.sifCount}
+                      </strong>{' '}
+                      ({site.density.toFixed(1)}%)
+                    </span>
+
+                    <span>
+                      Top Precursor:{' '}
+                      <strong className="text-[#17202A]">
+                        {site.topPrecursor}
+                      </strong>
+                    </span>
+                  </div>
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  asChild
+                  className="h-7 text-xs border-[#D9DDE0] text-[#102F3E] hover:text-[#C92925] bg-white rounded-[2px] shrink-0"
+                >
+                  <Link
+                    href={`/reports?site=${encodeURIComponent(
+                      site.site
+                    )}`}
+                  >
+                    View Site Reports
+                  </Link>
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Legend Footer */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-2 border-t border-[#D9DDE0] text-xs text-[#667085]">
+          <span>Risk Level Standard:</span>
+
+          <div className="flex flex-wrap items-center gap-3 font-medium">
+            <span className="flex items-center gap-1">
+              <span className="h-2.5 w-2.5 rounded-full bg-[#C92925]" />
+              HIGH (&ge;35%)
             </span>
-            <span className="flex items-center gap-1 text-[10px]">
-              <span className="h-2 w-2 rounded-full bg-amber-500" />
-              Med (5-15%)
+
+            <span className="flex items-center gap-1">
+              <span className="h-2.5 w-2.5 rounded-full bg-[#D97706]" />
+              MODERATE (20-34%)
             </span>
-            <span className="flex items-center gap-1 text-[10px]">
-              <span className="h-2 w-2 rounded-full bg-emerald-500" />
-              Low (&lt;5%)
+
+            <span className="flex items-center gap-1">
+              <span className="h-2.5 w-2.5 rounded-full bg-[#2E7D32]" />
+              LOW (&lt;20%)
             </span>
           </div>
         </div>

@@ -6,8 +6,6 @@ import {
   Eye,
   ChevronLeft,
   ChevronRight,
-  ExternalLink,
-  ShieldAlert,
   FilterX,
   RotateCcw,
 } from 'lucide-react';
@@ -30,24 +28,27 @@ import {
   getTypeBadgeColor,
   formatReadableDate,
 } from '@/lib/utils';
-import { SafetyReport } from '@/types';
 
 export function RecentReportsTable() {
   const { reports, filters, setSelectedReport, resetFilters } = useSafetyStore();
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
 
-  // Filter based on store filters
+  // Display 8 reports per page
+  const pageSize = 8;
+
+  // Filter reports based on active store filters
   const filteredReports = reports.filter((r) => {
     // Search query
     if (filters.searchQuery) {
       const q = filters.searchQuery.toLowerCase();
+
       const match =
         r.id.toLowerCase().includes(q) ||
         r.site.toLowerCase().includes(q) ||
         r.precursor.toLowerCase().includes(q) ||
         r.lsrViolated.toLowerCase().includes(q) ||
         r.title.toLowerCase().includes(q);
+
       if (!match) return false;
     }
 
@@ -64,7 +65,7 @@ export function RecentReportsTable() {
       return false;
     }
 
-    // SIF Level filter
+    // SIF level filter
     if (
       filters.sifLevel &&
       filters.sifLevel !== 'All SIF Levels' &&
@@ -74,84 +75,127 @@ export function RecentReportsTable() {
         r.sifPotential === filters.sifLevel ||
         r.sifLevel === filters.sifLevel ||
         (filters.sifLevel === 'High' && r.sifPotential === 'Yes');
+
       if (!match) return false;
     }
 
     return true;
   });
 
-  const totalPages = Math.max(1, Math.ceil(filteredReports.length / pageSize));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredReports.length / pageSize)
+  );
+
   const startIndex = (currentPage - 1) * pageSize;
-  const pageReports = filteredReports.slice(startIndex, startIndex + pageSize);
+
+  const pageReports = filteredReports.slice(
+    startIndex,
+    startIndex + pageSize
+  );
 
   return (
-    <Card className="flex flex-col border bg-card/90 shadow-sm">
-      <CardHeader className="p-4 pb-3 flex flex-row items-center justify-between">
+    <Card className="flex flex-col panel-card panel-accent-navy">
+      <CardHeader className="p-4 flex flex-row items-center justify-between border-b border-[#D9DDE0]">
         <div>
-          <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
-            Recent High SIF Potential Reports
-            <span className="rounded-full bg-rose-500/10 px-2 py-0.5 text-[10px] font-semibold text-rose-500 border border-rose-500/20">
-              Live Feed
-            </span>
+          <CardTitle className="text-base font-bold text-[#102F3E] flex items-center gap-2">
+            Safety Observations &amp; SIF Precursor Records
           </CardTitle>
-          <p className="text-[11px] text-muted-foreground mt-0.5">
-            Audit events flagged with high probability of life-altering outcome
+
+          <p className="text-xs text-[#667085] mt-0.5 font-normal">
+            Corporate Oil India safety log: Unsafe Acts (UA), Unsafe Conditions
+            (UC), and Near Misses (NM)
           </p>
         </div>
+
         <Link
           href="/reports"
-          className="text-[11px] font-medium text-sky-500 hover:text-sky-400 flex items-center hover:underline"
+          className="text-xs font-semibold text-[#102F3E] hover:text-[#C92925] flex items-center hover:underline"
         >
-          View all
-          <ChevronRight className="h-3 w-3 ml-0.5" />
+          View all reports
+          <ChevronRight className="h-3.5 w-3.5 ml-0.5" />
         </Link>
       </CardHeader>
 
-      <CardContent className="p-0 flex-1">
-        <div className="overflow-x-auto">
+      <CardContent className="p-0 flex-1 min-w-0">
+        <div className="overflow-x-auto min-w-0">
           <Table>
-            <TableHeader className="bg-muted/30">
-              <TableRow className="text-[11px] md:text-xs">
-                <TableHead className="w-[110px] md:w-[120px]">Report ID</TableHead>
-                <TableHead className="hidden md:table-cell w-[95px]">Date</TableHead>
-                <TableHead className="hidden md:table-cell min-w-[140px]">Site</TableHead>
-                <TableHead className="w-[60px]">Type</TableHead>
-                <TableHead className="hidden md:table-cell min-w-[130px]">Precursor</TableHead>
-                <TableHead className="w-[95px] md:w-[100px]">SIF Potential</TableHead>
-                <TableHead className="hidden lg:table-cell min-w-[130px]">LSR Violated</TableHead>
-                <TableHead className="w-[85px] md:w-[100px]">Status</TableHead>
-                <TableHead className="w-[60px] text-right pr-3 md:pr-4">Action</TableHead>
+            <TableHeader className="bg-[#082735]">
+              <TableRow className="text-xs border-b border-[#D9DDE0]">
+                <TableHead className="w-[120px] font-bold text-white">
+                  Report ID
+                </TableHead>
+
+                <TableHead className="hidden md:table-cell w-[100px] font-bold text-white">
+                  Date
+                </TableHead>
+
+                <TableHead className="hidden md:table-cell min-w-[140px] font-bold text-white">
+                  Site
+                </TableHead>
+
+                <TableHead className="w-[70px] font-bold text-white">
+                  Type
+                </TableHead>
+
+                <TableHead className="hidden md:table-cell min-w-[140px] font-bold text-white">
+                  Precursor Category
+                </TableHead>
+
+                <TableHead className="w-[110px] font-bold text-white">
+                  SIF Potential
+                </TableHead>
+
+                <TableHead className="hidden lg:table-cell min-w-[140px] font-bold text-white">
+                  LSR Violated
+                </TableHead>
+
+                <TableHead className="w-[100px] font-bold text-white">
+                  Status
+                </TableHead>
+
+                <TableHead className="w-[60px] text-right pr-4 font-bold text-white">
+                  Action
+                </TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="text-[11px] md:text-xs">
+
+            <TableBody className="text-xs">
               {pageReports.length === 0 ? (
                 <TableRow>
                   <TableCell
                     colSpan={9}
-                    className="h-52 text-center py-8"
+                    className="h-48 text-center py-8"
                   >
-                    <div className="flex flex-col items-center justify-center max-w-sm mx-auto text-center space-y-2.5">
-                      <div className="w-10 h-10 rounded-full bg-muted/80 flex items-center justify-center text-muted-foreground">
-                        <FilterX className="h-5 w-5 text-slate-400" />
+                    <div className="flex flex-col items-center justify-center max-w-sm mx-auto text-center space-y-2">
+                      <div className="w-9 h-9 rounded-[2px] bg-[#F3F2EE] flex items-center justify-center text-[#667085]">
+                        <FilterX className="h-4 w-4" />
                       </div>
+
                       <div>
-                        <h4 className="text-xs font-semibold text-foreground">
-                          No Reports Match Active Filters
+                        <h4 className="text-xs font-bold text-[#102F3E]">
+                          No Safety Reports Found
                         </h4>
-                        <p className="text-[11px] text-muted-foreground mt-0.5">
-                          Try adjusting your site, department, or SIF level filters.
+
+                        <p className="text-[11px] text-[#667085] mt-0.5">
+                          Try clearing active search or site filters.
                         </p>
                       </div>
+
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => {
                           resetFilters();
+
+                          setCurrentPage(1);
+
                           toast.info('Filters Reset', {
-                            description: 'All dashboard filters cleared to defaults.',
+                            description:
+                              'All dashboard filters cleared to defaults.',
                           });
                         }}
-                        className="text-xs h-7 px-3 gap-1.5 mt-1"
+                        className="text-xs h-7 px-3 gap-1.5 mt-1 border-[#D9DDE0] rounded-[2px]"
                       >
                         <RotateCcw className="h-3 w-3" />
                         Reset Filters
@@ -160,131 +204,190 @@ export function RecentReportsTable() {
                   </TableCell>
                 </TableRow>
               ) : (
-                pageReports.map((report) => (
-                  <TableRow
-                    key={report.id}
-                    className="cursor-pointer hover:bg-muted/40 transition-colors"
-                    onClick={() => setSelectedReport(report)}
-                  >
-                    <TableCell className="font-mono text-xs font-semibold text-sky-500 hover:underline whitespace-nowrap py-2.5">
-                      {report.id}
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell text-muted-foreground whitespace-nowrap py-2.5">
-                      {formatReadableDate(report.date)}
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell font-medium text-foreground max-w-[160px] truncate py-2.5" title={report.site}>
-                      {report.site}
-                    </TableCell>
-                    <TableCell className="py-2.5">
-                      <Badge
-                        variant="outline"
-                        className={getTypeBadgeColor(report.reportType)}
+                pageReports.map((report, idx) => {
+                  const isHighPriority =
+                    report.sifPotential === 'Yes' ||
+                    report.sifPotential === 'High' ||
+                    report.sifLevel === 'High';
+
+                  return (
+                    <TableRow
+                      key={report.id}
+                      className={`cursor-pointer industrial-row-hover transition-colors border-b border-[#D9DDE0] ${idx % 2 === 1
+                          ? 'industrial-row-even'
+                          : 'bg-white'
+                        } ${isHighPriority
+                          ? 'high-priority-left-border'
+                          : ''
+                        }`}
+                      onClick={() => setSelectedReport(report)}
+                    >
+                      <TableCell className="font-mono text-xs font-bold text-[#102F3E] hover:text-[#C92925] hover:underline whitespace-nowrap py-2.5">
+                        {report.id}
+                      </TableCell>
+
+                      <TableCell className="hidden md:table-cell text-[#667085] whitespace-nowrap py-2.5">
+                        {formatReadableDate(report.date)}
+                      </TableCell>
+
+                      <TableCell
+                        className="hidden md:table-cell font-semibold text-[#17202A] max-w-[160px] truncate py-2.5"
+                        title={report.site}
                       >
-                        {report.reportType}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell font-medium text-foreground max-w-[150px] truncate py-2.5" title={report.precursor}>
-                      {report.precursor}
-                    </TableCell>
-                    <TableCell className="py-2.5 whitespace-nowrap">
-                      <Badge
-                        variant="outline"
-                        className={getSifBadgeColor(report.sifPotential)}
+                        {report.site}
+                      </TableCell>
+
+                      <TableCell className="py-2.5">
+                        <Badge
+                          variant="outline"
+                          className={getTypeBadgeColor(report.reportType)}
+                        >
+                          {report.reportType}
+                        </Badge>
+                      </TableCell>
+
+                      <TableCell
+                        className="hidden md:table-cell font-medium text-[#475569] max-w-[150px] truncate py-2.5"
+                        title={report.precursor}
                       >
-                        {report.sifPotential}
-                        {(report.sifPotential === 'Yes' || report.sifPotential === 'High') && (
-                          <span className="ml-1 text-[9px] opacity-80 font-mono">
-                            ({report.confidence || Math.round((report.confidenceScore || 0) * 100)}%)
-                          </span>
-                        )}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden lg:table-cell text-muted-foreground max-w-[140px] truncate py-2.5" title={report.lsrViolated}>
-                      {report.lsrViolated}
-                    </TableCell>
-                    <TableCell className="py-2.5 whitespace-nowrap">
-                      <Badge
-                        variant="outline"
-                        className={getStatusBadgeColor(report.status)}
+                        {report.precursor}
+                      </TableCell>
+
+                      <TableCell className="py-2.5 whitespace-nowrap">
+                        <Badge
+                          variant="outline"
+                          className={getSifBadgeColor(
+                            report.sifPotential
+                          )}
+                        >
+                          {report.sifPotential}
+
+                          {(report.sifPotential === 'Yes' ||
+                            report.sifPotential === 'High') && (
+                              <span className="ml-1 text-[9px] font-mono">
+                                (
+                                {report.confidence ||
+                                  Math.round(
+                                    (report.confidenceScore || 0) * 100
+                                  )}
+                                %)
+                              </span>
+                            )}
+                        </Badge>
+                      </TableCell>
+
+                      <TableCell
+                        className="hidden lg:table-cell text-[#667085] max-w-[140px] truncate py-2.5"
+                        title={report.lsrViolated}
                       >
-                        {report.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right pr-3 md:pr-4 py-2.5">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedReport(report);
-                        }}
-                        className="h-8 w-8 p-0 text-muted-foreground hover:text-sky-500 touch-manipulation"
-                        title="Quick View Insight"
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
+                        {report.lsrViolated}
+                      </TableCell>
+
+                      <TableCell className="py-2.5 whitespace-nowrap">
+                        <Badge
+                          variant="outline"
+                          className={getStatusBadgeColor(report.status)}
+                        >
+                          {report.status}
+                        </Badge>
+                      </TableCell>
+
+                      <TableCell className="text-right pr-4 py-2.5">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedReport(report);
+                          }}
+                          className="h-7 w-7 p-0 text-[#667085] hover:text-[#2563EB]"
+                          title="View Report Details"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
               )}
             </TableBody>
           </Table>
         </div>
 
         {/* Pagination Footer */}
-        <div className="flex items-center justify-between px-4 py-3 border-t border-border/50 text-xs">
-          <span className="text-muted-foreground text-[11px]">
+        <div className="flex items-center justify-between px-4 py-3 border-t border-[#D9DDE0] text-xs bg-white">
+          <span className="text-[#667085] text-[11px]">
             Showing{' '}
-            <strong className="text-foreground font-mono">
+            <strong className="text-[#102F3E] font-semibold">
               {filteredReports.length > 0 ? startIndex + 1 : 0}
             </strong>{' '}
             to{' '}
-            <strong className="text-foreground font-mono">
-              {Math.min(startIndex + pageSize, filteredReports.length)}
+            <strong className="text-[#102F3E] font-semibold">
+              {Math.min(
+                startIndex + pageSize,
+                filteredReports.length
+              )}
             </strong>{' '}
             of{' '}
-            <strong className="text-foreground font-mono">
+            <strong className="text-[#102F3E] font-semibold">
               {filteredReports.length}
             </strong>{' '}
-            reports
+            entries
           </span>
 
           <div className="flex items-center space-x-1">
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              onClick={() =>
+                setCurrentPage((p) => Math.max(1, p - 1))
+              }
               disabled={currentPage === 1}
-              className="h-7 w-7 p-0 text-xs"
+              className="h-7 w-7 p-0 text-xs border-[#D9DDE0] rounded-[2px]"
             >
               <ChevronLeft className="h-3.5 w-3.5" />
             </Button>
 
-            {Array.from({ length: Math.min(5, totalPages) }, (_, idx) => {
-              const p = idx + 1;
-              return (
-                <Button
-                  key={p}
-                  variant={currentPage === p ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setCurrentPage(p)}
-                  className={`h-7 w-7 p-0 text-xs font-mono ${
-                    currentPage === p ? 'bg-sky-600 hover:bg-sky-700 text-white' : ''
-                  }`}
-                >
-                  {p}
-                </Button>
-              );
-            })}
+            {Array.from(
+              { length: Math.min(5, totalPages) },
+              (_, idx) => {
+                const p = idx + 1;
+
+                return (
+                  <Button
+                    key={p}
+                    variant={
+                      currentPage === p ? 'default' : 'outline'
+                    }
+                    size="sm"
+                    onClick={() => setCurrentPage(p)}
+                    className={`h-7 w-7 p-0 text-xs font-semibold rounded-[2px] ${currentPage === p
+                        ? 'bg-[#102F3E] hover:bg-[#082735] text-white'
+                        : 'border-[#D9DDE0] text-[#17202A]'
+                      }`}
+                  >
+                    {p}
+                  </Button>
+                );
+              }
+            )}
 
             {totalPages > 5 && (
               <>
-                <span className="px-1 text-muted-foreground">...</span>
+                <span className="px-1 text-[#667085]">...</span>
+
                 <Button
-                  variant={currentPage === totalPages ? 'default' : 'outline'}
+                  variant={
+                    currentPage === totalPages
+                      ? 'default'
+                      : 'outline'
+                  }
                   size="sm"
                   onClick={() => setCurrentPage(totalPages)}
-                  className="h-7 w-7 p-0 text-xs font-mono"
+                  className={`h-7 w-7 p-0 text-xs font-semibold border-[#D9DDE0] rounded-[2px] ${currentPage === totalPages
+                      ? 'bg-[#102F3E] hover:bg-[#082735] text-white'
+                      : 'text-[#17202A]'
+                    }`}
                 >
                   {totalPages}
                 </Button>
@@ -294,9 +397,13 @@ export function RecentReportsTable() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              onClick={() =>
+                setCurrentPage((p) =>
+                  Math.min(totalPages, p + 1)
+                )
+              }
               disabled={currentPage === totalPages}
-              className="h-7 w-7 p-0 text-xs"
+              className="h-7 w-7 p-0 text-xs border-[#D9DDE0] rounded-[2px]"
             >
               <ChevronRight className="h-3.5 w-3.5" />
             </Button>

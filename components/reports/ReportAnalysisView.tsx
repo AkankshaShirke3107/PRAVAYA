@@ -14,7 +14,7 @@ import {
   Image as ImageIcon,
   Download,
   ExternalLink,
-  Sparkles,
+  ShieldCheck,
   ShieldAlert,
   Flame,
   AlertTriangle,
@@ -51,6 +51,7 @@ import {
 } from '@/components/ui/dialog';
 import { ReportItem, mockReportsData } from '@/lib/mockReports';
 import { formatReadableDate } from '@/lib/utils';
+import { formatLsrName } from '@/components/dashboard/LsrDistributionChart';
 import { toast } from 'sonner';
 
 interface AttachmentItem {
@@ -217,9 +218,10 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
       : report.description.slice(0, 110));
 
   // AI Explanation (2-3 sentences)
+  const lsrName = formatLsrName(report.lsrViolated);
   const aiExplanation =
     report.aiExplanation ||
-    `This event was classified as SIF Potential (${sifLevel}) due to the direct presence of an active ${report.precursor.toLowerCase()} precursor with high stored energy. Critical engineering controls and procedural barriers (${report.lsrViolated}) were compromised without secondary containment. Under IOGP Report 459 and OISD process safety guidelines, this scenario carries an immediate risk of permanent life-altering or fatal harm if unmitigated.`;
+    `This event was classified as SIF Potential (${sifLevel}) due to the direct presence of an active ${report.precursor.toLowerCase()} precursor with high stored energy. Critical engineering controls and procedural barriers (${lsrName}) were compromised without secondary containment. Under IOGP Report 459 and OISD process safety guidelines, this scenario carries an immediate risk of permanent life-altering or fatal harm if unmitigated.`;
 
   // IOGP Life Saving Rules list
   const iogpRules =
@@ -228,8 +230,8 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
       : Array.from(
           new Set(
             [
-              report.lsrViolated,
-              report.precursor !== report.lsrViolated ? report.precursor : null,
+              lsrName,
+              report.precursor !== lsrName ? report.precursor : null,
               'Bypassing Safety Controls',
             ].filter(Boolean) as string[]
           )
@@ -352,13 +354,13 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
               </h1>
               <Badge
                 variant="outline"
-                className="font-mono text-xs text-[#0ea5e9] bg-sky-500/10 border-sky-500/30"
+                className="font-mono text-xs text-[#102F3E] bg-[#102F3E]/10 border-[#102F3E]/30"
               >
-                AI Model v2.4 Audited
+                OIL HSE Screening Standard
               </Badge>
             </div>
             <p className="text-xs text-[#475569] dark:text-slate-400">
-              Detailed side-by-side comparison of original field observation narrative and automated AI SIF precursor classification.
+              Detailed side-by-side comparison of original field observation narrative and automated SIF precursor screening.
             </p>
           </div>
         </div>
@@ -381,7 +383,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
           </div>
 
           {/* 1. Report Metadata Section (All in a card) */}
-          <Card className="border border-[#e2e8f0] bg-white dark:bg-card dark:border-border shadow-xs hover:shadow-md transition-all duration-200">
+          <Card className="border border-[#e2e8f0] bg-white dark:bg-card dark:border-border shadow-none rounded-[2px] transition-all duration-200">
             <CardHeader className="p-4 sm:p-6 pb-2 border-b border-[#e2e8f0] dark:border-border/50 bg-slate-50/50 dark:bg-muted/20">
               <CardTitle className="text-xs font-semibold text-[#64748b] uppercase tracking-wider">
                 Report Metadata
@@ -467,7 +469,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
           </Card>
 
           {/* 2. Original Narrative Section */}
-          <Card className="border bg-card shadow-sm">
+          <Card className="border bg-card shadow-none rounded-[2px]">
             <CardHeader className="p-4 pb-2 border-b border-border/50 bg-muted/20 flex flex-row items-center justify-between">
               <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 Original Narrative
@@ -480,7 +482,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
               <h3 className="text-sm font-bold text-foreground leading-snug">
                 {report.title}
               </h3>
-              <div className="p-4 rounded-xl border bg-muted/30 text-xs sm:text-sm leading-relaxed text-foreground/90 font-sans whitespace-pre-wrap">
+              <div className="p-4 rounded-[2px] border bg-muted/30 text-xs sm:text-sm leading-relaxed text-foreground/90 font-sans whitespace-pre-wrap">
                 {report.description}
               </div>
               <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
@@ -491,7 +493,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
           </Card>
 
           {/* 3. Attachments Section */}
-          <Card className="border bg-card shadow-sm">
+          <Card className="border bg-card shadow-none rounded-[2px]">
             <CardHeader className="p-4 pb-2 border-b border-border/50 bg-muted/20 flex flex-row items-center justify-between">
               <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
                 <Paperclip className="h-3.5 w-3.5 text-sky-500" />
@@ -505,19 +507,19 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
               {attachments.map((file, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-2.5 rounded-lg border bg-background hover:bg-muted/40 transition-colors group cursor-pointer"
+                  className="flex items-center justify-between p-2.5 rounded-[2px] border bg-background hover:bg-muted/40 transition-colors group cursor-pointer"
                   onClick={() => toast.info(`Viewing attachment: ${file.name}`)}
                 >
                   <div className="flex items-center space-x-3 min-w-0">
-                    <div className="p-2 rounded-md bg-muted/60 text-muted-foreground group-hover:text-foreground transition-colors shrink-0">
+                    <div className="p-2 rounded-[2px] bg-muted/60 text-muted-foreground group-hover:text-foreground transition-colors shrink-0">
                       {file.type === 'image' ? (
-                        <ImageIcon className="h-4 w-4 text-sky-500" />
+                        <ImageIcon className="h-4 w-4 text-[#102F3E]" />
                       ) : (
                         <File className="h-4 w-4 text-rose-500" />
                       )}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-xs font-medium text-foreground truncate group-hover:text-sky-500 transition-colors">
+                      <p className="text-xs font-medium text-foreground truncate group-hover:text-[#102F3E] transition-colors">
                         {file.name}
                       </p>
                       <p className="text-[10px] text-muted-foreground font-mono">
@@ -542,7 +544,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-7 w-7 text-muted-foreground hover:text-sky-500"
+                      className="h-7 w-7 text-muted-foreground hover:text-[#102F3E]"
                       title="Open in new tab"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -562,24 +564,24 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
         {/* RIGHT COLUMN (50% width) - "AI Analysis"                */}
         {/* Distinct subtle background color                         */}
         {/* ======================================================== */}
-        <div className="space-y-5 rounded-2xl border border-sky-500/20 bg-slate-50/75 dark:bg-[#070e1c]/80 p-5 sm:p-6 shadow-sm backdrop-blur-sm">
-          <div className="flex items-center justify-between pb-1 border-b border-sky-500/20">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400 flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-sky-500" />
-              AI Analysis
+        <div className="space-y-5 rounded-[2px] border border-[#E4E7EC] bg-white p-5 sm:p-6 shadow-none">
+          <div className="flex items-center justify-between pb-1 border-b border-[#E4E7EC]">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-[#17202A] flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-[#102F3E]" />
+              Screening Result
             </h2>
             <Badge
               variant="outline"
-              className="text-[10px] font-mono border-sky-500/30 text-sky-600 dark:text-sky-400 bg-sky-500/10"
+              className="text-[10px] font-mono border-[#102F3E]/30 text-[#102F3E] dark:text-[#102F3E] bg-[#102F3E]/10"
             >
-              Real-Time NLP Inference
+              Automated Screening
             </Badge>
           </div>
 
           {/* Top Row: SIF Potential Card & Circular Confidence Score */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* 1. SIF Potential Card with Large Badge */}
-            <Card className="border border-border/70 bg-card/90 shadow-2xs flex flex-col justify-between">
+            <Card className="border border-border/70 bg-card/90 shadow-none rounded-[2px] flex flex-col justify-between">
               <CardHeader className="p-4 pb-2">
                 <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
                   <ShieldAlert className="h-3.5 w-3.5 text-rose-500" />
@@ -591,7 +593,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
                 <div>
                   <Badge
                     variant="outline"
-                    className={`text-base font-black px-4 py-1.5 rounded-xl shadow-xs inline-flex items-center gap-2 ${
+                    className={`text-base font-black px-4 py-1.5 rounded-[2px] shadow-none inline-flex items-center gap-2 ${
                       sifLevel === 'High'
                         ? 'bg-red-500/15 text-red-600 dark:text-red-400 border-red-500/40'
                         : sifLevel === 'Medium'
@@ -622,10 +624,10 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
             </Card>
 
             {/* 2. Confidence Score (Circular progress indicator) */}
-            <Card className="border border-border/70 bg-card/90 shadow-2xs flex flex-col items-center justify-center p-4">
+            <Card className="border border-border/70 bg-card/90 shadow-none rounded-[2px] flex flex-col items-center justify-center p-4">
               <div className="w-full flex items-center justify-between pb-1 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 <span>Confidence Score</span>
-                <span className="font-mono text-sky-500 font-bold">
+                <span className="font-mono text-[#102F3E] font-bold">
                   {report.confidence}%
                 </span>
               </div>
@@ -674,16 +676,16 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
           </div>
 
           {/* 3. Detected Precursor Tag with Icon */}
-          <Card className="border border-border/70 bg-card/90 shadow-2xs">
+          <Card className="border border-border/70 bg-card/90 shadow-none rounded-[2px]">
             <CardHeader className="p-4 pb-2">
               <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
-                <Target className="h-3.5 w-3.5 text-sky-500" />
+                <Target className="h-3.5 w-3.5 text-[#102F3E]" />
                 Detected Precursor
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 pt-1">
               <div className="flex flex-wrap items-center gap-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-sky-500/30 bg-sky-500/10 text-xs font-bold text-sky-700 dark:text-sky-300">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-[2px] border border-[#102F3E]/30 bg-[#102F3E]/10 text-xs font-bold text-[#102F3E] dark:text-[#102F3E]">
                   {getPrecursorIcon(report.precursor)}
                   <span>{report.precursor}</span>
                 </div>
@@ -695,7 +697,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
           </Card>
 
           {/* 4. Potential Consequence Text Description */}
-          <Card className="border border-border/70 bg-card/90 shadow-2xs">
+          <Card className="border border-border/70 bg-card/90 shadow-none rounded-[2px]">
             <CardHeader className="p-4 pb-2">
               <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
                 <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />
@@ -710,7 +712,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
           </Card>
 
           {/* 5. IOGP Life-Saving Rule Badges */}
-          <Card className="border border-border/70 bg-card/90 shadow-2xs">
+          <Card className="border border-border/70 bg-card/90 shadow-none rounded-[2px]">
             <CardHeader className="p-4 pb-2">
               <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
                 <Shield className="h-3.5 w-3.5 text-emerald-500" />
@@ -723,7 +725,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
                   <Badge
                     key={idx}
                     variant="outline"
-                    className="text-xs font-semibold px-3 py-1 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 flex items-center gap-1.5 shadow-2xs"
+                    className="text-xs font-semibold px-3 py-1 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 flex items-center gap-1.5 shadow-none"
                   >
                     <CheckCircle2 className="h-3 w-3 text-emerald-500" />
                     <span>{rule}</span>
@@ -737,7 +739,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
           </Card>
 
           {/* 6. Evidence Highlight from Narrative (Yellow Highlight Background) */}
-          <Card className="border border-amber-500/30 bg-amber-500/5 shadow-2xs">
+          <Card className="border border-amber-500/30 bg-amber-500/5 shadow-none rounded-[2px]">
             <CardHeader className="p-4 pb-2">
               <CardTitle className="text-xs font-semibold text-amber-800 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
                 <Search className="h-3.5 w-3.5" />
@@ -745,34 +747,34 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 pt-1 space-y-1.5">
-              <div className="p-3 rounded-lg border border-amber-500/20 bg-background/80 text-xs leading-relaxed">
+              <div className="p-3 rounded-[2px] border border-amber-500/20 bg-background/80 text-xs leading-relaxed">
                 <span className="text-muted-foreground italic">" ... </span>
-                <mark className="bg-yellow-300 dark:bg-yellow-500/40 text-yellow-950 dark:text-yellow-100 font-semibold px-1.5 py-0.5 rounded shadow-2xs">
+                <mark className="bg-yellow-300 dark:bg-yellow-500/40 text-yellow-950 dark:text-yellow-100 font-semibold px-1.5 py-0.5 rounded-[2px] shadow-none">
                   {evidenceSnippet}
                 </mark>
                 <span className="text-muted-foreground italic"> ... "</span>
               </div>
-              <p className="text-[10px] text-amber-700 dark:text-amber-400">
-                Extracted semantic trigger phrase identified by the neural hazard detector.
+              <p className="text-[10px] text-[#667085]">
+                Extracted trigger phrase identified from field observation narrative.
               </p>
             </CardContent>
           </Card>
 
-          {/* 7. AI Explanation (2-3 Sentences) */}
-          <Card className="border border-sky-500/30 bg-sky-500/5 shadow-2xs">
+          {/* 7. Screening Rationale (2-3 Sentences) */}
+          <Card className="border border-[#102F3E]/20 bg-[#102F3E]/5 shadow-none rounded-[2px]">
             <CardHeader className="p-4 pb-2">
-              <CardTitle className="text-xs font-semibold text-sky-800 dark:text-sky-400 uppercase tracking-wider flex items-center gap-1.5">
-                <Sparkles className="h-3.5 w-3.5 text-sky-500" />
-                AI Explanation
+              <CardTitle className="text-xs font-semibold text-[#17202A] uppercase tracking-wider flex items-center gap-1.5">
+                <FileText className="h-3.5 w-3.5 text-[#102F3E]" />
+                Screening Rationale
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 pt-1">
               <p className="text-xs leading-relaxed text-foreground/90 font-medium">
                 {aiExplanation}
               </p>
-              <div className="mt-3 pt-2.5 border-t border-sky-500/20 flex items-center justify-between text-[10px] text-muted-foreground">
-                <span>Model: NeuralPrecursor-Large-v2.4</span>
-                <span className="font-mono">Inference: 142ms</span>
+              <div className="mt-3 pt-2.5 border-t border-[#102F3E]/20 flex items-center justify-between text-[10px] text-muted-foreground">
+                <span>Model: SIF Classification Engine v1.2</span>
+                <span className="font-mono">Processing Time: 142ms</span>
               </div>
             </CardContent>
           </Card>
@@ -782,7 +784,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
       {/* ======================================================== */}
       {/* EXPERT REVIEW SECTION (Bottom of Report Analysis Page)    */}
       {/* ======================================================== */}
-      <Card className="border border-[#e2e8f0] bg-white dark:bg-card dark:border-border shadow-xs hover:shadow-md transition-all duration-200 overflow-hidden">
+      <Card className="border border-[#e2e8f0] bg-white dark:bg-card dark:border-border shadow-none rounded-[2px] transition-all duration-200 overflow-hidden">
         <CardHeader className="p-4 sm:p-6 pb-3 border-b border-[#e2e8f0] dark:border-border/50 bg-slate-50/50 dark:bg-muted/20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <CardTitle className="text-base font-bold text-[#1e293b] dark:text-slate-100 flex items-center gap-2">
@@ -790,7 +792,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
               Expert Review &amp; Triage Validation
             </CardTitle>
             <p className="text-xs text-[#475569] dark:text-slate-400 mt-0.5">
-              Human-in-the-loop expert adjudication of AI SIF precursor classification under OISD &amp; OSHA standards
+              Human-in-the-loop expert adjudication of SIF precursor screening under OISD &amp; OSHA standards
             </p>
           </div>
 
@@ -838,7 +840,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
                 onClick={() => handleSelectDecision('confirm')}
                 className={`h-10 text-xs font-semibold justify-center transition-all duration-200 ease-in-out ${
                   selectedDecision === 'confirm'
-                    ? 'bg-[#22c55e] hover:bg-[#16a34a] text-white border-[#22c55e] ring-2 ring-emerald-500/30 shadow-xs'
+                    ? 'bg-[#22c55e] hover:bg-[#16a34a] text-white border-[#22c55e] ring-2 ring-emerald-500/30 shadow-none'
                     : 'border-emerald-500/40 text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 hover:bg-[#22c55e] hover:text-white dark:hover:bg-[#22c55e] dark:hover:text-white'
                 }`}
               >
@@ -854,7 +856,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
                 onClick={() => handleSelectDecision('reject')}
                 className={`h-10 text-xs font-semibold justify-center transition-all duration-200 ease-in-out ${
                   selectedDecision === 'reject'
-                    ? 'bg-[#ef4444] hover:bg-[#dc2626] text-white border-[#ef4444] ring-2 ring-red-500/30 shadow-xs'
+                    ? 'bg-[#ef4444] hover:bg-[#dc2626] text-white border-[#ef4444] ring-2 ring-red-500/30 shadow-none'
                     : 'border-red-500/40 text-red-700 dark:text-red-400 bg-red-500/10 hover:bg-[#ef4444] hover:text-white dark:hover:bg-[#ef4444] dark:hover:text-white'
                 }`}
               >
@@ -870,7 +872,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
                 onClick={() => handleSelectDecision('further_review')}
                 className={`h-10 text-xs font-semibold justify-center transition-all duration-200 ease-in-out ${
                   selectedDecision === 'further_review'
-                    ? 'bg-[#f59e0b] hover:bg-[#d97706] text-white border-[#f59e0b] ring-2 ring-amber-500/30 shadow-xs'
+                    ? 'bg-[#f59e0b] hover:bg-[#d97706] text-white border-[#f59e0b] ring-2 ring-amber-500/30 shadow-none'
                     : 'border-amber-500/40 text-amber-700 dark:text-amber-400 bg-amber-500/10 hover:bg-[#f59e0b] hover:text-white dark:hover:bg-[#f59e0b] dark:hover:text-white'
                 }`}
               >
@@ -907,7 +909,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
               {selectedDecision ? (
                 <span className="text-foreground font-medium">
                   Active selection:{' '}
-                  <strong className="text-sky-500 capitalize">
+                  <strong className="text-[#102F3E] capitalize">
                     {selectedDecision === 'confirm'
                       ? 'Confirm SIF Classification'
                       : selectedDecision === 'reject'
@@ -927,7 +929,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
               variant="default"
               disabled={!selectedDecision || isSubmittingReview}
               onClick={handleSubmitReview}
-              className="h-9 px-5 text-xs font-semibold shadow-xs gap-1.5 self-end sm:self-auto"
+              className="h-9 px-5 text-xs font-semibold shadow-none rounded-[2px] gap-1.5 self-end sm:self-auto"
             >
               <Send className="h-3.5 w-3.5" />
               {isSubmittingReview ? 'Submitting Review...' : 'Submit Review'}
@@ -936,7 +938,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
 
           {/* Audit Confirmation Banner (if submitted during session) */}
           {submittedReview && (
-            <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs space-y-1 animate-in fade-in-50 duration-300">
+            <div className="rounded-[2px] border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs space-y-1 animate-in fade-in-50 duration-300">
               <div className="flex items-center justify-between font-semibold text-emerald-800 dark:text-emerald-300">
                 <span className="flex items-center gap-1.5">
                   <CheckCircle2 className="h-4 w-4 text-emerald-500" />
@@ -971,7 +973,7 @@ export function ReportAnalysisView({ reportId }: ReportAnalysisViewProps) {
               </DialogTitle>
             </div>
             <DialogDescription className="text-xs text-muted-foreground pt-1.5 leading-relaxed">
-              Are you sure you want to reject the AI SIF precursor classification for{' '}
+              Are you sure you want to reject the SIF precursor screening result for{' '}
               <strong className="font-mono text-foreground">{report.id}</strong>?
               <br /><br />
               Rejecting this classification will downgrade this safety observation to non-critical and waive mandatory Life-Saving Rule corrective action escalation under OISD standards.

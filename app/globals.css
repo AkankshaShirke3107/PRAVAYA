@@ -4,95 +4,99 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222 47% 11%;
+    /* Main page background */
+    --background: 45 12% 94%;
+    --foreground: 215 30% 13%;
 
+    /* Cards and panels */
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 215 30% 13%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 215 30% 13%;
 
-    --primary: 199 89% 48%; /* #0ea5e9 sky blue */
+    /* Primary navy */
+    --primary: 199 59% 15%;
     --primary-foreground: 0 0% 100%;
 
-    --success: 142 71% 45%; /* #22c55e green */
+    /* Oil India red */
+    --oil: 2 69% 47%;
+    --oil-dark: 2 70% 35%;
+    --oil-foreground: 0 0% 100%;
+
+    /* Risk indicators */
+    --success: 123 46% 34%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%; /* #f59e0b amber */
+    --warning: 36 94% 44%;
     --warning-foreground: 0 0% 100%;
 
-    --danger: 0 84.2% 60.2%; /* #ef4444 red */
+    --danger: 2 69% 47%;
     --danger-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222 47% 11%;
+    /* Secondary */
+    --secondary: 45 12% 94%;
+    --secondary-foreground: 215 30% 13%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 45 12% 94%;
+    --muted-foreground: 220 13% 46%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 45 12% 94%;
+    --accent-foreground: 199 59% 15%;
 
-    --destructive: 0 84.2% 60.2%; /* #ef4444 */
+    --destructive: 2 69% 47%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%; /* #e2e8f0 */
-    --input: 214.3 31.8% 91.4%;
-    --ring: 199 89% 48%;
+    /* Borders */
+    --border: 206 9% 86%;
+    --input: 206 9% 86%;
+    --ring: 199 59% 15%;
 
-    --radius: 0.75rem;
+    /* Rectangular enterprise panels */
+    --radius: 2px;
 
-    --sidebar: 222 47% 11%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-muted: 217.2 32.6% 17.5%;
-    --sidebar-border: 217.2 32.6% 17.5%;
-    --sidebar-accent: 199 89% 48%;
+    /* Sidebar */
+    --sidebar: 0 0% 100%;
+    --sidebar-foreground: 215 30% 13%;
+    --sidebar-muted: 45 12% 94%;
+    --sidebar-border: 206 9% 86%;
+    --sidebar-accent: 199 59% 15%;
   }
 
   .dark {
-    --background: 224 71% 4%; /* #030712 / dark navy */
-    --foreground: 210 40% 98%;
+    --background: 45 12% 94%;
+    --foreground: 215 30% 13%;
 
-    --card: 222 47% 7%; /* #0b1120 / dark slate card */
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 30% 13%;
 
-    --popover: 222 47% 7%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 30% 13%;
 
-    --primary: 199 89% 48%; /* #0ea5e9 */
+    --primary: 199 59% 15%;
     --primary-foreground: 0 0% 100%;
 
-    --success: 142 71% 45%;
-    --success-foreground: 0 0% 100%;
+    --secondary: 45 12% 94%;
+    --secondary-foreground: 215 30% 13%;
 
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
+    --muted: 45 12% 94%;
+    --muted-foreground: 220 13% 46%;
 
-    --danger: 0 72% 51%;
-    --danger-foreground: 0 0% 100%;
+    --accent: 45 12% 94%;
+    --accent-foreground: 199 59% 15%;
 
-    --secondary: 217.2 32.6% 12%;
-    --secondary-foreground: 210 40% 98%;
+    --destructive: 2 69% 47%;
+    --destructive-foreground: 0 0% 100%;
 
-    --muted: 217.2 32.6% 14%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --border: 206 9% 86%;
+    --input: 206 9% 86%;
+    --ring: 199 59% 15%;
 
-    --accent: 217.2 32.6% 15%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 15%;
-    --input: 217.2 32.6% 15%;
-    --ring: 199 89% 48%;
-
-    --sidebar: 224 71% 3%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-muted: 217.2 32.6% 12%;
-    --sidebar-border: 217.2 32.6% 14%;
-    --sidebar-accent: 199 89% 48%;
+    --sidebar: 0 0% 100%;
+    --sidebar-foreground: 215 30% 13%;
+    --sidebar-muted: 45 12% 94%;
+    --sidebar-border: 206 9% 86%;
+    --sidebar-accent: 199 59% 15%;
   }
 }
 
@@ -100,37 +104,80 @@
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+
+    background: linear-gradient(160deg,
+        #f0f6ff 0%,
+        #e6edfb 45%,
+        #dbe7fa 100%);
+
+    background-attachment: fixed;
+    color: #17202a;
+
+    font-family:
+      'Inter',
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      sans-serif;
+
     font-feature-settings: "rlig" 1, "calt" 1;
+    min-height: 100vh;
   }
 
   /* Typography consistency */
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-bold text-[#1e293b] dark:text-slate-100 tracking-tight;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #102f3e;
+    font-weight: 700;
+    letter-spacing: -0.015em;
   }
 
-  /* Smooth 0.2s ease transitions and touch optimization for interactive elements */
-  button, a, input, select, textarea, [role="button"], tr {
-    transition: all 0.2s ease-in-out;
+  /* Smooth transitions */
+  button,
+  a,
+  input,
+  select,
+  textarea,
+  [role="button"],
+  tr {
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease;
     touch-action: manipulation;
   }
 
-  /* Optimize touch target on mobile devices */
+  /* Optimize touch targets on mobile */
   @media (pointer: coarse) {
-    button, [role="button"], a.btn {
+
+    button,
+    [role="button"],
+    a.btn {
       min-height: 40px;
       min-width: 40px;
     }
   }
 
-  /* Smooth momentum scrolling for table and chart containers */
-  .overflow-x-auto, .overflow-y-auto {
+  /* Smooth scrolling for tables and charts */
+  .overflow-x-auto,
+  .overflow-y-auto {
     -webkit-overflow-scrolling: touch;
   }
 }
 
-/* Skeleton pulse & shimmer animation */
+/* =========================================================
+   Skeleton pulse & shimmer animation
+   ========================================================= */
+
 @keyframes shimmer {
   100% {
     transform: translateX(100%);
@@ -149,32 +196,135 @@
   bottom: 0;
   left: 0;
   transform: translateX(-100%);
-  background-image: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0,
-    rgba(255, 255, 255, 0.4) 20%,
-    rgba(255, 255, 255, 0.7) 60%,
-    rgba(255, 255, 255, 0)
-  );
+
+  background-image: linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0,
+      rgba(255, 255, 255, 0.4) 20%,
+      rgba(255, 255, 255, 0.7) 60%,
+      rgba(255, 255, 255, 0) 100%);
+
   animation: shimmer 1.5s infinite;
   content: '';
 }
 
-/* Custom subtle scrollbar */
+/* =========================================================
+   Industrial HSE Header & Panel Styles
+   ========================================================= */
+
+.navy-header-gradient {
+  background: linear-gradient(120deg,
+      #082735 0%,
+      #102f3e 58%,
+      #17495d 100%);
+
+  position: relative;
+}
+
+.navy-header-gradient::before {
+  content: '';
+  border-top: 3px solid #102f3e !important;
+}
+
+.panel-accent-teal {
+  border-top: 3px solid #1d8278 !important;
+}
+
+.panel-accent-red {
+  border-top: 3px solid #c92925 !important;
+}
+
+.panel-accent-amber {
+  border-top: 3px solid #d97706 !important;
+}
+
+.panel-accent-green {
+  border-top: 3px solid #2e7d32 !important;
+}
+
+/* Gradient panel variants */
+
+.panel-grad-primary {
+  background: linear-gradient(135deg,
+      #ffffff 0%,
+      #f4f8f9 100%);
+}
+
+.panel-grad-blue {
+  background: linear-gradient(135deg,
+      #f0f6ff 0%,
+      #e6edfb 100%);
+}
+
+.panel-grad-teal {
+  background: linear-gradient(135deg,
+      #e5f5f2 0%,
+      #cde9e3 100%);
+}
+
+.panel-grad-amber {
+  background: linear-gradient(135deg,
+      #fff5df 0%,
+      #fbe5b5 100%);
+}
+
+.panel-grad-red {
+  background: linear-gradient(135deg,
+      #fce9e8 0%,
+      #f4cbc8 100%);
+}
+
+.panel-grad-green {
+  background: linear-gradient(135deg,
+      #e8f5ea 0%,
+      #cde8d1 100%);
+}
+
+/* =========================================================
+   Operational Labels
+   ========================================================= */
+
+.section-label,
+.operational-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #667085;
+}
+
+/* Enterprise numeric formatting */
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================
+   Chart Tooltip
+   ========================================================= */
+
+.recharts-default-tooltip {
+  background-color: #ffffff !important;
+  border-left: 3px solid #c92925 !important;
+}
+
+/* =========================================================
+   Custom Enterprise Scrollbar
+   ========================================================= */
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #f3f2ee;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.25);
-  border-radius: 9999px;
+  background: #d9dde0;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.4);
+  background: #667085;
 }

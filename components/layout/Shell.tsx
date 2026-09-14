@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
-import { useSafetyStore } from '@/lib/store';
-import { SafetyReport } from '@/types';
+import { Breadcrumbs } from './Breadcrumbs';
 import { ReportInsightModal } from '@/components/dashboard/ReportInsightModal';
+import { ReportDetailDrawer } from '@/components/dashboard/ReportDetailDrawer';
 
 export function Shell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -31,23 +31,42 @@ export function Shell({ children }: { children: React.ReactNode }) {
       />
 
       {/* Main Content Area */}
-      <div className="flex flex-1 flex-col overflow-x-hidden">
+      <div className="flex flex-1 flex-col overflow-x-hidden min-w-0">
         <Header onToggleSidebar={handleToggleSidebar} />
+
         <main className="flex-1 p-3.5 sm:p-5 md:p-6 bg-[#f8fafc] dark:bg-[#060913]/60 min-h-[calc(100vh-112px)] animate-in fade-in-50 duration-300 slide-in-from-bottom-1">
+          <Breadcrumbs />
           {children}
         </main>
 
-        {/* Global Report Insight Modal / Drawer */}
+        {/* Global Report Insight Modal */}
         <ReportInsightModal />
 
-        {/* Mandatory OISD/OSHA footer compliance note from reference screenshot */}
-        <footer className="border-t border-[#e2e8f0] dark:border-border py-3 px-6 text-center text-xs text-[#64748b] dark:text-muted-foreground bg-white/80 dark:bg-card/40 flex flex-wrap items-center justify-between gap-2">
-          <span>
-            SIF Precursor Detection is AI-generated and requires expert validation. Adheres to OISD/OSHA standards.
-          </span>
-          <span className="font-mono text-[11px] text-[#0ea5e9] font-medium">
+        {/* Global Right-Side Report Detail Drawer */}
+        <ReportDetailDrawer />
+
+        {/* Enterprise Compliance Footer */}
+        <footer className="border-t border-[#D9DDE0] dark:border-border py-3 px-6 text-[10px] text-[#667085] dark:text-slate-400 bg-white/80 dark:bg-card/40 flex flex-col lg:flex-row items-center justify-between gap-2 text-center lg:text-left">
+          <div>
+            <span>
+              SIF Precursor Detection is AI-generated and requires expert
+              validation. Adheres to OISD/OSHA standards.
+            </span>
+          </div>
+
+          <div className="font-mono text-[10px] text-[#0ea5e9] font-medium">
             Smart India Hackathon 2026 • Oil India Limited (SIH26165)
-          </span>
+          </div>
+
+          <div>
+            Data source: Demonstration HSE dataset | Screening model: SIF
+            Classification Engine v1.2
+          </div>
+
+          <div>
+            Figures shown are for prototype demonstration and are not OIL
+            operational statistics.
+          </div>
         </footer>
       </div>
     </div>
