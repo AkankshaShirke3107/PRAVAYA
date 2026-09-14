@@ -10,7 +10,6 @@ import {
   TrendingUp,
   ShieldCheck,
   Settings,
-  HelpCircle,
   X,
   Building2,
   LogOut,
@@ -132,7 +131,6 @@ export function Sidebar({
 
     if (query) {
       const targetTab = new URLSearchParams(query).get('tab');
-
       return pathname === path && currentTab === targetTab;
     }
 
@@ -161,14 +159,14 @@ export function Sidebar({
       {/* Mobile backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-xs lg:hidden"
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
           onClick={onClose}
         />
       )}
 
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-[#D9DDE0] bg-white text-[#17202A] transition-all duration-200 ease-in-out shadow-none',
+          'fixed inset-y-0 left-0 z-50 flex w-60 flex-col border-r border-border bg-card text-foreground transition-all duration-200 ease-in-out',
 
           // Mobile
           isOpen
@@ -185,48 +183,45 @@ export function Sidebar({
         )}
       >
         {/* Brand Header */}
-        <div className="flex h-16 shrink-0 items-center justify-between px-4 border-b border-[#D9DDE0] bg-white">
+        <div className="flex h-14 shrink-0 items-center justify-between px-4 border-b border-border">
           <Link
             href="/dashboard"
-            className="flex items-center space-x-3 group"
+            className="flex items-center space-x-2.5 group"
             onClick={onClose}
           >
-            {/* Oil India Enterprise Emblem */}
-            <div className="flex h-9 w-9 items-center justify-center rounded-[2px] bg-[#102F3E] text-white font-extrabold text-xs shadow-none border-l-2 border-[#C92925]">
-              <Building2 className="h-5 w-5 text-white" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-[2px] bg-[#102F3E] text-white font-bold text-xs border-l-2 border-[#C92925] shrink-0 dark:bg-[#1A3A4A] dark:border-[#C92925]">
+              <Building2 className="h-4 w-4 text-white" />
             </div>
 
-            <div className="flex flex-col">
-              <span className="font-extrabold text-sm tracking-tight text-[#102F3E]">
+            <div className="flex flex-col min-w-0">
+              <span className="font-bold text-xs tracking-tight text-foreground leading-tight truncate">
                 OIL INDIA LIMITED
               </span>
-
-              <span className="text-[10px] text-[#667085] font-medium">
+              <span className="text-[10px] text-muted-foreground font-medium">
                 Enterprise HSE Platform
               </span>
             </div>
           </Link>
 
-          {/* Close button */}
           <button
             onClick={onClose}
-            className="lg:hidden p-1.5 rounded-[2px] text-[#667085] hover:text-[#102F3E] hover:bg-[#F3F2EE]"
+            className="lg:hidden p-1.5 rounded-[2px] text-muted-foreground hover:text-foreground hover:bg-muted"
             title="Close navigation"
             type="button"
           >
-            <X className="h-5 w-5" />
+            <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Navigation Sections */}
-        <div className="flex-1 space-y-6 overflow-y-auto px-3 py-4">
+        <div className="flex-1 space-y-5 overflow-y-auto px-3 py-4">
           {navSections.map((section) => (
             <div key={section.title}>
-              <div className="px-2 mb-2 text-[10px] font-bold tracking-wider text-[#667085] uppercase">
+              <div className="px-2 mb-1.5 text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
                 {section.title}
               </div>
 
-              <nav className="space-y-1">
+              <nav className="space-y-0.5">
                 {section.items.map((item) => {
                   const Icon = item.icon;
                   const isActive = checkIsActive(item.href);
@@ -237,27 +232,26 @@ export function Sidebar({
                       href={item.href}
                       onClick={onClose}
                       className={cn(
-                        'flex items-center justify-between rounded-[2px] px-3 py-2 text-xs font-medium transition-colors group',
+                        'flex items-center justify-between rounded-[2px] px-2.5 py-1.5 text-xs font-medium transition-colors group',
                         isActive
-                          ? 'bg-[#102F3E]/10 text-[#102F3E] font-bold border-l-2 border-[#102F3E]'
-                          : 'text-[#17202A] hover:bg-[#F3F2EE] hover:text-[#102F3E]'
+                          ? 'bg-[#102F3E]/10 text-[#102F3E] font-semibold border-l-2 border-[#102F3E] dark:bg-[#1E3A4A]/60 dark:text-[#D4EAF4] dark:border-[#337E99]'
+                          : 'text-foreground hover:bg-muted hover:text-foreground'
                       )}
                     >
-                      <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-2.5">
                         <Icon
                           className={cn(
-                            'h-4 w-4 shrink-0',
+                            'h-3.5 w-3.5 shrink-0',
                             isActive
-                              ? 'text-[#102F3E]'
-                              : 'text-[#667085] group-hover:text-[#102F3E]'
+                              ? 'text-[#102F3E] dark:text-[#D4EAF4]'
+                              : 'text-muted-foreground group-hover:text-foreground'
                           )}
                         />
-
                         <span>{item.name}</span>
                       </div>
 
                       {item.count && (
-                        <span className="rounded-[2px] bg-[#F3F2EE] border border-[#D9DDE0] px-1.5 py-0.5 text-[10px] font-semibold text-[#102F3E]">
+                        <span className="rounded-[2px] bg-muted border border-border px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground dark:bg-[#1A2A38] dark:text-[#9BB8C8] dark:border-[#2A3545]">
                           {item.count}
                         </span>
                       )}
@@ -270,41 +264,36 @@ export function Sidebar({
         </div>
 
         {/* User Profile Section */}
-        <div className="border-t border-[#D9DDE0] bg-[#F3F2EE] p-3">
-          <div className="flex items-center justify-between rounded-[2px] bg-white p-2.5 border border-[#D9DDE0]">
-            <div className="flex items-center space-x-2.5">
-              <div className="flex h-7 w-7 items-center justify-center rounded-[2px] bg-[#102F3E] text-xs font-bold text-white">
+        <div className="border-t border-border bg-muted/40 p-3">
+          <div className="flex items-center justify-between rounded-[2px] bg-card p-2 border border-border">
+            <div className="flex items-center space-x-2">
+              <div className="flex h-6 w-6 items-center justify-center rounded-[2px] bg-[#102F3E] text-[10px] font-bold text-white dark:bg-[#1E3A4A]">
                 HO
               </div>
 
               <div className="flex flex-col">
-                <span className="text-xs font-bold text-[#102F3E] leading-tight">
+                <span className="text-xs font-semibold text-foreground leading-tight">
                   HSE Officer
                 </span>
-
-                <span className="text-[10px] text-[#667085]">
+                <span className="text-[10px] text-muted-foreground">
                   Safety Cell (OIL)
                 </span>
               </div>
             </div>
 
             <button
-              title="Logout session"
+              title="Session info"
               type="button"
               onClick={() => {
                 toast.info('Oil India Session Active', {
                   description:
-                    'Logged in as HSE Officer • Corporate Safety Net',
+                    'Logged in as HSE Officer · Corporate Safety Net',
                 });
               }}
-              className="text-[#667085] hover:text-[#C92925] transition-colors p-1 rounded-[2px]"
+              className="text-muted-foreground hover:text-[#C92925] transition-colors p-1 rounded-[2px]"
             >
-              <LogOut className="h-4 w-4" />
+              <LogOut className="h-3.5 w-3.5" />
             </button>
-          </div>
-
-          <div className="mt-2 text-[10px] text-[#667085] text-center font-medium">
-            Oil India Limited • Corporate HSE
           </div>
         </div>
       </aside>

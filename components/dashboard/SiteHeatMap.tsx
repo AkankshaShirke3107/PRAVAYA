@@ -124,14 +124,13 @@ export function SiteHeatMap() {
 
   return (
     <Card className="panel-card panel-accent-navy flex flex-col h-full min-w-0">
-      <CardHeader className="p-4 border-b border-[#D9DDE0] bg-[#F3F2EE] flex flex-row items-center justify-between">
+      <CardHeader className="p-4 flex flex-row items-center justify-between">
         <div>
-          <CardTitle className="text-sm font-bold text-[#102F3E] flex items-center gap-2">
-            <MapPin className="h-4 w-4 text-[#C92925]" />
+          <CardTitle className="text-sm font-semibold text-foreground flex items-center gap-2">
+            <MapPin className="h-3.5 w-3.5 text-[#C92925]" />
             OIL OPERATIONAL RISK MAP
           </CardTitle>
-
-          <p className="text-xs text-[#667085] mt-0.5 font-normal">
+          <p className="text-xs text-muted-foreground mt-0.5 font-normal">
             Operational HSE risk density &amp; SIF precursor analysis by site
           </p>
         </div>
@@ -168,18 +167,19 @@ export function SiteHeatMap() {
       <CardContent className="p-4 flex-1 flex flex-col justify-between space-y-4 min-w-0">
         {viewMode === 'map' ? (
           <div className="space-y-4">
-            {/* Simple Light SVG Map of Upper Assam region */}
-            <div className="relative w-full h-52 rounded-[2px] bg-[#F3F2EE] border border-[#D9DDE0] p-2 overflow-hidden flex items-center justify-center">
+            {/* Simple SVG Map of Upper Assam region */}
+            <div className="relative w-full h-52 rounded-[2px] bg-muted border border-border p-2 overflow-hidden flex items-center justify-center dark:bg-[#192028]">
               <svg
                 viewBox="0 0 350 180"
                 className="w-full h-full"
               >
-                {/* Light terrain background contour */}
+                {/* Terrain background */}
                 <path
                   d="M 20,165 Q 70,135 120,150 T 210,95 T 270,65 T 330,35 L 340,175 L 10,175 Z"
                   fill="#E5E4DE"
                   stroke="#D9DDE0"
                   strokeWidth="1.5"
+                  className="dark:fill-[#1E2B38] dark:stroke-[#232E3B]"
                 />
 
                 {/* River corridor */}
@@ -315,15 +315,15 @@ export function SiteHeatMap() {
 
             {/* Selected Site Detail Card */}
             {selectedSite && (
-              <div className="p-3.5 rounded-[2px] border border-[#D9DDE0] bg-[#F3F2EE] space-y-2.5">
+              <div className="p-3 rounded-[2px] border border-border bg-muted/50 dark:bg-[#192028] space-y-2">
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 min-w-0">
-                    <span className="font-bold text-sm text-[#102F3E] truncate">
+                    <span className="font-semibold text-sm text-foreground truncate">
                       {selectedSite.site} Field
                     </span>
 
                     <Badge
-                      className={`${selectedSite.badgeColor} font-bold text-xs px-2 py-0.5 rounded-full border-none shrink-0`}
+                      className={`${selectedSite.badgeColor} font-bold text-xs px-2 py-0.5 rounded-[2px] border-none shrink-0`}
                     >
                       {selectedSite.riskLevel}
                     </Badge>
@@ -333,7 +333,7 @@ export function SiteHeatMap() {
                     variant="outline"
                     size="sm"
                     asChild
-                    className="h-7 text-xs border-[#D9DDE0] text-[#102F3E] hover:text-[#C92925] bg-white rounded-[2px] shrink-0"
+                    className="h-7 text-xs text-muted-foreground hover:text-[#C92925] rounded-[2px] shrink-0"
                   >
                     <Link
                       href={`/reports?site=${encodeURIComponent(
@@ -346,36 +346,20 @@ export function SiteHeatMap() {
                   </Button>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 text-xs pt-1 border-t border-[#D9DDE0]">
+                <div className="grid grid-cols-3 gap-2 text-xs pt-1.5 border-t border-border">
                   <div>
-                    <span className="text-[#667085] block text-[11px]">
-                      Total Reports
-                    </span>
-
-                    <span className="font-bold text-[#102F3E]">
-                      {selectedSite.reports}
+                    <span className="text-muted-foreground block text-[11px]">Total Reports</span>
+                    <span className="font-semibold text-foreground">{selectedSite.reports}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground block text-[11px]">SIF Precursors</span>
+                    <span className="font-semibold text-[#C92925]">
+                      {selectedSite.sifCount} ({selectedSite.density.toFixed(1)}%)
                     </span>
                   </div>
-
                   <div>
-                    <span className="text-[#667085] block text-[11px]">
-                      SIF Precursors
-                    </span>
-
-                    <span className="font-bold text-[#C92925]">
-                      {selectedSite.sifCount} (
-                      {selectedSite.density.toFixed(1)}%)
-                    </span>
-                  </div>
-
-                  <div>
-                    <span className="text-[#667085] block text-[11px]">
-                      Top Precursor
-                    </span>
-
-                    <span className="font-medium text-[#17202A] truncate block">
-                      {selectedSite.topPrecursor}
-                    </span>
+                    <span className="text-muted-foreground block text-[11px]">Top Precursor</span>
+                    <span className="font-medium text-foreground truncate block">{selectedSite.topPrecursor}</span>
                   </div>
                 </div>
               </div>
@@ -396,7 +380,7 @@ export function SiteHeatMap() {
                     </span>
 
                     <Badge
-                      className={`${site.badgeColor} font-bold text-[10px] px-1.5 py-0.2 rounded-full border-none`}
+                      className={`${site.badgeColor} font-bold text-[10px] px-1.5 py-0.5 rounded-[2px] border-none`}
                     >
                       {site.riskLevel}
                     </Badge>
@@ -431,7 +415,7 @@ export function SiteHeatMap() {
                   variant="outline"
                   size="sm"
                   asChild
-                  className="h-7 text-xs border-[#D9DDE0] text-[#102F3E] hover:text-[#C92925] bg-white rounded-[2px] shrink-0"
+                  className="h-7 text-xs text-muted-foreground hover:text-[#C92925] rounded-[2px] shrink-0"
                 >
                   <Link
                     href={`/reports?site=${encodeURIComponent(
@@ -447,22 +431,19 @@ export function SiteHeatMap() {
         )}
 
         {/* Legend Footer */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-2 border-t border-[#D9DDE0] text-xs text-[#667085]">
-          <span>Risk Level Standard:</span>
-
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-2 border-t border-border text-xs text-muted-foreground">
+          <span>Risk Level:</span>
           <div className="flex flex-wrap items-center gap-3 font-medium">
-            <span className="flex items-center gap-1">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#C92925]" />
+            <span className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-[1px] bg-[#C92925]" />
               HIGH (&ge;35%)
             </span>
-
-            <span className="flex items-center gap-1">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#D97706]" />
+            <span className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-[1px] bg-[#D97706]" />
               MODERATE (20-34%)
             </span>
-
-            <span className="flex items-center gap-1">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#2E7D32]" />
+            <span className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-[1px] bg-[#2E7D32]" />
               LOW (&lt;20%)
             </span>
           </div>

@@ -42,7 +42,7 @@ export function ReportInsightModal() {
 
   return (
     <Dialog open={isQuickViewOpen} onOpenChange={setQuickViewOpen}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-4 sm:p-6 border border-[#D9DDE0] bg-white dark:bg-slate-900 shadow-lg rounded-[2px]">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-4 sm:p-6 border border-border bg-card dark:bg-popover shadow-lg rounded-[2px]">
 
         {/* Header */}
         <DialogHeader className="space-y-2 border-b border-[#D9DDE0] pb-4">
@@ -127,7 +127,7 @@ export function ReportInsightModal() {
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 
             {/* Precursor */}
-            <div className="rounded-[2px] border border-[#D9DDE0] dark:border-slate-700 bg-white dark:bg-slate-900 p-3">
+            <div className="rounded-[2px] border border-border bg-muted dark:bg-accent p-3">
               <span className="text-[10px] font-bold text-[#667085] uppercase tracking-wider">
                 Screened Precursor
               </span>
@@ -142,7 +142,7 @@ export function ReportInsightModal() {
             </div>
 
             {/* LSR */}
-            <div className="rounded-[2px] border border-[#D9DDE0] dark:border-slate-700 bg-white dark:bg-slate-900 p-3">
+            <div className="rounded-[2px] border border-border bg-muted dark:bg-accent p-3">
               <span className="text-[10px] font-bold text-[#667085] uppercase tracking-wider">
                 Breached Life-Saving Rule (LSR)
               </span>
@@ -158,7 +158,7 @@ export function ReportInsightModal() {
           </div>
 
           {/* Breached Controls */}
-          <div className="rounded-[2px] border border-[#D9DDE0] dark:border-slate-700 bg-white dark:bg-slate-900 p-3">
+          <div className="rounded-[2px] border border-border bg-muted dark:bg-accent p-3">
             <h4 className="font-bold text-[#102F3E] dark:text-white mb-2 text-xs uppercase tracking-wider flex items-center gap-1.5">
               <ShieldAlert className="h-3.5 w-3.5 text-[#C92925]" />
               Breached Safety Measures &amp; Controls

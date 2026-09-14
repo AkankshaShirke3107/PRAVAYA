@@ -15,121 +15,98 @@ import { SiteHeatMap } from '@/components/dashboard/SiteHeatMap';
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-8 max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-      {/* Industrial Editorial Navy Header */}
-      <header className="relative w-full navy-header-gradient overflow-hidden rounded-md border border-[#102F3E]">
-        {/* Geometric square accents */}
+    <div className="space-y-6 max-w-[1600px] mx-auto">
+      {/* Operational Page Header — navy gradient, locked layout */}
+      <header className="relative w-full navy-header-gradient overflow-hidden border border-[#102F3E]/60">
+        {/* Corner accents — brand identity, not decoration */}
         <div
           className="absolute top-3 right-4 flex items-center gap-1 z-10"
           aria-hidden="true"
         >
-          <span className="block w-2.5 h-2.5 bg-[#C92925]" />
-          <span className="block w-2 h-2 bg-white" />
-          <span className="block w-1.5 h-1.5 bg-[#C92925]" />
-        </div>
-
-        <div
-          className="absolute bottom-3 right-4 flex items-center gap-1 z-10"
-          aria-hidden="true"
-        >
-          <span className="block w-1.5 h-1.5 bg-white/60" />
           <span className="block w-2 h-2 bg-[#C92925]" />
+          <span className="block w-1.5 h-1.5 bg-white/70" />
         </div>
 
         {/* Header Content */}
-        <div className="relative z-10 px-6 py-6 sm:px-8 sm:py-7 flex flex-col md:flex-row md:items-end md:justify-between gap-5">
+        <div className="relative z-10 px-5 py-5 sm:px-7 sm:py-6 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div className="max-w-2xl">
-            <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-[#C92925] mb-2">
+            <p className="text-[10px] font-bold tracking-[0.14em] uppercase text-[#C92925] mb-1.5">
               OIL INDIA&ensp;|&ensp;HSE MONITORING
             </p>
 
-            <h1 className="text-lg sm:text-xl font-extrabold tracking-tight text-white leading-snug mb-2">
+            <h1 className="text-base sm:text-lg font-bold tracking-tight text-white leading-snug mb-1.5">
               Operational Safety Overview
             </h1>
 
-            <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed font-normal mb-3">
-              SIF precursor screening across safety observations, near misses,
-              and incident reports.
+            <p className="text-xs text-[#94A3B8] leading-relaxed font-normal">
+              SIF precursor screening across safety observations, near misses, and incident reports.
             </p>
 
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px] text-[#A0AEC0] font-medium tracking-wide uppercase">
-              <span>Reporting period: Current selection</span>
-              <span className="hidden sm:inline text-[#4A5568]">•</span>
-              <span>Prototype data — workflow demonstration</span>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-[#A0AEC0] font-medium tracking-wide uppercase mt-2.5">
+              <span>Current reporting period</span>
+              <span className="hidden sm:inline text-[#4A5568]">·</span>
+              <span>Prototype demonstration data</span>
             </div>
           </div>
 
           <div className="shrink-0">
             <Link
               href="/analyzer"
-              className="inline-flex items-center justify-center btn-primary-red text-white text-xs font-bold tracking-wider uppercase px-5 py-2.5 transition-all duration-150 rounded-[4px]"
+              className="btn-primary-red inline-flex items-center justify-center text-xs font-semibold tracking-wide uppercase px-4 py-2 rounded-[2px] transition-all duration-150"
             >
-              SCREEN A REPORT
+              Screen a Report
             </Link>
           </div>
         </div>
 
-        {/* Bottom rule accent */}
-        <div className="h-[3px] w-full flex" aria-hidden="true">
-          <div
-            className="h-full bg-[#C92925]"
-            style={{ width: '35%' }}
-          />
-          <div
-            className="h-full bg-white/20"
-            style={{ width: '65%' }}
-          />
+        {/* Bottom rule — brand accent bar */}
+        <div className="h-[2px] w-full flex" aria-hidden="true">
+          <div className="h-full bg-[#C92925]" style={{ width: '30%' }} />
+          <div className="h-full bg-white/15" style={{ width: '70%' }} />
         </div>
       </header>
 
       {/* Filters */}
-      <div>
-        <DashboardFilterBar />
-      </div>
+      <DashboardFilterBar />
 
       {/* Key Safety Metrics */}
-      <section className="space-y-3">
-        <h2 className="text-xs font-bold text-[#667085] uppercase tracking-wider">
+      <section className="space-y-2.5">
+        <h2 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
           Safety Performance Summary
         </h2>
-
         <StatCards />
       </section>
 
       {/* Main Dashboard Columns */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Main Column */}
-        <div className="min-w-0 lg:col-span-7 flex flex-col gap-6">
+        <div className="min-w-0 lg:col-span-7 flex flex-col gap-5">
           <HseReviewQueue />
-
           <SifTrendChart />
         </div>
 
         {/* Secondary Column */}
-        <div className="min-w-0 lg:col-span-5 flex flex-col gap-6">
+        <div className="min-w-0 lg:col-span-5 flex flex-col gap-5">
           <TopPrecursorsChart />
-
           <LsrDistributionChart />
         </div>
       </div>
 
       {/* Operational Safety Reports */}
-      <section className="space-y-3 min-w-0">
+      <section className="space-y-2.5 min-w-0">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-bold text-[#667085] uppercase tracking-wider">
+          <h2 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
             Operational Safety Log &amp; Incident Register
           </h2>
         </div>
-
         <RecentReportsTable />
       </section>
 
-      {/* Operational Risk Heatmap & High-Risk Incidents */}
-      <section className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+      {/* Risk Heatmap & High-Risk Incidents */}
+      <section className="grid grid-cols-1 gap-5 lg:grid-cols-12">
         <div className="min-w-0 lg:col-span-7">
           <RecentHighRiskReports />
         </div>
-
         <div className="min-w-0 lg:col-span-5">
           <SiteHeatMap />
         </div>

@@ -36,71 +36,52 @@ export function StatCards() {
       title: 'REPORTS RECEIVED',
       value: totalReports,
       description:
-        'Logged safety observations (UA/UC/NM) across operational sites',
+        'UA/UC/NM observations logged across all operational sites',
+      accent: 'panel-accent-navy',
     },
     {
       title: 'SIF-POTENTIAL',
       value: sifReports,
       description:
         'Precursor events with potential for serious injury or fatality',
+      accent: 'panel-accent-red',
     },
     {
       title: 'HIGH PRIORITY',
       value: highPriorityReports,
       description:
         'Critical Life-Saving Rule & barrier breakdown incidents',
+      accent: 'panel-accent-amber',
     },
     {
       title: 'PENDING REVIEW',
       value: pendingReviewReports,
       description:
         'Observations requiring HSE committee technical sign-off',
-    },
-  ];
-
-  const cardStyles = [
-    {
-      accent: 'panel-accent-navy',
-      grad: 'panel-grad-blue',
-    },
-    {
-      accent: 'panel-accent-red',
-      grad: 'panel-grad-red',
-    },
-    {
-      accent: 'panel-accent-amber',
-      grad: 'panel-grad-amber',
-    },
-    {
       accent: 'panel-accent-teal',
-      grad: 'panel-grad-teal',
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-      {statCardsData.map((stat, idx) => {
-        const style = cardStyles[idx % cardStyles.length];
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      {statCardsData.map((stat) => (
+        <div
+          key={stat.title}
+          className={`panel-card ${stat.accent} flex flex-col p-4`}
+        >
+          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">
+            {stat.title}
+          </span>
 
-        return (
-          <div
-            key={stat.title}
-            className={`relative flex flex-col p-4 sm:p-5 panel-card ${style.accent} ${style.grad}`}
-          >
-            <span className="text-[10px] font-bold text-[#667085] uppercase tracking-wider mb-2">
-              {stat.title}
-            </span>
+          <span className="text-xl sm:text-2xl font-bold text-foreground tracking-tight mb-2 font-mono tabular-nums">
+            {stat.value.toLocaleString()}
+          </span>
 
-            <span className="text-2xl sm:text-3xl font-extrabold text-[#102F3E] tracking-tight mb-2 font-mono">
-              {stat.value.toLocaleString()}
-            </span>
-
-            <p className="text-xs text-[#667085] font-normal leading-relaxed mt-auto">
-              {stat.description}
-            </p>
-          </div>
-        );
-      })}
+          <p className="text-[11px] text-muted-foreground font-normal leading-snug mt-auto">
+            {stat.description}
+          </p>
+        </div>
+      ))}
     </div>
   );
 }

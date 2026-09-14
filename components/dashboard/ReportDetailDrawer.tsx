@@ -84,22 +84,22 @@ export function ReportDetailDrawer() {
 
       {/* Right-Side Slide-in Drawer */}
       <aside
-        className={`fixed inset-y-0 right-0 z-50 w-full sm:w-[460px] max-w-full bg-white border-l border-[#D9DDE0] shadow-xl flex flex-col transition-transform duration-300 ease-in-out ${
+        className={`fixed inset-y-0 right-0 z-50 w-full sm:w-[460px] max-w-full bg-card border-l border-border shadow-xl flex flex-col transition-transform duration-300 ease-in-out ${
           isQuickViewOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* HEADER */}
-        <div className="flex h-16 shrink-0 items-center justify-between px-6 border-b border-[#D9DDE0] bg-white">
+        <div className="flex h-16 shrink-0 items-center justify-between px-6 border-b border-border bg-card">
           <div className="flex items-center space-x-2">
-            <span className="font-mono text-base font-extrabold text-[#17202A]">
+            <span className="font-mono text-base font-extrabold text-foreground">
               {selectedReport.id}
             </span>
-            <span className="text-xs text-[#667085] font-medium">&bull; Report Detail</span>
+            <span className="text-xs text-muted-foreground font-medium">&bull; Report Detail</span>
           </div>
 
           <button
             onClick={handleClose}
-            className="p-1.5 rounded-[2px] text-[#667085] hover:text-[#17202A] hover:bg-[#F3F2EE] transition-colors"
+            className="p-1.5 rounded-[2px] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
             title="Close drawer"
           >
             <X className="h-5 w-5" />
@@ -109,9 +109,9 @@ export function ReportDetailDrawer() {
         {/* DRAWER CONTENT (Scrollable body) */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {/* SECTION 1 - SIF POTENTIAL */}
-          <div className="p-4 rounded-[2px] border border-[#D9DDE0] bg-[#F3F2EE] space-y-2">
+          <div className="p-4 rounded-[2px] border border-border bg-muted space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-[#667085] uppercase tracking-wider">
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                 SIF POTENTIAL
               </span>
               <Badge
@@ -127,9 +127,9 @@ export function ReportDetailDrawer() {
               </Badge>
             </div>
 
-            <div className="flex items-center justify-between text-xs pt-1 border-t border-[#D9DDE0]">
-              <span className="text-[#667085]">Model Confidence:</span>
-              <strong className="font-mono font-bold text-[#17202A]">
+            <div className="flex items-center justify-between text-xs pt-1 border-t border-border">
+              <span className="text-muted-foreground">Model Confidence:</span>
+              <strong className="font-mono font-bold text-foreground">
                 {selectedReport.confidence || 93}%
               </strong>
             </div>
@@ -137,43 +137,43 @@ export function ReportDetailDrawer() {
 
           {/* SECTION 2 - REPORT DETAILS */}
           <div className="space-y-3">
-            <h3 className="text-xs font-bold text-[#667085] uppercase tracking-wider border-b border-[#D9DDE0] pb-1.5">
+            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider border-b border-border pb-1.5">
               REPORT DETAILS
             </h3>
 
             <div className="space-y-2 text-xs">
-              <div className="flex items-center justify-between py-1 border-b border-[#D9DDE0]/60">
-                <span className="text-[#667085]">Report Type:</span>
-                <span className="font-semibold text-[#17202A]">{selectedReport.reportType}</span>
+              <div className="flex items-center justify-between py-1 border-b border-border/60">
+                <span className="text-muted-foreground">Report Type:</span>
+                <span className="font-semibold text-foreground">{selectedReport.reportType}</span>
               </div>
-              <div className="flex items-center justify-between py-1 border-b border-[#D9DDE0]/60">
-                <span className="text-[#667085]">Site:</span>
-                <span className="font-semibold text-[#17202A]">{selectedReport.site} ({selectedReport.field || 'Main'})</span>
+              <div className="flex items-center justify-between py-1 border-b border-border/60">
+                <span className="text-muted-foreground">Site:</span>
+                <span className="font-semibold text-foreground">{selectedReport.site} ({selectedReport.field || 'Main'})</span>
               </div>
-              <div className="flex items-center justify-between py-1 border-b border-[#D9DDE0]/60">
-                <span className="text-[#667085]">Department:</span>
-                <span className="font-semibold text-[#17202A]">{selectedReport.department}</span>
+              <div className="flex items-center justify-between py-1 border-b border-border/60">
+                <span className="text-muted-foreground">Department:</span>
+                <span className="font-semibold text-foreground">{selectedReport.department}</span>
               </div>
-              <div className="flex items-center justify-between py-1 border-b border-[#D9DDE0]/60">
-                <span className="text-[#667085]">Activity:</span>
-                <span className="font-semibold text-[#17202A]">{selectedReport.activity || selectedReport.precursor}</span>
+              <div className="flex items-center justify-between py-1 border-b border-border/60">
+                <span className="text-muted-foreground">Activity:</span>
+                <span className="font-semibold text-foreground">{selectedReport.activity || selectedReport.precursor}</span>
               </div>
-              <div className="flex items-center justify-between py-1 border-b border-[#D9DDE0]/60">
-                <span className="text-[#667085]">Date:</span>
-                <span className="font-medium text-[#17202A]">{formatReadableDate(selectedReport.date)}</span>
+              <div className="flex items-center justify-between py-1 border-b border-border/60">
+                <span className="text-muted-foreground">Date:</span>
+                <span className="font-medium text-foreground">{formatReadableDate(selectedReport.date)}</span>
               </div>
             </div>
           </div>
 
           {/* SECTION 3 - DETECTED PRECURSORS */}
           <div className="space-y-2.5">
-            <h3 className="text-xs font-bold text-[#667085] uppercase tracking-wider border-b border-[#D9DDE0] pb-1.5">
+            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider border-b border-border pb-1.5">
               DETECTED PRECURSORS
             </h3>
 
             <ul className="space-y-2 text-xs">
               {detectedPrecursors.map((prec, idx) => (
-                <li key={idx} className="flex items-center space-x-2 text-[#17202A] font-medium">
+                <li key={idx} className="flex items-center space-x-2 text-foreground font-medium">
                   <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-[2px] bg-[#2E7D32]/15 text-[#2E7D32]">
                     <Check className="h-3 w-3" />
                   </span>
@@ -184,19 +184,19 @@ export function ReportDetailDrawer() {
           </div>
 
           {/* SECTION 4 - LIFE-SAVING RULE */}
-          <div className="p-4 rounded-[2px] border border-[#D9DDE0] bg-[#F3F2EE] space-y-2.5">
-            <span className="text-[11px] font-bold text-[#667085] uppercase tracking-wider block">
+          <div className="p-4 rounded-[2px] border border-border bg-muted space-y-2.5">
+            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block">
               Life-Saving Rule
             </span>
             <div className="flex items-center justify-between">
-              <span className="font-extrabold text-sm text-[#17202A] tracking-tight">
+              <span className="font-extrabold text-sm text-foreground tracking-tight">
                 {formatLsrName(selectedReport.lsrViolated).toUpperCase()}
               </span>
               <Button
                 variant="outline"
                 size="sm"
                 asChild
-                className="h-7 text-xs border-[#D9DDE0] text-[#102F3E] bg-white hover:bg-[#F3F2EE] rounded-[2px]"
+                className="h-7 text-xs rounded-[2px]"
               >
                 <Link href="/compliance?tab=lsr" onClick={handleClose}>
                   View Rule Details
@@ -206,26 +206,26 @@ export function ReportDetailDrawer() {
           </div>
 
           {/* SECTION 5 - HSE REVIEW */}
-          <div className="space-y-3 pt-2 border-t border-[#D9DDE0]">
-            <h3 className="text-xs font-bold text-[#667085] uppercase tracking-wider">
+          <div className="space-y-3 pt-2 border-t border-border">
+            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
               HSE REVIEW
             </h3>
 
             <div className="flex items-center space-x-4 text-xs">
               <div>
-                <span className="text-[#667085]">Status: </span>
+                <span className="text-muted-foreground">Status: </span>
                 <Badge
                   variant="outline"
-                  className="bg-[#D97706]/10 text-[#D97706] border-[#D97706]/30 font-semibold text-[11px] rounded-full"
+                  className="bg-[#D97706]/10 text-[#D97706] border-[#D97706]/30 font-semibold text-[11px] rounded-[2px]"
                 >
                   {selectedReport.status || 'Pending'}
                 </Badge>
               </div>
 
               <div>
-                <span className="text-[#667085]">Priority: </span>
+                <span className="text-muted-foreground">Priority: </span>
                 <Badge
-                  className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
+                  className={`text-[11px] font-bold px-2 py-0.5 rounded-[2px] ${
                     priority === 'P1'
                       ? 'bg-[#C92925] text-white'
                       : priority === 'P2'
@@ -240,26 +240,26 @@ export function ReportDetailDrawer() {
 
             {/* Comments text area */}
             <div className="space-y-1">
-              <label className="text-[11px] font-semibold text-[#667085]">
+              <label className="text-[11px] font-semibold text-muted-foreground">
                 Reviewer Notes / Triage Comments
               </label>
               <Textarea
                 value={reviewerNotes}
                 onChange={(e) => setReviewerNotes(e.target.value)}
                 placeholder="Enter HSE review notes or corrective action plan instructions..."
-                className="min-h-[80px] text-xs bg-white border-[#D9DDE0] text-[#17202A] rounded-[2px] focus:border-[#102F3E]"
+                className="min-h-[80px] text-xs bg-card border-border text-foreground rounded-[2px] focus:border-ring"
               />
             </div>
           </div>
         </div>
 
         {/* BOTTOM ACTION BUTTONS */}
-        <div className="p-4 border-t border-[#D9DDE0] bg-[#F3F2EE] flex items-center justify-end space-x-2">
+        <div className="p-4 border-t border-border bg-muted/60 flex items-center justify-end space-x-2">
           <Button
             variant="outline"
             size="sm"
             onClick={handleMarkAsReviewed}
-            className="h-9 px-4 text-xs font-semibold border-[#2E7D32]/40 text-[#2E7D32] bg-white hover:bg-[#2E7D32] hover:text-white transition-colors rounded-[2px]"
+            className="h-9 px-4 text-xs font-semibold border-[#2E7D32]/40 text-[#2E7D32] hover:bg-[#2E7D32] hover:text-white transition-colors rounded-[2px]"
           >
             Mark as Reviewed
           </Button>
