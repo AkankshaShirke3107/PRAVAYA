@@ -87,7 +87,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-sm font-semibold tracking-tight text-foreground sm:text-base leading-tight">
-                  OIL INDIA — HSE Monitoring
+                  PRAVAYA — HSE Intelligence
                 </h1>
                 {/* Operational status dot — replaces AI Active badge */}
                 <span className="hidden sm:flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground">
@@ -97,7 +97,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
               </div>
 
               <p className="hidden text-[11px] text-muted-foreground sm:block leading-tight mt-0.5">
-                Corporate Safety · SIF Precursor Monitoring
+                AI-Powered SIF Precursor Intelligence
               </p>
             </div>
           </div>

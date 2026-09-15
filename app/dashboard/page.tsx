@@ -31,7 +31,7 @@ export default function DashboardPage() {
         <div className="relative z-10 px-5 py-5 sm:px-7 sm:py-6 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div className="max-w-2xl">
             <p className="text-[10px] font-bold tracking-[0.14em] uppercase text-[#C92925] mb-1.5">
-              OIL INDIA&ensp;|&ensp;HSE MONITORING
+              PRAVAYA&ensp;|&ensp;HSE INTELLIGENCE
             </p>
 
             <h1 className="text-base sm:text-lg font-bold tracking-tight text-white leading-snug mb-1.5">
@@ -43,9 +43,9 @@ export default function DashboardPage() {
             </p>
 
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-[#A0AEC0] font-medium tracking-wide uppercase mt-2.5">
-              <span>Current reporting period</span>
+              <span>SIH 2026</span>
               <span className="hidden sm:inline text-[#4A5568]">·</span>
-              <span>Prototype demonstration data</span>
+              <span>PRAVAYA demonstration</span>
             </div>
           </div>
 

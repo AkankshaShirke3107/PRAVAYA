@@ -195,10 +195,10 @@ export function Sidebar({
 
             <div className="flex flex-col min-w-0">
               <span className="font-bold text-xs tracking-tight text-foreground leading-tight truncate">
-                OIL INDIA LIMITED
+                PRAVAYA
               </span>
               <span className="text-[10px] text-muted-foreground font-medium">
-                Enterprise HSE Platform
+                OIL INDIA LIMITED
               </span>
             </div>
           </Link>
